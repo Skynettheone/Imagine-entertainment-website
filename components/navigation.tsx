@@ -43,6 +43,8 @@ export default function Navigation() {
   const isDarkPage = pathname === "/" || pathname === "/about"
   const isDarkMode = mounted && (resolvedTheme === "dark" || theme === "dark")
   const isHeroPage = pathname === "/"
+  const openIconColor =
+    isDarkMode || isDarkPage || (isHeroPage && !scrolled) ? "bg-white" : "bg-foreground"
   
   // Determine which logo to show
   const getLogoSource = () => {
@@ -157,14 +159,14 @@ export default function Navigation() {
                   <span
                     className={`block h-[1.5px] w-full transition-all duration-400 ease-[cubic-bezier(0.77,0,0.175,1)] origin-center ${
                       isOpen
-                        ? "bg-white rotate-45 translate-y-[5.25px]"
+                        ? `${openIconColor} rotate-45 translate-y-[5.25px]`
                         : iconColor
                     }`}
                   />
                   <span
                     className={`block h-[1.5px] w-full transition-all duration-400 ease-[cubic-bezier(0.77,0,0.175,1)] origin-center ${
                       isOpen
-                        ? "bg-white -rotate-45 -translate-y-[5.25px]"
+                        ? `${openIconColor} -rotate-45 -translate-y-[5.25px]`
                         : iconColor
                     }`}
                   />
