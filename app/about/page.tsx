@@ -193,7 +193,9 @@ function AnimatedLabel() {
       ref={ref}
       className={`transition-all duration-700 ${isVisible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}
     >
-      <p className="text-muted-foreground text-sm md:text-base tracking-wide">Build More With</p>
+      <div className="mb-6">
+        <span className="text-base md:text-lg font-semibold tracking-widest text-foreground uppercase">Build More With</span>
+      </div>
     </div>
   )
 }
@@ -215,7 +217,7 @@ function AnimatedHeadline() {
 
   return (
     <div ref={ref}>
-      <h2 className="text-6xl md:text-8xl lg:text-[10rem] xl:text-[12rem] font-bold leading-[0.85] tracking-tighter">
+      <h2 className="text-6xl md:text-8xl lg:text-[10rem] xl:text-[12rem] font-semibold leading-[0.85] tracking-tighter">
         {["LESS", "STRESS"].map((word, i) => (
           <div key={word} className="overflow-hidden">
             <span
