@@ -118,19 +118,20 @@ export default function ServicesPage() {
       </section>
 
       <section className="relative py-28 md:py-36 overflow-hidden mx-4 md:mx-6 mt-16 rounded-2xl">
-        <div className="absolute inset-0 bg-foreground">
+        <div className="absolute inset-0 bg-foreground dark:bg-black">
           <img
             src="/dramatic-concert-stage-lighting-dark-atmospheric-p.jpg"
             alt="Production"
-            className="w-full h-full object-cover opacity-30"
+            className="w-full h-full object-cover opacity-30 dark:opacity-50"
           />
         </div>
+        <div className="absolute inset-0 bg-black/40 dark:bg-black/70" />
         <div className="relative z-10 text-center text-white px-6">
-          <p className="text-white/50 text-xs tracking-[0.15em] mb-4">READY TO START?</p>
-          <h2 className="text-3xl md:text-4xl font-medium mb-6">Let's create something extraordinary</h2>
+          <p className="text-white/70 dark:text-white/80 text-xs tracking-[0.15em] mb-4">READY TO START?</p>
+          <h2 className="text-3xl md:text-4xl font-medium mb-6 text-white dark:text-white">Let's create something extraordinary</h2>
           <Link
             href="/contact"
-            className="inline-flex items-center gap-2 text-base font-medium border border-white/40 px-6 py-3 rounded-full hover:bg-white hover:text-foreground transition-all duration-400"
+            className="inline-flex items-center gap-2 text-base font-medium border border-white/40 dark:border-white/50 px-6 py-3 rounded-full bg-transparent dark:bg-transparent text-white dark:text-foreground hover:bg-white hover:text-foreground dark:hover:bg-white dark:hover:text-black transition-all duration-400"
           >
             Talk to Us
             <ArrowRight className="w-4 h-4" />

@@ -4,11 +4,19 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { ArrowUpRight } from "lucide-react"
+import { useTheme } from "next-themes"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [mounted, setMounted] = useState(false)
   const pathname = usePathname()
+  const { theme, resolvedTheme } = useTheme()
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -36,6 +44,22 @@ export default function Navigation() {
   ]
 
   const isDarkPage = pathname === "/" || pathname === "/about"
+  const isDarkMode = mounted && (resolvedTheme === "dark" || theme === "dark")
+  
+  // Determine which logo to show
+  const getLogoSource = () => {
+    if (!mounted) return "/images/Imagine Logo Black Alpha.png"
+    // If menu is open, always show white logo
+    if (isOpen) return "/images/Imagine Logo White Alpha.png"
+    // If scrolled, use theme-based logo
+    if (scrolled) {
+      return isDarkMode ? "/images/Imagine Logo White Alpha.png" : "/images/Imagine Logo Black Alpha.png"
+    }
+    // If on dark page, show white logo
+    if (isDarkPage) return "/images/Imagine Logo White Alpha.png"
+    // Otherwise use theme-based logo
+    return isDarkMode ? "/images/Imagine Logo White Alpha.png" : "/images/Imagine Logo Black Alpha.png"
+  }
 
   return (
     <>
@@ -48,11 +72,9 @@ export default function Navigation() {
           <div className="flex items-center justify-between h-16 md:h-20">
             <Link href="/" className="relative z-50 flex items-center gap-2" onClick={() => setIsOpen(false)}>
               <img
-                src="/images/imagine-logo.png"
+                src={getLogoSource()}
                 alt="Imagine Entertainment"
-                className={`h-8 w-auto transition-all duration-300 ${
-                  isOpen ? "brightness-0 invert" : scrolled ? "" : isDarkPage ? "brightness-0 invert" : ""
-                }`}
+                className="h-8 w-auto transition-all duration-300"
               />
             </Link>
 
@@ -81,6 +103,8 @@ export default function Navigation() {
             </div>
 
             <div className="flex items-center gap-4">
+              <ThemeToggle />
+              
               <Link
                 href="/contact"
                 className={`hidden lg:flex items-center gap-2 text-sm font-medium transition-colors duration-300 ${
@@ -127,7 +151,7 @@ export default function Navigation() {
       </nav>
 
       <div
-        className={`fixed inset-0 z-40 bg-foreground transition-all duration-700 ease-[cubic-bezier(0.77,0,0.175,1)] ${
+        className={`fixed inset-0 z-40 bg-foreground text-foreground transition-all duration-700 ease-[cubic-bezier(0.77,0,0.175,1)] ${
           isOpen ? "opacity-100 visible" : "opacity-0 invisible"
         }`}
       >
@@ -144,7 +168,7 @@ export default function Navigation() {
                 }}
               >
                 <Link href={item.href} onClick={() => setIsOpen(false)} className="block py-2">
-                  <span className="text-4xl md:text-5xl font-medium text-white hover:text-white/60 transition-colors duration-300">
+                  <span className="text-4xl md:text-5xl font-medium text-foreground hover:text-foreground/60 transition-colors duration-300">
                     {item.label}
                   </span>
                 </Link>

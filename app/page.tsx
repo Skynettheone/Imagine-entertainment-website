@@ -254,11 +254,11 @@ export default function Home() {
           alt="Behind the scenes"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-black/50" />
+        <div className="absolute inset-0 bg-black/50 dark:bg-black/70" />
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center text-white px-6">
-            <p className="text-sm tracking-[0.2em] mb-4 text-white/50">READY TO CREATE?</p>
-            <Link href="/contact" className="group inline-flex items-center gap-3 text-3xl md:text-5xl font-medium">
+          <div className="text-center text-white dark:text-white px-6">
+            <p className="text-sm tracking-[0.2em] mb-4 text-white/70 dark:text-white/80">READY TO CREATE?</p>
+            <Link href="/contact" className="group inline-flex items-center gap-3 text-3xl md:text-5xl font-medium text-white dark:text-white">
               <span className="link-slide">Let's Talk</span>
               <ArrowUpRight className="w-8 h-8 md:w-10 md:h-10 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
             </Link>
