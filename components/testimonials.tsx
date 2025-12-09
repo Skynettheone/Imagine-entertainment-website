@@ -1,0 +1,146 @@
+"use client"
+
+import { useEffect, useState, useRef } from "react"
+import { ArrowLeft, ArrowRight } from "lucide-react"
+
+const testimonials = [
+  {
+    quote:
+      "IMAGINE delivered beyond our expectations. Their attention to detail transformed our product launch into an unforgettable experience.",
+    author: "Sarah Mitchell",
+    role: "Marketing Director",
+    company: "Mercedes-Benz UK",
+  },
+  {
+    quote:
+      "Working with IMAGINE on the BRIT Awards was seamless. Their technical expertise and ability to handle pressure made them invaluable.",
+    author: "James Crawford",
+    role: "Executive Producer",
+    company: "BBC Studios",
+  },
+  {
+    quote:
+      "The team's creativity and professionalism are unmatched. They turned our vision into reality with precision and style.",
+    author: "Emma Thompson",
+    role: "Events Director",
+    company: "Live Nation UK",
+  },
+]
+
+export default function Testimonials() {
+  const [isVisible, setIsVisible] = useState(false)
+  const [activeIndex, setActiveIndex] = useState(0)
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) setIsVisible(true)
+      },
+      { threshold: 0.2 },
+    )
+    if (ref.current) observer.observe(ref.current)
+    return () => observer.disconnect()
+  }, [])
+
+  const nextTestimonial = () => {
+    setActiveIndex((prev) => (prev + 1) % testimonials.length)
+  }
+
+  const prevTestimonial = () => {
+    setActiveIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length)
+  }
+
+  return (
+    <section ref={ref} className="py-20 md:py-28 px-6 md:px-10 bg-muted mx-4 md:mx-6 rounded-2xl my-6">
+      <div className="max-w-[1400px] mx-auto">
+        <div className="grid lg:grid-cols-12 gap-10 lg:gap-16">
+          {/* Left column - title and nav */}
+          <div className="lg:col-span-4">
+            <div
+              className={`transition-all duration-700 ${
+                isVisible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
+              }`}
+            >
+              <p className="text-muted-foreground text-xs tracking-[0.15em] mb-3">//Testimonials</p>
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-medium mb-8">
+                What Our
+                <br />
+                <span className="italic font-normal text-muted-foreground">Clients Say</span>
+              </h2>
+
+              {/* Navigation */}
+              <div className="flex items-center gap-4">
+                <button
+                  onClick={prevTestimonial}
+                  className="w-10 h-10 rounded-full border border-border bg-background flex items-center justify-center hover:bg-foreground hover:text-background hover:border-foreground transition-all duration-300"
+                  aria-label="Previous testimonial"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={nextTestimonial}
+                  className="w-10 h-10 rounded-full border border-border bg-background flex items-center justify-center hover:bg-foreground hover:text-background hover:border-foreground transition-all duration-300"
+                  aria-label="Next testimonial"
+                >
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+                <span className="text-sm text-muted-foreground ml-2">
+                  {String(activeIndex + 1).padStart(2, "0")} / {String(testimonials.length).padStart(2, "0")}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Right column - testimonial content */}
+          <div className="lg:col-span-8">
+            <div
+              className={`relative transition-all duration-700 ${
+                isVisible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
+              }`}
+              style={{ transitionDelay: "0.15s" }}
+            >
+              {/* Large decorative quote */}
+              <span className="text-[120px] md:text-[180px] font-serif text-foreground/5 absolute -top-8 md:-top-12 -left-2 leading-none select-none">
+                "
+              </span>
+
+              {/* Quote content */}
+              <div className="relative pt-12 md:pt-16">
+                {testimonials.map((testimonial, index) => (
+                  <div
+                    key={index}
+                    className={`transition-all duration-500 ${
+                      index === activeIndex ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 absolute inset-0"
+                    }`}
+                  >
+                    <blockquote className="text-xl md:text-2xl lg:text-3xl font-medium leading-relaxed mb-8">
+                      {testimonial.quote}
+                    </blockquote>
+
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-full bg-foreground text-background flex items-center justify-center">
+                        <span className="text-sm font-medium">
+                          {testimonial.author
+                            .split(" ")
+                            .map((n) => n[0])
+                            .join("")}
+                        </span>
+                      </div>
+                      <div>
+                        <p className="font-medium">{testimonial.author}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {testimonial.role}, {testimonial.company}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
