@@ -16,9 +16,6 @@ export default function Navigation() {
 
   useEffect(() => {
     setMounted(true)
-  }, [])
-
-  useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50)
     }
@@ -65,7 +62,7 @@ export default function Navigation() {
     <>
       <nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          scrolled ? "bg-background/95 backdrop-blur-md" : "bg-transparent"
+          mounted && scrolled ? "bg-background/95 backdrop-blur-md" : "bg-transparent"
         }`}
         suppressHydrationWarning
       >
