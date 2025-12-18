@@ -150,6 +150,8 @@ export default function Home() {
       <ClientsMarquee />
       <Testimonials />
 
+      <StatsSection />
+
       {/* Pre-footer CTA */}
       <section className="relative h-[50vh] md:h-[70vh] overflow-hidden mx-4 md:mx-6 rounded-2xl">
         <img
