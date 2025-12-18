@@ -51,9 +51,9 @@ export default function Navigation() {
   ]
 
   const servicesItems = [
-    { label: "Corporate Events", href: "/services#corporate-events" },
-    { label: "Television & Film", href: "/services#television-and-film" },
-    { label: "Theatre Production", href: "/services#theatre-production" },
+    { label: "Corporate Events", href: "/services#corporate-events", number: "01" },
+    { label: "Television & Film", href: "/services#television-and-film", number: "02" },
+    { label: "Theatre Production", href: "/services#theatre-production", number: "03" },
   ]
 
   // Handle hover with delay to prevent flickering
@@ -193,41 +193,50 @@ export default function Navigation() {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent
                           align="start"
-                          sideOffset={12}
-                          className="w-64 bg-background/95 backdrop-blur-xl border border-border/50 shadow-lg rounded-lg p-2 min-w-[200px]"
+                          sideOffset={16}
+                          className="w-72 bg-background border border-border shadow-2xl rounded-2xl p-6 min-w-[280px] overflow-hidden"
                           onMouseEnter={handleServicesMouseEnter}
                           onMouseLeave={handleServicesMouseLeave}
                         >
-                          {servicesItems.map((service, idx) => (
-                            <DropdownMenuItem
-                              key={service.label}
-                              asChild
-                              className="rounded-md focus:bg-accent/50 transition-colors"
-                            >
+                          <div className="space-y-1">
+                            {servicesItems.map((service, idx) => (
+                              <DropdownMenuItem
+                                key={service.label}
+                                asChild
+                                className="rounded-xl focus:bg-transparent p-0 m-0"
+                              >
+                                <Link
+                                  href={service.href}
+                                  className="cursor-pointer group flex items-start gap-4 p-4 rounded-xl hover:bg-muted/50 transition-all duration-300 border border-transparent hover:border-border/50"
+                                  onClick={() => setServicesOpen(false)}
+                                >
+                                  <span className="text-2xl font-medium text-muted-foreground/40 group-hover:text-muted-foreground/60 transition-colors duration-300 flex-shrink-0 mt-0.5">
+                                    {service.number}
+                                  </span>
+                                  <div className="flex-1 min-w-0">
+                                    <span className="text-sm font-medium text-foreground block group-hover:translate-x-1 transition-transform duration-300">
+                                      {service.label}
+                                    </span>
+                                  </div>
+                                  <ArrowUpRight className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300 flex-shrink-0 mt-0.5" />
+                                </Link>
+                              </DropdownMenuItem>
+                            ))}
+                          </div>
+                          <div className="mt-4 pt-4 border-t border-border/50">
+                            <DropdownMenuItem asChild className="rounded-xl focus:bg-transparent p-0 m-0">
                               <Link
-                                href={service.href}
-                                className="cursor-pointer px-3 py-2.5 text-sm flex items-center group"
+                                href="/services"
+                                className="cursor-pointer group flex items-center justify-between gap-3 p-4 rounded-xl bg-muted/30 hover:bg-muted/50 transition-all duration-300 border border-border/30 hover:border-border/50"
                                 onClick={() => setServicesOpen(false)}
                               >
-                                <span className="group-hover:translate-x-1 transition-transform duration-200">
-                                  {service.label}
+                                <span className="text-sm font-semibold text-foreground group-hover:translate-x-1 transition-transform duration-300">
+                                  View All Services
                                 </span>
+                                <ArrowUpRight className="w-4 h-4 text-foreground group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300" />
                               </Link>
                             </DropdownMenuItem>
-                          ))}
-                          <DropdownMenuSeparator className="my-2 bg-border/50" />
-                          <DropdownMenuItem asChild className="rounded-md focus:bg-accent/50 transition-colors">
-                            <Link
-                              href="/services"
-                              className="cursor-pointer px-3 py-2.5 text-sm font-medium flex items-center gap-2 group"
-                              onClick={() => setServicesOpen(false)}
-                            >
-                              <span className="group-hover:translate-x-1 transition-transform duration-200">
-                                View All Services
-                              </span>
-                              <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-                            </Link>
-                          </DropdownMenuItem>
+                          </div>
                         </DropdownMenuContent>
                       </div>
                     </DropdownMenu>
