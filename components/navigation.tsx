@@ -193,50 +193,46 @@ export default function Navigation() {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent
                           align="start"
-                          sideOffset={16}
-                          className="w-72 bg-background border border-border shadow-2xl rounded-2xl p-6 min-w-[280px] overflow-hidden"
+                          sideOffset={12}
+                          className="w-64 bg-white dark:bg-background border border-border shadow-lg rounded-lg p-4 min-w-[240px]"
                           onMouseEnter={handleServicesMouseEnter}
                           onMouseLeave={handleServicesMouseLeave}
                         >
-                          <div className="space-y-1">
-                            {servicesItems.map((service, idx) => (
+                          <div className="space-y-0">
+                            {servicesItems.map((service) => (
                               <DropdownMenuItem
                                 key={service.label}
                                 asChild
-                                className="rounded-xl focus:bg-transparent p-0 m-0"
+                                className="focus:bg-transparent p-0 m-0"
                               >
                                 <Link
                                   href={service.href}
-                                  className="cursor-pointer group flex items-start gap-4 p-4 rounded-xl hover:bg-muted/50 transition-all duration-300 border border-transparent hover:border-border/50"
+                                  className="cursor-pointer flex items-center gap-3 px-3 py-2.5 rounded-md hover:bg-muted/50 transition-colors"
                                   onClick={() => setServicesOpen(false)}
                                 >
-                                  <span className="text-2xl font-medium text-muted-foreground/40 group-hover:text-muted-foreground/60 transition-colors duration-300 flex-shrink-0 mt-0.5">
+                                  <span className="text-sm font-normal text-muted-foreground">
                                     {service.number}
                                   </span>
-                                  <div className="flex-1 min-w-0">
-                                    <span className="text-sm font-medium text-foreground block group-hover:translate-x-1 transition-transform duration-300">
-                                      {service.label}
-                                    </span>
-                                  </div>
-                                  <ArrowUpRight className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300 flex-shrink-0 mt-0.5" />
+                                  <span className="text-sm font-medium text-foreground">
+                                    {service.label}
+                                  </span>
                                 </Link>
                               </DropdownMenuItem>
                             ))}
                           </div>
-                          <div className="mt-4 pt-4 border-t border-border/50">
-                            <DropdownMenuItem asChild className="rounded-xl focus:bg-transparent p-0 m-0">
-                              <Link
-                                href="/services"
-                                className="cursor-pointer group flex items-center justify-between gap-3 p-4 rounded-xl bg-muted/30 hover:bg-muted/50 transition-all duration-300 border border-border/30 hover:border-border/50"
-                                onClick={() => setServicesOpen(false)}
-                              >
-                                <span className="text-sm font-semibold text-foreground group-hover:translate-x-1 transition-transform duration-300">
-                                  View All Services
-                                </span>
-                                <ArrowUpRight className="w-4 h-4 text-foreground group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300" />
-                              </Link>
-                            </DropdownMenuItem>
-                          </div>
+                          <DropdownMenuSeparator className="my-2" />
+                          <DropdownMenuItem asChild className="focus:bg-transparent p-0 m-0">
+                            <Link
+                              href="/services"
+                              className="cursor-pointer flex items-center justify-between gap-2 px-3 py-2.5 rounded-md hover:bg-muted/50 transition-colors"
+                              onClick={() => setServicesOpen(false)}
+                            >
+                              <span className="text-sm font-medium text-foreground">
+                                View All Services
+                              </span>
+                              <ArrowUpRight className="w-4 h-4 text-foreground" />
+                            </Link>
+                          </DropdownMenuItem>
                         </DropdownMenuContent>
                       </div>
                     </DropdownMenu>

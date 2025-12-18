@@ -72,15 +72,10 @@ export default function Hero() {
 
       {/* Bottom Navigation Hints */}
       <div
-        className={`absolute bottom-8 left-6 lg:left-12 right-6 lg:right-12 flex justify-between items-end transition-all duration-700 delay-500 ${
+        className={`absolute bottom-8 left-6 lg:left-12 right-6 lg:right-12 flex justify-end items-end transition-all duration-700 delay-500 ${
           isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
         }`}
       >
-        <div className="hidden md:flex gap-12 text-xs text-white/50">
-          <span>London</span>
-          <span>Global</span>
-        </div>
-
         <div className="flex items-center gap-2 text-xs text-white/50">
           <span>Scroll</span>
           <div className="w-8 h-8 border border-white/30 rounded-full flex items-center justify-center animate-bounce">

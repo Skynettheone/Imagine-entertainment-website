@@ -49,8 +49,6 @@ export default function Home() {
         </div>
       </section>
 
-      <StatsSection />
-
       {/* Featured Projects */}
       <section className="py-20 md:py-28 px-6 md:px-10">
         <div className="max-w-[1400px] mx-auto">
@@ -129,6 +127,8 @@ export default function Home() {
       {/* Clients & Testimonials */}
       <ClientsMarquee />
       <Testimonials />
+
+      <StatsSection />
 
       {/* Pre-footer CTA */}
       <section className="relative h-[50vh] md:h-[70vh] overflow-hidden mx-4 md:mx-6 rounded-2xl">
