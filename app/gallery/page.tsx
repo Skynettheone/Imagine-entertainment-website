@@ -24,7 +24,7 @@ const getImageDimensions = (src: string): Promise<{ width: number; height: numbe
 export default function GalleryPage() {
   const [allImages, setAllImages] = useState<string[]>([])
   const [masonryItems, setMasonryItems] = useState<
-    Array<{ id: string; img: string; url?: string; height: number }>
+    Array<{ id: string; img: string; url?: string; height: number; loaded?: boolean }>
   >([])
   const [isLoading, setIsLoading] = useState(true)
   const [isLoadingMore, setIsLoadingMore] = useState(false)
@@ -32,6 +32,7 @@ export default function GalleryPage() {
   const currentIndexRef = useRef(0)
   const observerTarget = useRef<HTMLDivElement>(null)
   const itemIdCounter = useRef(0)
+  const imageLoadStates = useRef<Map<string, boolean>>(new Map())
 
   // Fisher-Yates shuffle algorithm
   const shuffleArray = <T,>(array: T[]): T[] => {
@@ -43,8 +44,19 @@ export default function GalleryPage() {
     return shuffled
   }
 
-  // Load images with dimensions
-  const loadImageItems = useCallback(async (imageSources: string[]) => {
+  // Preload images for faster display
+  const preloadImage = (src: string): Promise<void> => {
+    return new Promise((resolve) => {
+      const img = new Image()
+      img.onload = () => resolve()
+      img.onerror = () => resolve() // Resolve even on error to not block
+      img.src = src
+    })
+  }
+
+  // Load images with dimensions - optimized for faster loading
+  const loadImageItems = useCallback(async (imageSources: string[], showPlaceholders: boolean = true) => {
+    // Load dimensions in parallel
     const items = await Promise.all(
       imageSources.map(async (src: string) => {
         const dimensions = await getImageDimensions(src)
@@ -52,13 +64,44 @@ export default function GalleryPage() {
         const baseWidth = 400
         const calculatedHeight = baseWidth * aspectRatio
 
+        // Check if image is already loaded
+        const isLoaded = imageLoadStates.current.get(src) || false
+
         return {
           id: `gallery-item-${itemIdCounter.current++}-${src}`,
           img: src,
           height: calculatedHeight,
+          loaded: isLoaded,
         }
       })
     )
+    
+    // Start preloading images in background and track loading state
+    imageSources.forEach((src) => {
+      if (!imageLoadStates.current.has(src)) {
+        imageLoadStates.current.set(src, false)
+        const img = new Image()
+        img.onload = () => {
+          imageLoadStates.current.set(src, true)
+          // Update the item's loaded state
+          setMasonryItems(prevItems => 
+            prevItems.map(item => 
+              item.img === src ? { ...item, loaded: true } : item
+            )
+          )
+        }
+        img.onerror = () => {
+          imageLoadStates.current.set(src, true) // Mark as "loaded" even on error to stop showing placeholder
+          setMasonryItems(prevItems => 
+            prevItems.map(item => 
+              item.img === src ? { ...item, loaded: true } : item
+            )
+          )
+        }
+        img.src = src
+      }
+    })
+    
     return items
   }, [])
 
@@ -83,6 +126,15 @@ export default function GalleryPage() {
             const initialBatch = shuffledImages.slice(0, INITIAL_LOAD_COUNT)
             currentIndexRef.current = INITIAL_LOAD_COUNT
             setHasMore(shuffledImages.length > INITIAL_LOAD_COUNT)
+            
+            // Preload next batch in background for smoother experience
+            if (shuffledImages.length > INITIAL_LOAD_COUNT) {
+              const nextBatch = shuffledImages.slice(INITIAL_LOAD_COUNT, INITIAL_LOAD_COUNT + LOAD_MORE_COUNT)
+              nextBatch.forEach(src => {
+                const img = new Image()
+                img.src = src
+              })
+            }
             
             // Load dimensions for initial batch
             const items = await loadImageItems(initialBatch)
@@ -118,12 +170,12 @@ export default function GalleryPage() {
       const nextBatch = images.slice(currentIndex, currentIndex + LOAD_MORE_COUNT)
       
       if (nextBatch.length > 0) {
-        // Update index immediately
+        // Update index immediately to show placeholders right away
         currentIndexRef.current = currentIndex + nextBatch.length
         setHasMore(currentIndexRef.current < images.length)
         
-        // Load dimensions for new batch
-        const newItems = await loadImageItems(nextBatch)
+        // Load dimensions for new batch (this will show placeholders immediately)
+        const newItems = await loadImageItems(nextBatch, true)
         setMasonryItems(prevItems => [...prevItems, ...newItems])
       } else {
         setHasMore(false)

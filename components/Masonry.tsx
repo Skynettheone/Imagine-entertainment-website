@@ -57,6 +57,7 @@ interface Item {
   img: string;
   url?: string;
   height: number;
+  loaded?: boolean;
 }
 
 interface GridItem extends Item {
@@ -310,7 +311,25 @@ const Masonry: React.FC<MasonryProps> = ({
             onMouseEnter={e => handleMouseEnter(e, item)}
             onMouseLeave={e => handleMouseLeave(e, item)}
           >
-            <div className="item-img" style={{ backgroundImage: `url(${item.img})` }}>
+            <div className="item-img" style={{ backgroundImage: item.loaded ? `url(${item.img})` : 'none' }}>
+              {/* Skeleton placeholder - shows while image is loading */}
+              {!item.loaded && (
+                <div className="image-skeleton" />
+              )}
+              {/* Actual image - fades in when loaded */}
+              {item.loaded && (
+                <div 
+                  className="image-loaded"
+                  style={{ 
+                    backgroundImage: `url(${item.img})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    width: '100%',
+                    height: '100%',
+                    borderRadius: '12px'
+                  }}
+                />
+              )}
               {colorShiftOnHover && (
                 <div
                   className="color-overlay"

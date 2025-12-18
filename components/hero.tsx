@@ -1,26 +1,56 @@
 "use client"
 
-import { useRef } from "react"
+import { useRef, useState, useEffect } from "react"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 
 export default function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null)
+  const [videoReady, setVideoReady] = useState(false)
+
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video) return
+
+    const handleCanPlay = () => {
+      setVideoReady(true)
+      video.play().catch(() => {
+        // Autoplay failed, but video is ready
+        setVideoReady(true)
+      })
+    }
+
+    const handleLoadedData = () => {
+      setVideoReady(true)
+    }
+
+    video.addEventListener('canplay', handleCanPlay)
+    video.addEventListener('loadeddata', handleLoadedData)
+
+    // Force load
+    video.load()
+
+    return () => {
+      video.removeEventListener('canplay', handleCanPlay)
+      video.removeEventListener('loadeddata', handleLoadedData)
+    }
+  }, [])
 
   return (
     <section className="relative min-h-screen h-[100dvh] bg-black dark:bg-black overflow-hidden">
       {/* Background Video */}
-      <div className="absolute inset-0 w-full h-full overflow-hidden">
+      <div className="absolute inset-0 w-full h-full overflow-hidden bg-black">
         <video
           ref={videoRef}
-          className="absolute inset-0 w-full h-full object-cover scale-[1.3]"
+          className={`absolute inset-0 w-full h-full object-cover scale-[1.3] transition-opacity duration-500 ${
+            videoReady ? 'opacity-100' : 'opacity-0'
+          }`}
           src="/Imagine Entertainment Commercial 30 Sec.mp4"
           autoPlay
           loop
           muted
           playsInline
           preload="auto"
-          poster="/dramatic-stage-lighting-corporate-event-dark-green.jpg"
           aria-label="Imagine Entertainment showreel"
         />
         {/* Subtle Overlay */}
