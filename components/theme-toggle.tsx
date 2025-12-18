@@ -19,11 +19,13 @@ export function ThemeToggle({ iconColor = "foreground", noGlass = false }: Theme
   }, [])
 
   const isDark = mounted && (resolvedTheme === "dark" || theme === "dark")
-  const iconClass = iconColor === "white" ? "text-white" : "text-foreground dark:text-foreground"
+  const iconClass = iconColor === "white" 
+    ? "text-white" 
+    : "text-black dark:text-foreground"
 
   const glassClasses = noGlass
     ? "border border-transparent"
-    : "bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20"
+    : "md:bg-white/10 md:backdrop-blur-md border border-transparent md:border-white/20 md:hover:bg-white/20"
 
   if (!mounted) {
     return (

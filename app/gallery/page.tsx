@@ -1,6 +1,7 @@
 "use client"
 
 import Image from "next/image"
+import Masonry from "react-masonry-css"
 
 const galleryItems = [
   "/brit-awards-stage-red-lighting-production.jpg",
@@ -17,6 +18,13 @@ const galleryItems = [
   "/corporate-event-stage-lighting.jpg",
 ]
 
+const breakpointColumnsObj = {
+  default: 4,
+  1280: 3,
+  768: 2,
+  640: 2,
+}
+
 export default function GalleryPage() {
   return (
     <main className="min-h-screen bg-background text-foreground">
@@ -25,13 +33,17 @@ export default function GalleryPage() {
           <p className="text-xs tracking-[0.15em] text-muted-foreground mb-3">//Gallery</p>
           <h1 className="text-3xl md:text-4xl font-medium mb-4">Visual Highlights</h1>
           <p className="text-muted-foreground">
-            A Pinterest-style wall of recent stages, shows, and experiences we’ve delivered.
+            A Pinterest-style wall of recent stages, shows, and experiences we've delivered.
           </p>
         </div>
 
-        <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4 space-y-4">
+        <Masonry
+          breakpointCols={breakpointColumnsObj}
+          className="masonry-grid"
+          columnClassName="masonry-grid_column"
+        >
           {galleryItems.map((src, idx) => (
-            <div key={src + idx} className="overflow-hidden rounded-xl break-inside-avoid group shadow-sm">
+            <div key={src + idx} className="overflow-hidden rounded-xl group shadow-sm mb-4">
               <div className="relative w-full h-auto block">
                 <Image
                   src={src}
@@ -39,14 +51,37 @@ export default function GalleryPage() {
                   width={1200}
                   height={1600}
                   className="w-full h-auto transition-transform duration-500 group-hover:scale-105"
-                  sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                  sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 768px) 50vw, 50vw"
                   priority={idx < 4}
                 />
               </div>
             </div>
           ))}
-        </div>
+        </Masonry>
       </section>
+
+      <style jsx global>{`
+        .masonry-grid {
+          display: flex;
+          width: auto;
+          gap: 1rem;
+        }
+        .masonry-grid_column {
+          padding-left: 1rem;
+          background-clip: padding-box;
+        }
+        .masonry-grid_column > div {
+          margin-bottom: 1rem;
+        }
+        @media (max-width: 639px) {
+          .masonry-grid {
+            gap: 0.75rem;
+          }
+          .masonry-grid_column {
+            padding-left: 0.75rem;
+          }
+        }
+      `}</style>
     </main>
   )
 }

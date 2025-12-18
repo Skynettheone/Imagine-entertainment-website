@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { ArrowUpRight, ChevronDown } from "lucide-react"
+import { ArrowUpRight, ChevronDown, Menu, X } from "lucide-react"
 import { useTheme } from "next-themes"
 import { ThemeToggle } from "@/components/theme-toggle"
 import {
@@ -110,24 +110,24 @@ export default function Navigation() {
 
   // Determine icon color for hero page
   const getIconColor = () => {
-    // When menu is open, match original openIconColor logic
+    // When menu is open, the menu overlay has a background, so use foreground color
     if (isOpen) {
-      // If dark mode OR dark page OR (hero page AND not scrolled), use white
-      // Otherwise use foreground (not black) to match original behavior
-      return (isDarkMode || isDarkPage || (isHeroPage && !scrolled)) ? "bg-white" : "bg-foreground"
+      return "text-foreground"
     }
     // On hero page: white when not scrolled, dark when scrolled
-    if (isHeroPage) return scrolled ? "bg-foreground" : "bg-white"
+    if (isHeroPage) return scrolled ? "text-foreground" : "text-white"
     // If scrolled, use theme-based color
-    if (scrolled) return "bg-foreground"
+    if (scrolled) return "text-foreground"
     // If on dark page, use white
-    if (isDarkPage) return "bg-white"
+    if (isDarkPage) return "text-white"
     // Otherwise use theme-based color (black in light mode)
-    return "bg-black dark:bg-foreground"
+    return "text-black dark:text-foreground"
   }
 
   // Determine theme toggle icon color - keep consistent, don't change on scroll
   const getThemeToggleColor = () => {
+    // When menu is open, use foreground color (visible on menu overlay background)
+    if (isOpen) return "foreground"
     // If on dark page, use white
     if (isDarkPage) return "white"
     // Otherwise use foreground (consistent regardless of scroll)
@@ -282,14 +282,14 @@ export default function Navigation() {
               
               <Link
                 href="/contact"
-                className={`hidden lg:flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 flex-shrink-0 border ${
+                className={`hidden lg:flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 flex-shrink-0 ${
                   scrolled
                     ? isDarkMode
-                      ? "bg-white text-black hover:bg-white/90 border-white"
-                      : "bg-black text-white hover:bg-black/90 border-black"
+                      ? "bg-white text-black hover:bg-white/90 border border-white"
+                      : "bg-black text-white hover:bg-black/90 border border-black"
                     : isDarkPage
-                      ? "bg-white/10 backdrop-blur-md border-white/20 text-white hover:bg-white/20"
-                      : "bg-white/10 backdrop-blur-md border-white/20 text-white hover:bg-white/20"
+                      ? "bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20"
+                      : "bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20"
                 }`}
               >
                 Talk to Us
@@ -301,22 +301,16 @@ export default function Navigation() {
                 className="lg:hidden relative z-50 w-8 h-8 flex items-center justify-center"
                 aria-label="Toggle menu"
               >
-                <div className="relative w-5 h-3 flex flex-col justify-between" suppressHydrationWarning>
-                  <span
-                    className={`block h-[1.5px] w-full transition-all duration-400 ease-[cubic-bezier(0.77,0,0.175,1)] origin-center ${
-                      isOpen
-                        ? `${iconColor} rotate-45 translate-y-[5.25px]`
-                        : iconColor
-                    }`}
-                  />
-                  <span
-                    className={`block h-[1.5px] w-full transition-all duration-400 ease-[cubic-bezier(0.77,0,0.175,1)] origin-center ${
-                      isOpen
-                        ? `${iconColor} -rotate-45 -translate-y-[5.25px]`
-                        : iconColor
-                    }`}
-                  />
-                </div>
+                <Menu 
+                  className={`w-5 h-5 transition-all duration-300 absolute ${iconColor} ${
+                    isOpen ? "opacity-0 rotate-90 scale-0" : "opacity-100 rotate-0 scale-100"
+                  }`} 
+                />
+                <X 
+                  className={`w-5 h-5 transition-all duration-300 absolute ${iconColor} ${
+                    isOpen ? "opacity-100 rotate-0 scale-100" : "opacity-0 -rotate-90 scale-0"
+                  }`} 
+                />
               </button>
             </div>
           </div>
