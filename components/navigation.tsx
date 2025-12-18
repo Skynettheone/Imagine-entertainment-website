@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { ArrowUpRight, ChevronDown } from "lucide-react"
@@ -19,6 +19,7 @@ export default function Navigation() {
   const [scrolled, setScrolled] = useState(false)
   const [mounted, setMounted] = useState(false)
   const [servicesOpen, setServicesOpen] = useState(false)
+  const servicesTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const pathname = usePathname()
   const { theme, resolvedTheme } = useTheme()
 
@@ -50,10 +51,33 @@ export default function Navigation() {
   ]
 
   const servicesItems = [
-    { label: "Corporate Events", href: "/services#corporate-events" },
-    { label: "Television & Film", href: "/services#television-and-film" },
-    { label: "Theatre Production", href: "/services#theatre-production" },
+    { label: "Corporate Events", href: "/services#corporate-events", number: "01" },
+    { label: "Television & Film", href: "/services#television-and-film", number: "02" },
+    { label: "Theatre Production", href: "/services#theatre-production", number: "03" },
   ]
+
+  // Handle hover with delay to prevent flickering
+  const handleServicesMouseEnter = () => {
+    if (servicesTimeoutRef.current) {
+      clearTimeout(servicesTimeoutRef.current)
+      servicesTimeoutRef.current = null
+    }
+    setServicesOpen(true)
+  }
+
+  const handleServicesMouseLeave = () => {
+    servicesTimeoutRef.current = setTimeout(() => {
+      setServicesOpen(false)
+    }, 200) // Small delay to prevent flickering when moving between trigger and content
+  }
+
+  useEffect(() => {
+    return () => {
+      if (servicesTimeoutRef.current) {
+        clearTimeout(servicesTimeoutRef.current)
+      }
+    }
+  }, [])
 
   const isDarkPage = pathname === "/" || pathname === "/about"
   const isDarkMode = mounted && (resolvedTheme === "dark" || theme === "dark")
@@ -132,57 +156,89 @@ export default function Navigation() {
               {menuItems.map((item) => {
                 if (item.hasDropdown) {
                   return (
-                    <DropdownMenu key={item.label} onOpenChange={setServicesOpen}>
-                      <DropdownMenuTrigger asChild>
-                        <button
-                          className={`text-sm font-medium transition-colors duration-300 flex items-center gap-1 ${
-                            pathname === item.href || pathname.startsWith("/services")
-                              ? scrolled
-                                ? "text-foreground"
-                                : isDarkPage
-                                  ? "text-white"
-                                  : "text-foreground"
-                              : scrolled
-                                ? "text-muted-foreground hover:text-foreground"
-                                : isDarkPage
-                                  ? "text-white/70 hover:text-white"
-                                  : "text-muted-foreground hover:text-foreground"
-                          }`}
-                        >
-                          {item.label}
-                          <ChevronDown
-                            className={`w-3 h-3 transition-transform duration-200 ${
-                              servicesOpen ? "rotate-180" : ""
-                            }`}
-                          />
-                        </button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent
-                        align="start"
-                        className="w-56 bg-background border-border"
+                    <DropdownMenu
+                      key={item.label}
+                      open={servicesOpen}
+                      onOpenChange={setServicesOpen}
+                      modal={false}
+                    >
+                      <div
+                        onMouseEnter={handleServicesMouseEnter}
+                        onMouseLeave={handleServicesMouseLeave}
+                        className="relative"
                       >
-                        {servicesItems.map((service) => (
-                          <DropdownMenuItem key={service.label} asChild>
-                            <Link
-                              href={service.href}
-                              className="cursor-pointer"
-                              onClick={() => setServicesOpen(false)}
-                            >
-                              {service.label}
-                            </Link>
-                          </DropdownMenuItem>
-                        ))}
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem asChild>
-                          <Link
-                            href="/services"
-                            className="cursor-pointer font-medium"
-                            onClick={() => setServicesOpen(false)}
+                        <DropdownMenuTrigger asChild>
+                          <button
+                            className={`text-sm font-medium transition-colors duration-300 flex items-center gap-1.5 ${
+                              pathname === item.href || pathname.startsWith("/services")
+                                ? scrolled
+                                  ? "text-foreground"
+                                  : isDarkPage
+                                    ? "text-white"
+                                    : "text-foreground"
+                                : scrolled
+                                  ? "text-muted-foreground hover:text-foreground"
+                                  : isDarkPage
+                                    ? "text-white/70 hover:text-white"
+                                    : "text-muted-foreground hover:text-foreground"
+                            }`}
                           >
-                            View All Services
-                          </Link>
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
+                            {item.label}
+                            <ChevronDown
+                              className={`w-3.5 h-3.5 transition-transform duration-300 ${
+                                servicesOpen ? "rotate-180" : ""
+                              }`}
+                            />
+                          </button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent
+                          align="start"
+                          sideOffset={16}
+                          className="w-72 bg-background border border-border shadow-2xl rounded-2xl p-6 min-w-[280px] overflow-hidden"
+                          onMouseEnter={handleServicesMouseEnter}
+                          onMouseLeave={handleServicesMouseLeave}
+                        >
+                          <div className="space-y-1">
+                            {servicesItems.map((service, idx) => (
+                              <DropdownMenuItem
+                                key={service.label}
+                                asChild
+                                className="rounded-xl focus:bg-transparent p-0 m-0"
+                              >
+                                <Link
+                                  href={service.href}
+                                  className="cursor-pointer group flex items-start gap-4 p-4 rounded-xl hover:bg-muted/50 transition-all duration-300 border border-transparent hover:border-border/50"
+                                  onClick={() => setServicesOpen(false)}
+                                >
+                                  <span className="text-2xl font-medium text-muted-foreground/40 group-hover:text-muted-foreground/60 transition-colors duration-300 flex-shrink-0 mt-0.5">
+                                    {service.number}
+                                  </span>
+                                  <div className="flex-1 min-w-0">
+                                    <span className="text-sm font-medium text-foreground block group-hover:translate-x-1 transition-transform duration-300">
+                                      {service.label}
+                                    </span>
+                                  </div>
+                                  <ArrowUpRight className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300 flex-shrink-0 mt-0.5" />
+                                </Link>
+                              </DropdownMenuItem>
+                            ))}
+                          </div>
+                          <div className="mt-4 pt-4 border-t border-border/50">
+                            <DropdownMenuItem asChild className="rounded-xl focus:bg-transparent p-0 m-0">
+                              <Link
+                                href="/services"
+                                className="cursor-pointer group flex items-center justify-between gap-3 p-4 rounded-xl bg-muted/30 hover:bg-muted/50 transition-all duration-300 border border-border/30 hover:border-border/50"
+                                onClick={() => setServicesOpen(false)}
+                              >
+                                <span className="text-sm font-semibold text-foreground group-hover:translate-x-1 transition-transform duration-300">
+                                  View All Services
+                                </span>
+                                <ArrowUpRight className="w-4 h-4 text-foreground group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300" />
+                              </Link>
+                            </DropdownMenuItem>
+                          </div>
+                        </DropdownMenuContent>
+                      </div>
                     </DropdownMenu>
                   )
                 }
