@@ -48,7 +48,7 @@ export default function ClientsMarquee() {
   }, [])
 
   return (
-    <section ref={ref} className="py-20 md:py-28 overflow-hidden border-t border-border" suppressHydrationWarning>
+    <section ref={ref} className="py-20 md:py-28 overflow-hidden" suppressHydrationWarning>
       <div className="max-w-[1400px] mx-auto px-6 md:px-10 mb-12" suppressHydrationWarning>
         <p
           className={`text-muted-foreground text-xs tracking-[0.2em] text-center mb-4 transition-all duration-700 ${

@@ -61,35 +61,14 @@ export default function Home() {
       </section>
 
       {/* Services Bento Grid */}
-      <section className="py-20 md:py-28 px-6 md:px-10">
+      <section className="py-20 md:py-28 mx-4 md:mx-6">
         <div className="max-w-[1400px] mx-auto">
-          <div className="flex justify-between items-end mb-12">
-            <div>
-              <p className="text-muted-foreground text-xs tracking-[0.15em] mb-3">//What We Do</p>
-              <h2 className="text-2xl md:text-3xl font-medium">Our Services</h2>
-            </div>
-            <Link
-              href="/services"
-              className="hidden md:flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
-              View All Services
-              <ArrowUpRight className="w-4 h-4" />
-            </Link>
-          </div>
-
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 auto-rows-[minmax(300px,auto)]">
             {services.map((service, index) => (
               <ServiceBentoCard key={service.id} service={service} index={index} />
             ))}
             {/* View Our Services Card - Below Rigging Services */}
             <ViewServicesCard index={services.length} />
-          </div>
-
-          <div className="mt-10 md:hidden">
-            <Link href="/services" className="flex items-center gap-2 text-sm font-medium">
-              View All Services
-              <ArrowUpRight className="w-4 h-4" />
-            </Link>
           </div>
         </div>
       </section>
@@ -192,7 +171,7 @@ function StatsSection() {
   ]
 
   return (
-    <section ref={ref} className="py-20 md:py-28 px-6 md:px-10 border-y border-border">
+    <section ref={ref} className="py-20 md:py-28 px-6 md:px-10">
       <div className="max-w-[1400px] mx-auto">
         <div className="grid lg:grid-cols-12 gap-12 lg:gap-0">
           {/* Left side - label */}
@@ -334,9 +313,6 @@ function ServiceBentoCard({ service, index }: { service: (typeof services)[0]; i
       {/* Content Overlay */}
       <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-8">
         <div className="relative z-10">
-          <p className="text-xs md:text-sm text-white/80 dark:text-white/80 tracking-[0.15em] uppercase mb-2">
-            {service.eventType}
-          </p>
           <h3 className="text-xl md:text-2xl lg:text-3xl font-medium text-white dark:text-white leading-tight">
             {service.title}
           </h3>
@@ -379,9 +355,6 @@ function ViewServicesCard({ index }: { index: number }) {
       {/* Content */}
       <div className="absolute inset-0 flex flex-col items-center justify-center p-6 md:p-8">
         <div className="text-center">
-          <p className="text-xs md:text-sm text-muted-foreground dark:text-muted-foreground tracking-[0.15em] uppercase mb-3">
-            Explore All
-          </p>
           <h3 className="text-xl md:text-2xl lg:text-3xl font-medium text-foreground mb-4 leading-tight">
             View Our Services
           </h3>

@@ -17,7 +17,13 @@ export const metadata: Metadata = {
     "Full-service event production for corporate events, television, film, and theatre. We create extraordinary experiences that captivate audiences worldwide.",
   generator: "v0.app",
   icons: {
-    icon: "/images/Imagine Logo Black Alpha.png",
+    icon: [
+      { url: "/Imagine Logo White Alpha.png", type: "image/png" },
+    ],
+    apple: [
+      { url: "/Imagine Logo White Alpha.png", type: "image/png" },
+    ],
+    shortcut: "/Imagine Logo White Alpha.png",
   },
 }
 
@@ -29,7 +35,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable} suppressHydrationWarning>
       <body className="font-sans antialiased overflow-x-hidden" suppressHydrationWarning>
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
         <Navigation />
         {children}
         <Analytics />

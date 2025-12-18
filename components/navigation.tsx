@@ -92,20 +92,20 @@ export default function Navigation() {
   
   // Determine which logo to show
   const getLogoSource = () => {
-    if (!mounted) return "/images/Imagine Logo Black Alpha.png"
+    if (!mounted) return "/Imagine Logo Black Alpha.png"
     // If menu is open, use theme-appropriate logo (consider both theme and page background)
     if (isOpen) {
       // If on dark page or dark mode, show white logo
-      return (isDarkMode || isDarkPage) ? "/images/Imagine Logo White Alpha.png" : "/images/Imagine Logo Black Alpha.png"
+      return (isDarkMode || isDarkPage) ? "/Imagine Logo White Alpha.png" : "/Imagine Logo Black Alpha.png"
     }
     // If scrolled, use theme-based logo
     if (scrolled) {
-      return isDarkMode ? "/images/Imagine Logo White Alpha.png" : "/images/Imagine Logo Black Alpha.png"
+      return isDarkMode ? "/Imagine Logo White Alpha.png" : "/Imagine Logo Black Alpha.png"
     }
     // If on dark page, show white logo
-    if (isDarkPage) return "/images/Imagine Logo White Alpha.png"
+    if (isDarkPage) return "/Imagine Logo White Alpha.png"
     // Otherwise use theme-based logo
-    return isDarkMode ? "/images/Imagine Logo White Alpha.png" : "/images/Imagine Logo Black Alpha.png"
+    return isDarkMode ? "/Imagine Logo White Alpha.png" : "/Imagine Logo Black Alpha.png"
   }
 
   // Determine icon color for hero page
