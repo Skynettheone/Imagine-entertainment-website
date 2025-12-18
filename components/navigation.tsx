@@ -25,10 +25,17 @@ export default function Navigation() {
 
   useEffect(() => {
     setMounted(true)
+    let ticking = false
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50)
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setScrolled(window.scrollY > 50)
+          ticking = false
+        })
+        ticking = true
+      }
     }
-    window.addEventListener("scroll", handleScroll)
+    window.addEventListener("scroll", handleScroll, { passive: true })
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
@@ -119,15 +126,11 @@ export default function Navigation() {
     return "bg-black dark:bg-foreground"
   }
 
-  // Determine theme toggle icon color
+  // Determine theme toggle icon color - keep consistent, don't change on scroll
   const getThemeToggleColor = () => {
-    // On hero page: white when not scrolled, dark when scrolled
-    if (isHeroPage) return scrolled ? "foreground" : "white"
-    // If scrolled, use foreground
-    if (scrolled) return "foreground"
     // If on dark page, use white
     if (isDarkPage) return "white"
-    // Otherwise use foreground
+    // Otherwise use foreground (consistent regardless of scroll)
     return "foreground"
   }
 
@@ -137,11 +140,23 @@ export default function Navigation() {
   return (
     <>
       <nav
-        className="fixed top-0 left-0 right-0 z-50 bg-transparent transition-all duration-500"
+        className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-500 ${
+          mounted && scrolled
+            ? isDarkMode
+              ? "bg-black/95 backdrop-blur-md"
+              : "bg-white/95 backdrop-blur-md"
+            : "bg-transparent"
+        }`}
+        style={{ 
+          transform: 'translateZ(0)',
+          backfaceVisibility: 'hidden',
+          willChange: 'background-color, backdrop-filter',
+          isolation: 'isolate'
+        }}
         suppressHydrationWarning
       >
         <div className="max-w-[1400px] mx-auto px-6 md:px-10" suppressHydrationWarning>
-          <div className="flex items-center justify-between h-16 md:h-20" suppressHydrationWarning>
+          <div className="flex items-center justify-between h-16 md:h-20 min-h-[4rem] md:min-h-[5rem] w-full" suppressHydrationWarning>
             <Link href="/" className="relative z-50 flex items-center gap-2" onClick={() => setIsOpen(false)}>
               <img
                 src={getLogoSource()}
@@ -257,19 +272,28 @@ export default function Navigation() {
               })}
             </div>
 
-            <div className="flex items-center gap-3" suppressHydrationWarning>
-              <ThemeToggle iconColor={themeToggleColor} />
+            <div className="flex items-center gap-3 flex-shrink-0 min-w-fit" suppressHydrationWarning>
+              <div className="flex-shrink-0 w-[42px] h-[42px] flex items-center justify-center">
+                <ThemeToggle 
+                  iconColor={scrolled ? (isDarkMode ? "white" : "foreground") : themeToggleColor} 
+                  noGlass={scrolled} 
+                />
+              </div>
               
               <Link
                 href="/contact"
-                className={`hidden lg:flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${
-                  isDarkPage
-                    ? "bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20"
-                    : "bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20"
+                className={`hidden lg:flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 flex-shrink-0 border ${
+                  scrolled
+                    ? isDarkMode
+                      ? "bg-white text-black hover:bg-white/90 border-white"
+                      : "bg-black text-white hover:bg-black/90 border-black"
+                    : isDarkPage
+                      ? "bg-white/10 backdrop-blur-md border-white/20 text-white hover:bg-white/20"
+                      : "bg-white/10 backdrop-blur-md border-white/20 text-white hover:bg-white/20"
                 }`}
               >
                 Talk to Us
-                <ArrowUpRight className="w-4 h-4" />
+                <ArrowUpRight className="w-4 h-4 flex-shrink-0" />
               </Link>
 
               <button

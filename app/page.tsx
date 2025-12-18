@@ -14,42 +14,35 @@ const services = [
     title: "Corporate Events",
     eventType: "Corporate",
     image: "/corporate-event-stage-blue-lighting-conference.jpg",
-    span: "lg:col-span-1 lg:row-span-2",
+    span: "lg:col-start-1 lg:col-span-1 lg:row-start-1 lg:row-span-2",
   },
   {
     id: 2,
     title: "Television & Film Production",
     eventType: "Television & Film",
     image: "/brit-awards-stage-red-lighting-production.jpg",
-    span: "lg:col-span-1 lg:row-span-1",
+    span: "lg:col-start-2 lg:col-span-1 lg:row-start-1 lg:row-span-1",
   },
   {
     id: 3,
     title: "Music",
     eventType: "Music",
     image: "/music-festival-outdoor-stage-crowd-night-lights.jpg",
-    span: "lg:col-span-1 lg:row-span-1",
+    span: "lg:col-start-3 lg:col-span-1 lg:row-start-1 lg:row-span-1",
   },
   {
     id: 4,
     title: "Rigging Services",
     eventType: "Rigging",
     image: "/professional-event-production-team-working-stage-s.jpg",
-    span: "lg:col-span-1 lg:row-span-2",
+    span: "lg:col-start-4 lg:col-span-1 lg:row-start-1 lg:row-span-1",
   },
   {
     id: 5,
     title: "Public, Sports & Major Events",
     eventType: "Major Events",
     image: "/dramatic-stage-lighting-corporate-event-dark-green.jpg",
-    span: "sm:col-span-2 lg:col-span-2 lg:row-span-1",
-  },
-  {
-    id: 6,
-    title: "Theatre Production",
-    eventType: "Theatre",
-    image: "/theatre-stage-dramatic-spotlight-performance.jpg",
-    span: "lg:col-span-1 lg:row-span-1",
+    span: "sm:col-span-2 lg:col-start-2 lg:col-span-2 lg:row-start-2 lg:row-span-1",
   },
 ]
 
@@ -88,6 +81,8 @@ export default function Home() {
             {services.map((service, index) => (
               <ServiceBentoCard key={service.id} service={service} index={index} />
             ))}
+            {/* View Our Services Card - Below Rigging Services */}
+            <ViewServicesCard index={services.length} />
           </div>
 
           <div className="mt-10 md:hidden">
@@ -350,6 +345,52 @@ function ServiceBentoCard({ service, index }: { service: (typeof services)[0]; i
 
       {/* Hover Effect Border */}
       <div className="absolute inset-0 border-2 border-transparent group-hover:border-white/20 rounded-xl transition-all duration-500 pointer-events-none" />
+    </Link>
+  )
+}
+
+function ViewServicesCard({ index }: { index: number }) {
+  const [isVisible, setIsVisible] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) setIsVisible(true)
+      },
+      { threshold: 0.2 },
+    )
+    if (ref.current) observer.observe(ref.current)
+    return () => observer.disconnect()
+  }, [])
+
+  return (
+    <Link
+      href="/services"
+      ref={ref}
+      className={`group relative block h-full min-h-[300px] md:min-h-[350px] overflow-hidden rounded-xl transition-all duration-700 lg:col-start-4 lg:row-start-2 lg:col-span-1 lg:row-span-1 w-full ${
+        isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+      }`}
+      style={{ transitionDelay: `${index * 0.1}s` }}
+    >
+      {/* Background */}
+      <div className="absolute inset-0 bg-muted dark:bg-muted/50 group-hover:bg-muted/80 dark:group-hover:bg-muted/70 transition-all duration-500" />
+      
+      {/* Content */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center p-6 md:p-8">
+        <div className="text-center">
+          <p className="text-xs md:text-sm text-muted-foreground dark:text-muted-foreground tracking-[0.15em] uppercase mb-3">
+            Explore All
+          </p>
+          <h3 className="text-xl md:text-2xl lg:text-3xl font-medium text-foreground mb-4 leading-tight">
+            View Our Services
+          </h3>
+          <ArrowUpRight className="w-6 h-6 md:w-8 md:h-8 mx-auto text-muted-foreground dark:text-muted-foreground group-hover:text-foreground group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300" />
+        </div>
+      </div>
+
+      {/* Hover Effect Border */}
+      <div className="absolute inset-0 border-2 border-transparent group-hover:border-border dark:group-hover:border-border rounded-xl transition-all duration-500 pointer-events-none" />
     </Link>
   )
 }

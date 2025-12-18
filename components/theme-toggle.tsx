@@ -6,9 +6,10 @@ import { useEffect, useState } from "react"
 
 interface ThemeToggleProps {
   iconColor?: "white" | "foreground"
+  noGlass?: boolean
 }
 
-export function ThemeToggle({ iconColor = "foreground" }: ThemeToggleProps) {
+export function ThemeToggle({ iconColor = "foreground", noGlass = false }: ThemeToggleProps) {
   const { theme, setTheme, resolvedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
 
@@ -18,15 +19,20 @@ export function ThemeToggle({ iconColor = "foreground" }: ThemeToggleProps) {
   }, [])
 
   const isDark = mounted && (resolvedTheme === "dark" || theme === "dark")
-  const iconClass = iconColor === "white" ? "text-white" : "text-foreground"
+  const iconClass = iconColor === "white" ? "text-white" : "text-foreground dark:text-foreground"
+
+  const glassClasses = noGlass
+    ? "border border-transparent"
+    : "bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20"
 
   if (!mounted) {
     return (
       <button
-        className="relative h-9 w-9 flex items-center justify-center rounded-full bg-white/10 backdrop-blur-md border border-white/20 transition-all duration-300 hover:bg-white/20"
+        className={`relative h-[42px] w-[42px] flex items-center justify-center rounded-full transition-all duration-300 flex-shrink-0 ${glassClasses}`}
+        style={{ minWidth: '42px', minHeight: '42px' }}
         aria-label="Toggle theme"
       >
-        <Sun className={`h-4 w-4 ${iconClass}`} />
+        <Sun className={`h-4 w-4 ${iconClass} flex-shrink-0`} />
       </button>
     )
   }
@@ -34,7 +40,8 @@ export function ThemeToggle({ iconColor = "foreground" }: ThemeToggleProps) {
   return (
     <button
       onClick={() => setTheme(isDark ? "light" : "dark")}
-      className="relative h-9 w-9 flex items-center justify-center rounded-full bg-white/10 backdrop-blur-md border border-white/20 transition-all duration-300 hover:bg-white/20 hover:scale-105 active:scale-95"
+      className={`relative h-[42px] w-[42px] flex items-center justify-center rounded-full transition-all duration-300 hover:scale-105 active:scale-95 flex-shrink-0 ${glassClasses}`}
+      style={{ minWidth: '42px', minHeight: '42px' }}
       aria-label="Toggle theme"
     >
       <Sun className={`h-4 w-4 ${iconClass} rotate-0 scale-100 transition-all duration-500 dark:-rotate-90 dark:scale-0 dark:opacity-0 absolute`} />
