@@ -137,18 +137,21 @@ export default function Footer() {
         </div>
 
 
-        <div className="border-t border-border py-6 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-foreground/50">
-          <p>© IMAGINE ENTERTAINMENT (PVT) LTD. All rights reserved.</p>
-          <div className="flex flex-col md:flex-row gap-4 md:gap-6 items-center">
+        <div className="border-t border-border py-8 flex flex-col md:flex-row justify-between items-center gap-6 text-xs text-foreground/50">
+          <p className="order-2 md:order-1 text-center md:text-left">© IMAGINE ENTERTAINMENT (PVT) LTD. All rights reserved.</p>
+          
+          <div className="flex flex-col items-center gap-4 md:flex-row md:gap-6 order-1 md:order-2">
             <div className="flex gap-6">
-            <Link href="/privacy-policy" className="hover:text-foreground transition-colors">
-              Privacy Policy
-            </Link>
-            <Link href="/terms-of-use" className="hover:text-foreground transition-colors">
-              Terms of Use
-            </Link>
+              <Link href="/privacy-policy" className="hover:text-foreground transition-colors">
+                Privacy Policy
+              </Link>
+              <Link href="/terms-of-use" className="hover:text-foreground transition-colors">
+                Terms of Use
+              </Link>
             </div>
-            <span className="hidden md:block h-3 w-px bg-foreground/20"></span>
+            
+            <div className="hidden md:block h-3 w-px bg-foreground/20"></div>
+            
             <p className="font-medium hover:text-foreground transition-colors cursor-default">
               Developed by TEAM SKYNET
             </p>
