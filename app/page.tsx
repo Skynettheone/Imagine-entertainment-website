@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { ArrowRight, ArrowUpRight, ArrowDown } from "lucide-react"
 import Hero from "@/components/hero"
 import ClientsMarquee from "@/components/clients-marquee"
@@ -54,14 +55,14 @@ export default function Home() {
       <Hero />
 
       {/* Philosophy section */}
-      <section id="philosophy" className="py-24 md:py-32 px-6 md:px-10">
+      <section id="philosophy" className="pt-20 md:pt-28 pb-10 md:pb-14 px-6 md:px-10">
         <div className="max-w-[1400px] mx-auto">
           <StatementReveal />
         </div>
       </section>
 
       {/* Services Bento Grid */}
-      <section className="py-20 md:py-28 mx-4 md:mx-6">
+      <section className="pt-10 md:pt-14 pb-20 md:pb-28 mx-4 md:mx-6">
         <div className="max-w-[1400px] mx-auto">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 auto-rows-[minmax(300px,auto)]">
             {services.map((service, index) => (
@@ -126,10 +127,12 @@ export default function Home() {
 
       {/* Pre-footer CTA */}
       <section className="relative h-[50vh] md:h-[70vh] overflow-hidden mx-4 md:mx-6 rounded-2xl">
-        <img
+        <Image
           src="/behind-the-scenes-event-production-crew-working-ba.jpg"
           alt="Behind the scenes"
-          className="w-full h-full object-cover"
+          fill
+          className="object-cover"
+          sizes="(max-width: 768px) 100vw, 100vw"
         />
         <div className="absolute inset-0 bg-black/50 dark:bg-black/70" />
         <div className="absolute inset-0 flex items-center justify-center">
@@ -277,7 +280,7 @@ function StatementReveal() {
 
 function ServiceBentoCard({ service, index }: { service: (typeof services)[0]; index: number }) {
   const [isVisible, setIsVisible] = useState(false)
-  const ref = useRef<HTMLDivElement>(null)
+  const ref = useRef<HTMLAnchorElement>(null)
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -301,10 +304,12 @@ function ServiceBentoCard({ service, index }: { service: (typeof services)[0]; i
     >
       {/* Background Image */}
       <div className="absolute inset-0">
-        <img
+        <Image
           src={service.image || "/placeholder.svg"}
           alt={service.title}
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+          fill
+          className="object-cover transition-transform duration-700 group-hover:scale-110"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
         />
         {/* Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20 group-hover:from-black/70 group-hover:via-black/30 group-hover:to-black/10 transition-all duration-500" />
@@ -327,7 +332,7 @@ function ServiceBentoCard({ service, index }: { service: (typeof services)[0]; i
 
 function ViewServicesCard({ index }: { index: number }) {
   const [isVisible, setIsVisible] = useState(false)
-  const ref = useRef<HTMLDivElement>(null)
+  const ref = useRef<HTMLAnchorElement>(null)
 
   useEffect(() => {
     const observer = new IntersectionObserver(
