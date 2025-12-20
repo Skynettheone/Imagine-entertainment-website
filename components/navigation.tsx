@@ -94,22 +94,22 @@ export default function Navigation() {
   
   // Determine which logo to show
   const getLogoSource = () => {
-    if (!mounted) return "/Imagine Logo Black Alpha.png"
+    if (!mounted) return "/Imagine_logo_black_long.png"
     // If menu is open, use theme-appropriate logo (consider both theme and page background)
     if (isOpen) {
       // If on dark page or dark mode, show white logo
-      return (isDarkMode || isDarkPage) ? "/Imagine Logo White Alpha.png" : "/Imagine Logo Black Alpha.png"
+      return (isDarkMode || isDarkPage) ? "/Imagine_logo_white_long.png" : "/Imagine_logo_black_long.png" 
     }
     // If scrolled, use theme-based logo
     if (scrolled) {
-      return isDarkMode ? "/Imagine Logo White Alpha.png" : "/Imagine Logo Black Alpha.png"
+      return isDarkMode ? "/Imagine_logo_white_long.png" : "/Imagine_logo_black_long.png"
     }
     // On work detail page with hero image: show white logo when not scrolled
-    if (pathname.startsWith("/work/") && !scrolled) return "/Imagine Logo White Alpha.png"
+    if (pathname.startsWith("/work/") && !scrolled) return "/Imagine_logo_white_long.png"
     // If on dark page, show white logo
-    if (isDarkPage) return "/Imagine Logo White Alpha.png"
+    if (isDarkPage) return "/Imagine_logo_white_long.png"
     // Otherwise use theme-based logo
-    return isDarkMode ? "/Imagine Logo White Alpha.png" : "/Imagine Logo Black Alpha.png"
+    return isDarkMode ? "/Imagine_logo_white_long.png" : "/Imagine_logo_black_long.png"
   }
 
   // Determine icon color for hero page
@@ -173,7 +173,7 @@ export default function Navigation() {
               <img
                 src={getLogoSource()}
                 alt="Imagine Entertainment"
-                className="h-8 w-auto transition-all duration-300"
+                className="h-8 md:h-10 w-auto transition-all duration-300"
               />
             </Link>
 
@@ -219,11 +219,11 @@ export default function Navigation() {
                         <DropdownMenuContent
                           align="start"
                           sideOffset={12}
-                          className="w-64 bg-background/80 dark:bg-background/80 backdrop-blur-md border border-border/50 shadow-lg rounded-lg p-4 min-w-[240px]"
+                          className="w-64 bg-background/80 dark:bg-background/80 backdrop-blur-md border border-border shadow-lg rounded-xl p-2 min-w-[240px]"
                           onMouseEnter={handleServicesMouseEnter}
                           onMouseLeave={handleServicesMouseLeave}
                         >
-                          <div className="space-y-0">
+                          <div className="space-y-1">
                             {servicesItems.map((service) => (
                               <DropdownMenuItem
                                 key={service.label}
@@ -232,27 +232,23 @@ export default function Navigation() {
                               >
                                 <Link
                                   href={service.href}
-                                  className="cursor-pointer flex items-center px-3 py-2.5 rounded-md hover:bg-muted/50 transition-colors"
+                                  className="w-full flex items-center justify-between px-4 py-3 rounded-lg text-sm text-foreground hover:bg-muted transition-colors"
                                   onClick={() => setServicesOpen(false)}
                                 >
-                                  <span className="text-sm font-medium text-foreground">
-                                    {service.label}
-                                  </span>
+                                  <span>{service.label}</span>
                                 </Link>
                               </DropdownMenuItem>
                             ))}
                           </div>
-                          <DropdownMenuSeparator className="my-2" />
+                          <div className="my-2 h-px bg-border" />
                           <DropdownMenuItem asChild className="focus:bg-transparent p-0 m-0">
                             <Link
                               href="/services"
-                              className="cursor-pointer flex items-center justify-between gap-2 px-3 py-2.5 rounded-md hover:bg-muted/50 transition-colors"
+                              className="w-full flex items-center justify-between px-4 py-3 rounded-lg text-sm font-medium text-foreground hover:bg-muted transition-colors"
                               onClick={() => setServicesOpen(false)}
                             >
-                              <span className="text-sm font-medium text-foreground">
-                                View All Services
-                              </span>
-                              <ArrowUpRight className="w-4 h-4 text-foreground" />
+                              <span>View All Services</span>
+                              <ArrowUpRight className="w-4 h-4 text-muted-foreground" />
                             </Link>
                           </DropdownMenuItem>
                         </DropdownMenuContent>

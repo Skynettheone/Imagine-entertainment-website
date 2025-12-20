@@ -193,12 +193,27 @@ export default function GalleryPage() {
   return (
     <main className="min-h-screen bg-background text-foreground">
       <section className="pt-28 pb-12 px-6 md:px-10 max-w-[1400px] mx-auto">
-        <div className="max-w-3xl mb-10">
-          <p className="text-xs tracking-[0.15em] text-muted-foreground mb-3">//Gallery</p>
-          <h1 className="text-3xl md:text-4xl font-medium mb-4">Visual Highlights</h1>
-          <p className="text-muted-foreground">
-            A Pinterest-style wall of recent stages, shows, and experiences we've delivered.
-          </p>
+        <div className="max-w-[1400px] mx-auto mb-10 md:mb-16">
+          <div className="grid lg:grid-cols-2 gap-6 lg:gap-16">
+            <div>
+              <div className="overflow-hidden mb-3">
+                <p className="text-muted-foreground text-xs tracking-[0.15em] transition-all duration-700 translate-y-0 opacity-100">
+                  OUR GALLERY
+                </p>
+              </div>
+              <h1 className="overflow-hidden pb-2">
+                <span className="block text-4xl md:text-5xl lg:text-6xl font-medium leading-tight transition-all duration-700 translate-y-0 opacity-100" style={{ transitionDelay: "0.15s" }}>
+                  Visual <span className="italic font-normal text-muted-foreground">Highlights</span>
+                </span>
+              </h1>
+            </div>
+
+            <div className="lg:self-end transition-all duration-700 translate-y-0 opacity-100" style={{ transitionDelay: "0.3s" }}>
+              <p className="text-muted-foreground leading-relaxed max-w-md">
+                A curated collection of recent stages, shows, and extraordinary experiences we've delivered across the globe.
+              </p>
+            </div>
+          </div>
         </div>
 
         {initialLoaded && masonryItems.length === 0 ? (

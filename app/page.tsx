@@ -135,9 +135,9 @@ export default function Home() {
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center text-white dark:text-white px-6">
             <p className="text-sm tracking-[0.2em] mb-4 text-white/70 dark:text-white/80">READY TO CREATE?</p>
-            <Link href="/contact" className="group inline-flex items-center gap-3 text-3xl md:text-5xl font-medium text-white dark:text-white">
-              <span className="link-slide">Let's Talk</span>
-              <ArrowUpRight className="w-8 h-8 md:w-10 md:h-10 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
+            <Link href="/contact" className="group inline-flex items-center gap-3 px-6 py-3 bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 transition-all rounded-full">
+              <span className="text-xl md:text-2xl font-medium text-white dark:text-white">Let's Talk</span>
+              <ArrowUpRight className="w-5 h-5 md:w-6 md:h-6 text-white group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
             </Link>
           </div>
         </div>

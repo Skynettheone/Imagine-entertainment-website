@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { useTheme } from "next-themes"
+import { socialLinks } from "@/lib/socials"
 
 // Filled social media icons
 const FacebookIcon = ({ className }: { className?: string }) => (
@@ -96,30 +97,38 @@ export default function Footer() {
             <p className="text-xs tracking-[0.15em] text-foreground/50 mb-4">CONNECT</p>
             <div className="flex items-center gap-4">
               <a
-                href="#"
+                href={socialLinks.facebook}
                 className="text-foreground/70 hover:text-foreground transition-colors duration-300"
                 aria-label="Facebook"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 <FacebookIcon className="w-5 h-5" />
               </a>
               <a
-                href="#"
+                href={socialLinks.instagram}
                 className="text-foreground/70 hover:text-foreground transition-colors duration-300"
                 aria-label="Instagram"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 <InstagramIcon className="w-5 h-5" />
               </a>
               <a
-                href="#"
+                href={socialLinks.linkedin}
                 className="text-foreground/70 hover:text-foreground transition-colors duration-300"
                 aria-label="LinkedIn"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 <LinkedInIcon className="w-5 h-5" />
               </a>
               <a
-                href="#"
+                href={socialLinks.twitter}
                 className="text-foreground/70 hover:text-foreground transition-colors duration-300"
                 aria-label="Twitter"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 <TwitterIcon className="w-5 h-5" />
               </a>
@@ -129,14 +138,20 @@ export default function Footer() {
 
 
         <div className="border-t border-border py-6 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-foreground/50">
-          <p>© 2025 IMAGINE ENTERTAINMENT. All rights reserved.</p>
-          <div className="flex gap-6">
-            <a href="#" className="hover:text-foreground transition-colors">
+          <p>© IMAGINE ENTERTAINMENT (PVT) LTD. All rights reserved.</p>
+          <div className="flex flex-col md:flex-row gap-4 md:gap-6 items-center">
+            <div className="flex gap-6">
+            <Link href="/privacy-policy" className="hover:text-foreground transition-colors">
               Privacy Policy
-            </a>
-            <a href="#" className="hover:text-foreground transition-colors">
+            </Link>
+            <Link href="/terms-of-use" className="hover:text-foreground transition-colors">
               Terms of Use
-            </a>
+            </Link>
+            </div>
+            <span className="hidden md:block h-3 w-px bg-foreground/20"></span>
+            <p className="font-medium hover:text-foreground transition-colors cursor-default">
+              Developed by TEAM SKYNET
+            </p>
           </div>
         </div>
       </div>
