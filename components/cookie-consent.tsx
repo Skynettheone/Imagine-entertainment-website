@@ -40,9 +40,7 @@ export function CookieConsent() {
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
           className="fixed bottom-0 left-0 z-[100] w-full md:bottom-8 md:right-8 md:left-auto md:max-w-sm"
         >
-          <div className="relative overflow-hidden rounded-t-xl border-t border-white/10 bg-black/80 p-6 shadow-2xl backdrop-blur-xl md:rounded-xl md:border">
-            {/* Glossy gradient effect */}
-            <div className="pointer-events-none absolute -top-24 -right-24 h-48 w-48 rounded-full bg-primary/20 blur-3xl" />
+          <div className="relative overflow-hidden rounded-t-xl border-t border-border bg-background/80 p-6 shadow-2xl backdrop-blur-xl md:rounded-xl md:border">
             
             <div className="relative z-10 flex flex-col gap-4">
               <div className="flex items-start gap-4">
@@ -50,7 +48,7 @@ export function CookieConsent() {
                   <Cookie className="h-5 w-5" />
                 </div>
                 <div className="space-y-1">
-                  <h3 className="font-medium leading-none text-white">
+                  <h3 className="font-medium leading-none text-foreground">
                     Cookie Preferences
                   </h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
@@ -62,14 +60,14 @@ export function CookieConsent() {
               <div className="flex gap-2 pt-2">
                 <Button 
                   onClick={accept}
-                  className="flex-1 bg-white text-black hover:bg-white/90"
+                  className="flex-1 rounded-full"
                 >
                   Accept All
                 </Button>
                 <Button 
                   onClick={decline}
                   variant="outline" 
-                  className="flex-1 border-white/10 bg-transparent text-white hover:bg-white/5 hover:text-white"
+                  className="flex-1 rounded-full"
                 >
                   Decline
                 </Button>
@@ -78,7 +76,7 @@ export function CookieConsent() {
 
             <button
               onClick={decline}
-              className="absolute top-4 right-4 text-white/40 transition-colors hover:text-white"
+              className="absolute top-4 right-4 text-muted-foreground transition-colors hover:text-foreground"
             >
               <X className="h-4 w-4" />
               <span className="sr-only">Close</span>
