@@ -1,35 +1,52 @@
 "use client"
 
 import { useEffect, useState, useRef } from "react"
+import Image from "next/image"
 
+// Media & Hotels
 const clients = [
-  { abbr: "BBC", name: "BBC Studios" },
-  { abbr: "ITV", name: "ITV Productions" },
-  { abbr: "SKY", name: "Sky UK" },
-  { abbr: "NFX", name: "Netflix" },
-  { abbr: "AMZ", name: "Amazon Prime" },
-  { abbr: "LN", name: "Live Nation" },
-  { abbr: "AEG", name: "AEG Presents" },
-  { abbr: "SNY", name: "Sony Music" },
-  { abbr: "UNI", name: "Universal" },
-  { abbr: "WB", name: "Warner Bros" },
-  { abbr: "MB", name: "Mercedes-Benz" },
-  { abbr: "CH4", name: "Channel 4" },
+  { abbr: "HIR", name: "Hiru TV", image: "Hiru_TV-Logo1.png" },
+  { abbr: "DER", name: "TV Derana", image: "TV_Derana_Logo.png" },
+  { abbr: "SIR", name: "Sirasa TV", image: "Sirasa_TV_Logo.png" },
+  { abbr: "SWA", name: "Swarnavahini", image: "swarnavahini.png" }, // Placeholder filename
+  { abbr: "ITN", name: "ITN", image: "ITN_Television_Logo_of_Sri_lanka.png" },
+  { abbr: "RUP", name: "Rupavahini", image: "Logo_of_Sri_Lanka_Rupavahini_Corporation.png" },
+  { abbr: "WE", name: "Waters Edge", image: "waters-edge.png" }, // Placeholder
+  { abbr: "HIL", name: "Hilton", image: "hilton-logo.png" },
+  { abbr: "KIN", name: "The Kingsbury", image: "the-kingsbury.png" }, // Placeholder
+  { abbr: "TAJ", name: "Taj Samudra", image: "taj-samudra.png" }, // Placeholder
+  { abbr: "SHA", name: "Shangri-La", image: "shangri-la.png" }, // Placeholder
+  { abbr: "MLH", name: "Mount Lavinia", image: "mount-lavinia-hotel.png" }, // Placeholder
+  { abbr: "GFH", name: "Galle Face", image: "galle-face-hotel.png" }, // Placeholder
+  { abbr: "AVN", name: "Avenra", image: "avenra.png" }, // Placeholder
 ]
 
+// Corporate
 const clients2 = [
-  { abbr: "EMI", name: "EMI Records" },
-  { abbr: "HBO", name: "HBO Max" },
-  { abbr: "DSN", name: "Disney+" },
-  { abbr: "APL", name: "Apple TV" },
-  { abbr: "BMG", name: "BMG Rights" },
-  { abbr: "O2", name: "O2 Arena" },
-  { abbr: "RAH", name: "Royal Albert" },
-  { abbr: "NTL", name: "National Theatre" },
-  { abbr: "RSC", name: "RSC" },
-  { abbr: "ENO", name: "English Nat. Opera" },
-  { abbr: "RFH", name: "Royal Festival" },
-  { abbr: "BP", name: "Barbican" },
+  { abbr: "PB", name: "People's Bank", image: "peoples-bank.png" },
+  { abbr: "SB", name: "Sampath Bank", image: "sampath-bank.png" },
+  { abbr: "BOC", name: "BOC", image: "boc.png" },
+  { abbr: "COM", name: "Commercial Bank", image: "commercial-bank.png" },
+  { abbr: "HNB", name: "HNB", image: "hnb.png" },
+  { abbr: "SIN", name: "Singer", image: "singer.png" },
+  { abbr: "UBR", name: "Uber", image: "uber.png" },
+  { abbr: "FLO", name: "Flora", image: "flora.png" },
+  { abbr: "UL", name: "Unilever", image: "unilever.png" },
+  { abbr: "NYSC", name: "Sri Lanka Youth", image: "sri-lanka-youth.png" },
+  { abbr: "JANA", name: "Janashakti", image: "janashakti.png" },
+  { abbr: "DIA", name: "Dialog", image: "dialog.png" },
+  { abbr: "BRX", name: "Brandix", image: "brandix.png" },
+  { abbr: "FON", name: "Fonterra", image: "fonterra.png" },
+  { abbr: "IESL", name: "IESL", image: "iesl.png" },
+  { abbr: "SLIC", name: "Sri Lanka Ins.", image: "sri-lanka-insurance.png" },
+  { abbr: "LOLC", name: "LOLC", image: "lolc.png" },
+  { abbr: "CGTTI", name: "German Tech", image: "cgtti.png" },
+  { abbr: "RAI", name: "Raigam", image: "raigam.png" },
+  { abbr: "LION", name: "Lions Club", image: "lions-club.png" },
+  { abbr: "SLT", name: "SLT Mobitel", image: "slt.png" },
+  { abbr: "SLA", name: "SriLankan", image: "srilankan-airlines.png" },
+  { abbr: "NES", name: "Nestle", image: "nestle.png" },
+  { abbr: "DP", name: "DP Education", image: "dp-education.png" },
 ]
 
 export default function ClientsMarquee() {
@@ -89,16 +106,25 @@ export default function ClientsMarquee() {
   )
 }
 
-function ClientCard({ client }: { client: { abbr: string; name: string } }) {
+function ClientCard({ client }: { client: { abbr: string; name: string; image?: string } }) {
   return (
-    <div className="flex-shrink-0 px-2" suppressHydrationWarning>
-      <div className="w-20 md:w-24 flex flex-col items-center gap-2" suppressHydrationWarning>
-        <div className="w-16 h-16 md:w-20 md:h-20 rounded-xl border border-border bg-muted/30 flex items-center justify-center hover:border-foreground/30 hover:bg-muted/50 transition-all duration-300">
-          <span className="text-sm md:text-base font-medium text-foreground/70">{client.abbr}</span>
-        </div>
-        <span className="text-[10px] md:text-xs text-muted-foreground text-center whitespace-nowrap">
-          {client.name}
-        </span>
+    <div className="flex-shrink-0 px-3 md:px-5" suppressHydrationWarning>
+      <div className="flex items-center justify-center h-20 md:h-24" suppressHydrationWarning>
+        {client.image ? (
+          <div className="relative w-28 h-14 md:w-40 md:h-20 transition-transform duration-300 hover:scale-110">
+            <Image
+              src={`/brands/${client.image}`}
+              alt={client.name}
+              fill
+              className="object-contain"
+              sizes="(max-width: 768px) 112px, 160px"
+            />
+          </div>
+        ) : (
+          <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-muted/20 flex items-center justify-center border border-white/10">
+            <span className="text-xs md:text-sm font-bold text-muted-foreground/50">{client.abbr}</span>
+          </div>
+        )}
       </div>
     </div>
   )

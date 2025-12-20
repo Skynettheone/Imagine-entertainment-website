@@ -92,15 +92,18 @@ export default function AboutPage() {
             <div>
               <p className="text-muted-foreground text-xs tracking-[0.15em] mb-3">//Expertise</p>
               <h2 className="text-xl md:text-2xl font-medium mb-6 leading-relaxed">
-                A single, experienced team—producers, directors, and technicians working side-by-side.
+                A single, experienced team producers, directors, and technicians working side-by-side.
               </h2>
               <p className="text-muted-foreground leading-relaxed mb-6">
                 IMAGINE ENTERTAINMENT is a full-service event production company that takes ideas from concept to
                 execution. Our cross-functional crew collaborates under one roof, so you deal with one accountable
                 partner.
               </p>
-              <Link href="/contact" className="inline-flex items-center gap-2 text-sm font-medium">
-                <span className="link-slide">Let's work together</span>
+              <Link
+                href="/contact"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-foreground text-background text-sm font-medium hover:bg-foreground/90 transition-colors"
+              >
+                Let's work together
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
@@ -127,7 +130,7 @@ export default function AboutPage() {
               <div>
                 <p className="text-muted-foreground text-xs tracking-[0.15em] mb-4">//Industries</p>
                 <ul className="space-y-2">
-                  {["Corporate", "Television & Film", "Theatre", "Fashion", "Music & Live", "Automotive"].map(
+                  {["Corporate", "Television & Film", "Fashion", "Music & Live", "Automotive"].map(
                     (item) => (
                       <li key={item} className="text-base">
                         {item}

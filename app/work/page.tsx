@@ -9,49 +9,66 @@ const allProjects = [
   {
     id: 1,
     title: "BRIT AWARDS 2024",
-    category: "Television Production",
+    category: "Television & Film Production",
     image: "/brit-awards-stage-red-lighting-production.jpg",
   },
   {
     id: 2,
     title: "LONDON FASHION WEEK",
-    category: "Fashion Shows",
+    category: "Corporate",
     image: "/fashion-runway-show-pink-dramatic-lighting.jpg",
   },
   {
     id: 3,
     title: "CORPORATE SUMMIT 2024",
-    category: "Corporate Events",
+    category: "Corporate",
     image: "/corporate-event-stage-blue-lighting-conference.jpg",
   },
   {
     id: 4,
     title: "WEST END PREMIERE",
-    category: "Theatre",
+    category: "Television & Film Production",
     image: "/theatre-stage-dramatic-spotlight-performance.jpg",
   },
   {
     id: 5,
     title: "PRODUCT LAUNCH",
-    category: "Brand Activation",
+    category: "Corporate",
     image: "/product-launch-event-modern-minimal-tech-stage.jpg",
   },
   {
     id: 6,
     title: "FILM PREMIERE",
-    category: "Film Events",
+    category: "Television & Film Production",
     image: "/film-premiere-red-carpet-night-event-glamour-lond.jpg",
+  },
+  {
+    id: 7,
+    title: "SUMMER MUSIC FESTIVAL",
+    category: "Music",
+    image: "/music-festival-stage-crowd-lights.jpg", // Placeholder path
+  },
+  {
+    id: 8,
+    title: "STADIUM RIGGING INSTALL",
+    category: "Rigging Services",
+    image: "/large-scale-rigging-truss-system.jpg", // Placeholder path
+  },
+  {
+    id: 9,
+    title: "NATIONAL SPORTS CEREMONY",
+    category: "Public, Sports & Major Events",
+    image: "/stadium-sports-event-ceremony.jpg", // Placeholder path
   },
 ]
 
 const categories = [
   "All",
-  "Television Production",
-  "Corporate Events",
-  "Theatre",
-  "Fashion Shows",
-  "Brand Activation",
-  "Film Events",
+  "Corporate",
+  "Television & Film Production",
+  "Music",
+  "Rigging Services",
+  "Public, Sports & Major Events",
 ]
 
 export default function WorkPage() {
@@ -137,7 +154,7 @@ export default function WorkPage() {
 
       <section className="px-6 md:px-10 pb-20 md:pb-28">
         <div className="max-w-[1400px] mx-auto">
-          <div className="grid md:grid-cols-2 gap-5 md:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
             {filteredProjects.map((project, index) => (
               <ProjectCard key={project.id} project={project} index={index} />
             ))}
@@ -149,9 +166,12 @@ export default function WorkPage() {
         <div className="max-w-[1400px] mx-auto px-6 md:px-10">
           <p className="text-muted-foreground text-xs tracking-[0.15em] mb-4">//Start a Project</p>
           <h2 className="text-2xl md:text-4xl font-medium mb-6">Have a project in mind?</h2>
-          <Link href="/contact" className="inline-flex items-center gap-2 text-base font-medium">
-            <span className="link-slide">Let's Talk</span>
-            <ArrowUpRight className="w-4 h-4" />
+          <Link
+            href="/contact"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-foreground text-background text-lg md:text-xl font-medium hover:bg-foreground/90 transition-colors"
+          >
+            Let's Talk
+            <ArrowUpRight className="w-5 h-5" />
           </Link>
         </div>
       </section>
@@ -163,7 +183,7 @@ export default function WorkPage() {
 
 function ProjectCard({ project, index }: { project: (typeof allProjects)[0]; index: number }) {
   const [isVisible, setIsVisible] = useState(false)
-  const ref = useRef<HTMLDivElement>(null)
+  const ref = useRef<HTMLAnchorElement>(null)
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -183,7 +203,7 @@ function ProjectCard({ project, index }: { project: (typeof allProjects)[0]; ind
       className={`group block transition-all duration-700 ${
         isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
       }`}
-      style={{ transitionDelay: `${(index % 2) * 0.1}s` }}
+      style={{ transitionDelay: `${(index % 4) * 0.1}s` }}
     >
       <div className="relative overflow-hidden aspect-[4/3] mb-4 bg-muted rounded-xl">
         <img

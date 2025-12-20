@@ -1,10 +1,25 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef, useCallback } from "react"
 import { useParams, useRouter } from "next/navigation"
 import Link from "next/link"
-import { ArrowLeft, ArrowUpRight, ChevronLeft, ChevronRight, X } from "lucide-react"
+import { ArrowLeft, ArrowUpRight } from "lucide-react"
 import Footer from "@/components/footer"
+import Masonry from "@/components/Masonry"
+
+// Helper function to get image dimensions
+const getImageDimensions = (src: string): Promise<{ width: number; height: number }> => {
+  return new Promise((resolve) => {
+    const img = new Image()
+    img.onload = () => {
+      resolve({ width: img.naturalWidth, height: img.naturalHeight })
+    }
+    img.onerror = () => {
+      resolve({ width: 1200, height: 1600 })
+    }
+    img.src = src
+  })
+}
 
 // Project details data
 const projectDetails: Record<
@@ -16,6 +31,7 @@ const projectDetails: Record<
     description: string
     client: string
     year: string
+    date: string
     location: string
     services: string[]
     images: string[]
@@ -31,6 +47,7 @@ const projectDetails: Record<
     description: "Award-winning production for the UK's most prestigious music awards ceremony.",
     client: "BRIT Awards",
     year: "2024",
+    date: "March 2, 2024",
     location: "London, UK",
     services: ["Live Broadcast", "Lighting Design", "Audio Production", "Stage Management"],
     images: [
@@ -55,6 +72,7 @@ const projectDetails: Record<
     description: "High-energy fashion show production with dramatic lighting and seamless runway management.",
     client: "British Fashion Council",
     year: "2024",
+    date: "February 16, 2024",
     location: "London, UK",
     services: ["Runway Production", "Lighting Design", "Event Management", "Technical Direction"],
     images: [
@@ -79,6 +97,7 @@ const projectDetails: Record<
     description: "Large-scale corporate conference with multiple stages, breakout sessions, and networking areas.",
     client: "Global Tech Corporation",
     year: "2024",
+    date: "January 15, 2024",
     location: "London, UK",
     services: ["Conference Production", "AV Systems", "Stage Design", "Event Technology"],
     images: [
@@ -103,6 +122,7 @@ const projectDetails: Record<
     description: "Technical production for a major West End theatrical premiere with complex staging requirements.",
     client: "West End Theatre",
     year: "2024",
+    date: "April 10, 2024",
     location: "London, UK",
     services: ["Theatrical Production", "Scenic Design", "Lighting & Sound", "Stage Automation"],
     images: [
@@ -127,6 +147,7 @@ const projectDetails: Record<
     description: "Innovative product launch event combining technology, entertainment, and brand storytelling.",
     client: "Tech Innovation Brand",
     year: "2024",
+    date: "May 5, 2024",
     location: "London, UK",
     services: ["Brand Activation", "Event Production", "Content Creation", "Digital Integration"],
     images: [
@@ -151,6 +172,7 @@ const projectDetails: Record<
     description: "Red carpet premiere event with celebrity arrivals, press interviews, and exclusive screening.",
     client: "Film Studio",
     year: "2024",
+    date: "June 20, 2024",
     location: "London, UK",
     services: ["Premiere Production", "Red Carpet Management", "Media Coordination", "Screening Production"],
     images: [
@@ -170,14 +192,50 @@ const projectDetails: Record<
   },
 }
 
+
+
 export default function WorkDetailPage() {
   const params = useParams()
   const router = useRouter()
   const [isLoaded, setIsLoaded] = useState(false)
-  const [lightboxOpen, setLightboxOpen] = useState(false)
-  const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const projectId = Number(params.id)
   const project = projectDetails[projectId]
+
+  // Masonry state
+  type MasonryItem = {
+    id: string
+    img: string
+    url?: string
+    height: number
+    loaded?: boolean
+  }
+  const [masonryItems, setMasonryItems] = useState<MasonryItem[]>([])
+
+  const getRandomHeight = () => {
+    const ratios = [0.75, 1, 1.25, 1.5]
+    const ratio = ratios[Math.floor(Math.random() * ratios.length)]
+    return 400 * ratio
+  }
+
+  const updateItemDimensions = useCallback(async (item: MasonryItem) => {
+    try {
+      const dimensions = await getImageDimensions(item.img)
+      const aspectRatio = dimensions.height / dimensions.width
+      const calculatedHeight = 400 * aspectRatio
+      
+      setMasonryItems(prev => prev.map(p => {
+        if (p.id === item.id) {
+          return { ...p, height: calculatedHeight, loaded: true }
+        }
+        return p
+      }))
+    } catch (e) {
+      setMasonryItems(prev => prev.map(p => {
+        if (p.id === item.id) return { ...p, loaded: true }
+        return p
+      }))
+    }
+  }, [])
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoaded(true), 100)
@@ -185,43 +243,17 @@ export default function WorkDetailPage() {
   }, [])
 
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (!lightboxOpen) return
-      if (e.key === "Escape") {
-        setLightboxOpen(false)
-      } else if (e.key === "ArrowLeft") {
-        handlePrevious()
-      } else if (e.key === "ArrowRight") {
-        handleNext()
-      }
+    if (project && project.images && masonryItems.length === 0) {
+      const newItems = project.images.map((src, index) => ({
+        id: `work-item-${projectId}-${index}`,
+        img: src,
+        height: getRandomHeight(),
+        loaded: false
+      }))
+      setMasonryItems(newItems)
+      newItems.forEach(item => updateItemDimensions(item))
     }
-
-    window.addEventListener("keydown", handleKeyDown)
-    return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [lightboxOpen, currentImageIndex, project])
-
-  const openLightbox = (index: number) => {
-    setCurrentImageIndex(index)
-    setLightboxOpen(true)
-    document.body.style.overflow = "hidden"
-  }
-
-  const closeLightbox = () => {
-    setLightboxOpen(false)
-    document.body.style.overflow = ""
-  }
-
-  const handleNext = () => {
-    if (project) {
-      setCurrentImageIndex((prev) => (prev + 1) % project.images.length)
-    }
-  }
-
-  const handlePrevious = () => {
-    if (project) {
-      setCurrentImageIndex((prev) => (prev - 1 + project.images.length) % project.images.length)
-    }
-  }
+  }, [project, projectId, updateItemDimensions, masonryItems.length])
 
   if (!project) {
     return (
@@ -262,160 +294,48 @@ export default function WorkDetailPage() {
               isLoaded ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
             }`}
           >
-            <p className="text-white/80 dark:text-white/80 text-xs tracking-[0.15em] mb-3">
-              {project.category}
-            </p>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-medium text-white dark:text-white mb-4">
+            <div className="mb-4">
+              <span className="inline-block px-4 py-1.5 text-xs font-medium tracking-wider text-white uppercase bg-white/10 backdrop-blur-md border border-white/20 rounded-full">
+                {project.category}
+              </span>
+            </div>
+
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-medium text-white dark:text-white mb-6">
               {project.title}
             </h1>
-            <p className="text-white/90 dark:text-white/90 text-base md:text-lg max-w-2xl">
-              {project.description}
-            </p>
+
+            <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4 text-white/90 text-base md:text-lg font-medium">
+              <p>{project.date}</p>
+              <span className="hidden md:inline text-white/40">•</span>
+              <p>{project.location}</p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Project Info */}
-      <section className="py-12 md:py-16 px-6 md:px-10 border-b border-border">
-        <div className="max-w-[1400px] mx-auto">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <p className="text-xs text-muted-foreground mb-2">CLIENT</p>
-              <p className="text-sm font-medium">{project.client}</p>
-            </div>
-            <div>
-              <p className="text-xs text-muted-foreground mb-2">YEAR</p>
-              <p className="text-sm font-medium">{project.year}</p>
-            </div>
-            <div>
-              <p className="text-xs text-muted-foreground mb-2">LOCATION</p>
-              <p className="text-sm font-medium">{project.location}</p>
-            </div>
-            <div>
-              <p className="text-xs text-muted-foreground mb-2">SERVICES</p>
-              <div className="flex flex-wrap gap-2">
-                {project.services.map((service) => (
-                  <span key={service} className="text-xs text-muted-foreground">
-                    {service}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+
 
       {/* Project Images Gallery */}
       <section className="py-12 md:py-20 px-6 md:px-10">
-        <div className="max-w-[1400px] mx-auto">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            {project.images.map((image, index) => (
-              <div
-                key={index}
-                className={`relative overflow-hidden rounded-xl aspect-[4/3] bg-muted cursor-pointer group transition-all duration-700 ${
-                  isLoaded ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
-                }`}
-                style={{ transitionDelay: `${(index + 1) * 0.1}s` }}
-                onClick={() => openLightbox(index)}
-              >
-                <img
-                  src={image}
-                  alt={`${project.title} - Image ${index + 1}`}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center">
-                  <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <div className="bg-white/20 backdrop-blur-sm rounded-full p-3">
-                      <ArrowUpRight className="w-6 h-6 text-white" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+        <div className="max-w-[1400px] mx-auto min-h-[400px]">
+           {masonryItems.length > 0 && (
+             <Masonry
+               items={masonryItems}
+               animateFrom="bottom"
+               scaleOnHover={true}
+               hoverScale={0.98}
+               blurToFocus={true}
+               stagger={0.05}
+             />
+           )}
         </div>
       </section>
 
       {/* Lightbox Modal */}
-      {lightboxOpen && project && (
-        <div
-          className="fixed inset-0 z-50 bg-black/95 p-4"
-          onClick={closeLightbox}
-        >
-          <button
-            onClick={closeLightbox}
-            className="absolute top-4 right-4 z-10 text-white hover:text-white/80 transition-colors"
-            aria-label="Close lightbox"
-          >
-            <X className="w-8 h-8" />
-          </button>
 
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              handlePrevious()
-            }}
-            className="absolute left-4 z-10 text-white hover:text-white/80 transition-colors bg-black/50 hover:bg-black/70 rounded-full p-3"
-            aria-label="Previous image"
-          >
-            <ChevronLeft className="w-8 h-8" />
-          </button>
-
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              handleNext()
-            }}
-            className="absolute right-4 z-10 text-white hover:text-white/80 transition-colors bg-black/50 hover:bg-black/70 rounded-full p-3"
-            aria-label="Next image"
-          >
-            <ChevronRight className="w-8 h-8" />
-          </button>
-
-          <div
-            className="w-full h-full flex items-center justify-center"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="relative w-full h-full max-w-7xl max-h-[90vh]">
-              <img
-                src={project.images[currentImageIndex]}
-                alt={`${project.title} - Image ${currentImageIndex + 1}`}
-                className="absolute inset-0 w-full h-full object-cover rounded-lg"
-              />
-            </div>
-          </div>
-
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/80 text-sm">
-            {currentImageIndex + 1} / {project.images.length}
-          </div>
-        </div>
-      )}
 
       {/* Project Details */}
-      <section className="py-12 md:py-20 px-6 md:px-10 bg-muted">
-        <div className="max-w-[1400px] mx-auto">
-          <div className="grid lg:grid-cols-3 gap-12 lg:gap-16">
-            <div className="lg:col-span-1">
-              <p className="text-xs text-muted-foreground tracking-[0.15em] mb-3">//Overview</p>
-              <h2 className="text-2xl md:text-3xl font-medium mb-6">Project Overview</h2>
-            </div>
-            <div className="lg:col-span-2 space-y-12">
-              <div>
-                <h3 className="text-lg font-medium mb-4">The Challenge</h3>
-                <p className="text-muted-foreground leading-relaxed">{project.challenge}</p>
-              </div>
-              <div>
-                <h3 className="text-lg font-medium mb-4">Our Solution</h3>
-                <p className="text-muted-foreground leading-relaxed">{project.solution}</p>
-              </div>
-              <div>
-                <h3 className="text-lg font-medium mb-4">About the Project</h3>
-                <p className="text-muted-foreground leading-relaxed">{project.overview}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+
 
       {/* Next Project CTA */}
       <section className="py-20 md:py-28 px-6 md:px-10">
@@ -428,13 +348,13 @@ export default function WorkDetailPage() {
               className="inline-flex items-center gap-2 text-sm font-medium border border-border px-6 py-3 rounded-full hover:bg-foreground hover:text-background transition-all duration-300"
             >
               All Projects
-              <ArrowUpRight className="w-4 h-4" />
             </Link>
             <Link
               href="/contact"
-              className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              className="inline-flex items-center gap-2 text-sm font-medium px-6 py-3 rounded-full bg-foreground text-background hover:opacity-90 transition-all duration-300"
             >
               Start Your Project
+              <ArrowUpRight className="w-4 h-4" />
             </Link>
           </div>
         </div>

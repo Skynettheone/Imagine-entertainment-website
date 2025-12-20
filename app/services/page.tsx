@@ -8,7 +8,7 @@ import Footer from "@/components/footer"
 const services = [
   {
     number: "01",
-    title: "Corporate Events",
+    title: "Corporate",
     description: "From intimate board meetings to large-scale conferences, we deliver seamless corporate experiences.",
     items: [
       "Corporate Galas & Award Ceremonies",
@@ -62,13 +62,6 @@ const services = [
     description: "Large-scale event production for public gatherings, sporting events, and ceremonies.",
     items: ["Sporting Events", "Public Events", "Opening & Closing Ceremonies"],
     image: "/dramatic-stage-lighting-corporate-event-dark-green.jpg",
-  },
-  {
-    number: "06",
-    title: "Theatre Production",
-    description: "West End quality technical production for theatrical performances of all scales.",
-    items: ["West End Theatre", "Touring Theatre", "Regional Theatre", "Dance Productions", "Opera"],
-    image: "/theatre-stage-dramatic-spotlight-performance.jpg",
   },
 ]
 
@@ -174,10 +167,10 @@ export default function ServicesPage() {
           <h2 className="text-3xl md:text-4xl font-medium mb-6 text-white dark:text-white">Let's create something extraordinary</h2>
           <Link
             href="/contact"
-            className="inline-flex items-center gap-2 text-base font-medium border border-white/40 dark:border-white/50 px-6 py-3 rounded-full bg-transparent dark:bg-transparent text-white dark:text-foreground hover:bg-white hover:text-foreground dark:hover:bg-white dark:hover:text-black transition-all duration-400"
+            className="group inline-flex items-center gap-3 px-6 py-3 bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 transition-all rounded-full"
           >
-            Talk to Us
-            <ArrowRight className="w-4 h-4" />
+            <span className="text-xl md:text-2xl font-medium text-white dark:text-white">Talk to Us</span>
+            <ArrowUpRight className="w-5 h-5 md:w-6 md:h-6 text-white group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
           </Link>
         </div>
       </section>
@@ -218,9 +211,10 @@ function ServiceCard({ service, index }: { service: (typeof services)[0]; index:
           <div>
             <h3 className="text-xl md:text-2xl font-medium mb-3">{service.title}</h3>
             <p className="text-muted-foreground leading-relaxed mb-4">{service.description}</p>
-            <ul className="grid grid-cols-2 gap-1">
+            <ul className="flex flex-col gap-2">
               {service.items.map((item) => (
-                <li key={item} className="text-sm text-muted-foreground">
+                <li key={item} className="text-sm text-muted-foreground flex items-start gap-2">
+                  <span className="mt-1.5 w-1 h-1 rounded-full bg-foreground/40 shrink-0" />
                   {item}
                 </li>
               ))}

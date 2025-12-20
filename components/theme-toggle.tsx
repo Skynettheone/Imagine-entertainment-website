@@ -3,6 +3,7 @@
 import { Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
 import { useEffect, useState } from "react"
+import { flushSync } from "react-dom"
 
 interface ThemeToggleProps {
   iconColor?: "white" | "foreground"
@@ -27,6 +28,23 @@ export function ThemeToggle({ iconColor = "foreground", noGlass = false }: Theme
     ? "border border-transparent"
     : "md:bg-white/10 md:backdrop-blur-md border border-transparent md:border-white/20 md:hover:bg-white/20"
 
+  const toggleTheme = () => {
+    if (
+      !document.startViewTransition || 
+      typeof document.startViewTransition !== 'function' ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      setTheme(isDark ? "light" : "dark")
+      return
+    }
+
+    document.startViewTransition(() => {
+      flushSync(() => {
+        setTheme(isDark ? "light" : "dark")
+      })
+    })
+  }
+
   if (!mounted) {
     return (
       <button
@@ -41,7 +59,7 @@ export function ThemeToggle({ iconColor = "foreground", noGlass = false }: Theme
 
   return (
     <button
-      onClick={() => setTheme(isDark ? "light" : "dark")}
+      onClick={toggleTheme}
       className={`relative h-[42px] w-[42px] flex items-center justify-center rounded-full transition-all duration-300 hover:scale-105 active:scale-95 flex-shrink-0 ${glassClasses}`}
       style={{ minWidth: '42px', minHeight: '42px' }}
       aria-label="Toggle theme"

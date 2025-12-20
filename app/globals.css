@@ -123,33 +123,24 @@
     @apply bg-background text-foreground antialiased;
   }
   
-  /* Buttery smooth theme transitions with fade effect */
-  html {
-    transition: background-color 600ms cubic-bezier(0.25, 0.46, 0.45, 0.94), 
-                color 600ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  /* View Transition API - Smooth Cross-fade */
+  ::view-transition-group(root),
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 0.7s;
+    animation-timing-function: cubic-bezier(0.33, 1, 0.68, 1);
   }
-  
-  body {
-    transition: background-color 600ms cubic-bezier(0.25, 0.46, 0.45, 0.94), 
-                color 600ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    mix-blend-mode: normal;
   }
-  
-  /* Smooth transitions for theme-dependent properties - exclude media and interactive elements */
-  div, section, article, aside, header, footer, nav, main, 
-  p, h1, h2, h3, h4, h5, h6, span, a, button, input, textarea, select, label,
-  ul, ol, li, table, tr, td, th, thead, tbody,
-  [class*="bg-"], [class*="text-"], [class*="border-"] {
-    transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow;
-    transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    transition-duration: 600ms;
-  }
-  
-  /* Pseudo-elements also transition smoothly */
-  div::before, div::after, section::before, section::after,
-  p::before, p::after, a::before, a::after, button::before, button::after {
-    transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow;
-    transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    transition-duration: 600ms;
+
+  /* Fallback: Smooth background for non-supporting browsers */
+  @media (prefers-reduced-motion: no-preference) {
+    body {
+       transition: background-color 0.5s ease, color 0.5s ease;
+    }
   }
 }
 

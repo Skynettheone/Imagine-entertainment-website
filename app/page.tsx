@@ -77,43 +77,66 @@ export default function Home() {
       {/* Services */}
       <section className="py-20 md:py-28 bg-muted mx-4 md:mx-6 rounded-2xl">
         <div className="max-w-[1400px] mx-auto px-6 md:px-10">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20">
-            <div>
-              <p className="text-muted-foreground text-xs tracking-[0.15em] mb-3">//What We Do</p>
-              <h2 className="text-2xl md:text-4xl font-medium leading-tight mb-6">
-                Creative Production <span className="italic font-normal text-muted-foreground">&</span>
-                <br />
-                Event Excellence
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-24">
+            {/* Left Column - Expertise */}
+            <div className="flex flex-col justify-start items-start">
+              <p className="text-muted-foreground text-xs tracking-[0.15em] mb-4 font-medium uppercase">//Expertise</p>
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-medium leading-tight mb-6">
+                A single, experienced team producers, directors, and technicians working side-by-side.
               </h2>
-              <p className="text-muted-foreground leading-relaxed mb-6 max-w-md">
-                We bring together creativity, technology, and precision to deliver unforgettable experiences.
+              <p className="text-muted-foreground leading-relaxed mb-8 max-w-lg">
+                IMAGINE ENTERTAINMENT is a full-service event production company that takes ideas from concept to execution. Our cross-functional crew collaborates under one roof, so you deal with one accountable partner.
               </p>
-              <Link href="/services" className="inline-flex items-center gap-2 text-sm font-medium">
-                Our Services
+              <Link
+                href="/contact"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-foreground text-background text-sm font-medium hover:bg-foreground/90 transition-colors"
+              >
+                Let's work together
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
 
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-              {[
-                { label: "Corporate", items: ["Galas & Awards", "Product Launches", "Conferences"] },
-                { label: "Television & Film", items: ["Feature Films", "Reality TV", "Documentaries"] },
-                { label: "Music", items: ["Concerts & Tours", "Festivals", "Classical"] },
-                { label: "Rigging Services", items: ["Stage Rigging", "Automation", "Special Effects"] },
-                { label: "Major Events", items: ["Sports Events", "Public Events", "Ceremonies"] },
-                { label: "Theatre", items: ["West End", "Touring", "Regional"] },
-              ].map((service) => (
-                <div key={service.label}>
-                  <h3 className="text-base font-medium mb-2">{service.label}</h3>
-                  <ul className="space-y-1">
-                    {service.items.map((item) => (
-                      <li key={item} className="text-sm text-muted-foreground">
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
+            {/* Right Column - Services & Industries */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 lg:gap-12">
+              {/*  Services */}
+              <div>
+                <p className="text-muted-foreground text-xs tracking-[0.15em] mb-6 font-medium uppercase">//Services</p>
+                <ul className="space-y-3">
+                  {[
+                    "Creative Direction",
+                    "Technical Production",
+                    "Event Management",
+                    "Audio & Video",
+                    "Lighting Design",
+                    "Staging & Scenic",
+                  ].map((item) => (
+                    <li key={item} className="text-base text-foreground/80 font-medium">
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Industries */}
+              <div>
+                <p className="text-muted-foreground text-xs tracking-[0.15em] mb-6 font-medium uppercase">
+                  //Industries
+                </p>
+                <ul className="space-y-3">
+                  {[
+                    "Corporate",
+                    "Television & Film",
+                    "Theatre",
+                    "Fashion",
+                    "Music & Live",
+                    "Automotive",
+                  ].map((item) => (
+                    <li key={item} className="text-base text-foreground/80 font-medium">
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
         </div>

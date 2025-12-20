@@ -77,27 +77,31 @@ export default function ContactPage() {
               <div>
                 <p className="text-xs tracking-[0.15em] text-muted-foreground mb-4">//Email</p>
                 <a
-                  href="mailto:hello@imagineent.com"
+                  href="mailto:info@imaginesl.com"
                   className="text-2xl md:text-3xl font-medium hover:text-muted-foreground transition-colors"
                 >
-                  hello@imagineent.com
+                  info@imaginesl.com
                 </a>
               </div>
 
               <div>
                 <p className="text-xs tracking-[0.15em] text-muted-foreground mb-4">//Phone</p>
                 <a
-                  href="tel:+442071234567"
+                  href="tel:+94717750744"
                   className="text-2xl md:text-3xl font-medium hover:text-muted-foreground transition-colors"
                 >
-                  +44 20 7123 4567
+                  +94 717 750744
                 </a>
               </div>
 
               <div>
                 <p className="text-xs tracking-[0.15em] text-muted-foreground mb-4">//Location</p>
-                <p className="text-lg font-medium">London, United Kingdom</p>
-                <p className="text-muted-foreground mt-1">Available worldwide</p>
+                <address className="text-lg font-medium not-italic leading-relaxed">
+                  <p>No : 97 Delkanda,</p>
+                  <p>Old Kesbewa Road,</p>
+                  <p>Nugegoda 10250,</p>
+                  <p>Sri Lanka.</p>
+                </address>
               </div>
 
               <div>
