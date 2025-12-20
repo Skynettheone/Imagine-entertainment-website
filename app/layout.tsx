@@ -1,9 +1,10 @@
 import type React from "react"
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Inter } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
 import Navigation from "@/components/navigation"
+import { CookieConsent } from "@/components/cookie-consent"
 import { ThemeProvider } from "@/components/theme-provider"
 
 const inter = Inter({
@@ -16,12 +17,7 @@ export const metadata: Metadata = {
   description:
     "Full-service event production for corporate events, television, film, and theatre. We create extraordinary experiences that captivate audiences worldwide.",
   generator: "v0.app",
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 5,
-    userScalable: true,
-  },
+
   icons: {
     icon: [
       { url: "/Imagine Logo White Alpha.png", type: "image/png" },
@@ -31,6 +27,13 @@ export const metadata: Metadata = {
     ],
     shortcut: "/Imagine Logo White Alpha.png",
   },
+}
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
 }
 
 export default function RootLayout({
@@ -45,6 +48,7 @@ export default function RootLayout({
         <Navigation />
         {children}
         <Analytics />
+        <CookieConsent />
         </ThemeProvider>
       </body>
     </html>
