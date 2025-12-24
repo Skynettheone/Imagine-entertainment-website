@@ -26,10 +26,24 @@ const services = [
   },
   {
     id: 3,
-    title: "Music",
-    eventType: "Music",
+    title: "Musical Concert",
+    eventType: "Musical Concert",
     image: "/music-festival-outdoor-stage-crowd-night-lights.jpg",
     span: "lg:col-start-3 lg:col-span-1 lg:row-start-1 lg:row-span-1",
+  },
+  {
+    id: 6,
+    title: "Fixed Installation",
+    eventType: "Fixed Installation",
+    image: "/professional-event-production-team-working-stage-s.jpg",
+    span: "lg:col-start-1 lg:col-span-1 lg:row-start-3 lg:row-span-1",
+  },
+  {
+    id: 7,
+    title: "Weddings & Private Celebrations",
+    eventType: "Weddings & Private Celebrations",
+    image: "/dramatic-stage-lighting-corporate-event-dark-green.jpg",
+    span: "sm:col-span-2 lg:col-start-2 lg:col-span-2 lg:row-start-3 lg:row-span-1",
   },
   {
     id: 4,
@@ -79,20 +93,20 @@ export default function Home() {
         <div className="max-w-[1400px] mx-auto px-6 md:px-10">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-24">
             {/* Left Column - Expertise */}
-            <div className="flex flex-col justify-start items-start">
+            <div className="flex flex-col justify-center items-start">
               <p className="text-muted-foreground text-xs tracking-[0.15em] mb-4 font-medium uppercase">//Expertise</p>
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-medium leading-tight mb-6">
-                A single, experienced team producers, directors, and technicians working side-by-side.
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-6">
+                One Vision. One Team. One Flawless Event.
               </h2>
-              <p className="text-muted-foreground leading-relaxed mb-8 max-w-lg">
-                IMAGINE ENTERTAINMENT is a full-service event production company that takes ideas from concept to execution. Our cross-functional crew collaborates under one roof, so you deal with one accountable partner.
+              <p className="text-muted-foreground leading-relaxed mb-8 max-w-lg text-base md:text-lg">
+                At Imagine Entertainment, a single, seasoned team of producers, directors, and technicians brings your ideas to life from concept to execution. With our full-service, cross-functional crew working side by side under one roof, you get one accountable partner delivering seamless, unforgettable experiences.
               </p>
               <Link
                 href="/contact"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-foreground text-background text-sm font-medium hover:bg-foreground/90 transition-colors"
+                className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-gradient-to-r from-foreground to-foreground/90 text-background text-base font-semibold hover:from-foreground/90 hover:to-foreground transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
               >
-                Let's work together
-                <ArrowRight className="w-4 h-4" />
+                Start Your Project Today
+                <ArrowRight className="w-5 h-5" />
               </Link>
             </div>
 
@@ -151,8 +165,8 @@ export default function Home() {
       {/* Pre-footer CTA */}
       <section className="relative h-[50vh] md:h-[70vh] overflow-hidden mx-4 md:mx-6 rounded-2xl">
         <Image
-          src="/behind-the-scenes-event-production-crew-working-ba.jpg"
-          alt="Behind the scenes"
+          src="/dramatic-concert-stage-lighting-dark-atmospheric-p.jpg"
+          alt="Let's talk"
           fill
           className="object-cover"
           sizes="(max-width: 768px) 100vw, 100vw"
@@ -190,9 +204,9 @@ function StatsSection() {
   }, [])
 
   const stats = [
-    { number: "15", suffix: "+", label: "Years of Excellence" },
-    { number: "500", suffix: "+", label: "Projects Delivered" },
-    { number: "50", suffix: "+", label: "Creative Experts" },
+    { number: "37", suffix: "+", label: "Years of Excellence" },
+    { number: "1000", suffix: "+", label: "Projects Delivered" },
+    { number: "100", suffix: "+", label: "Creative Experts" },
     { number: "98", suffix: "%", label: "Client Satisfaction" },
   ]
 
@@ -271,31 +285,13 @@ function StatementReveal() {
         <div className="h-px w-10 bg-border" />
       </div>
 
-      <h2 className="text-2xl md:text-4xl lg:text-5xl font-medium leading-tight">
-        <span
-          className={`block transition-all duration-700 ${
-            isVisible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
-          }`}
-        >
-          We're not just a production company.
-        </span>
-        <span
-          className={`block italic font-normal text-muted-foreground transition-all duration-700 ${
-            isVisible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
-          }`}
-          style={{ transitionDelay: "0.15s" }}
-        >
-          We're your creative partner.
-        </span>
-      </h2>
-
       <p
-        className={`mt-6 text-muted-foreground max-w-xl mx-auto leading-relaxed transition-all duration-700 ${
+        className={`text-xl md:text-2xl lg:text-3xl text-muted-foreground max-w-3xl mx-auto leading-relaxed transition-all duration-700 ${
           isVisible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
         }`}
-        style={{ transitionDelay: "0.3s" }}
+        style={{ transitionDelay: "0.15s" }}
       >
-        From concept to execution, we deliver experiences that leave lasting impressions.
+        Every great experience starts with a story. We partner with you to shape that story—from imagination to impact—creating moments people remember.
       </p>
     </div>
   )

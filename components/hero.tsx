@@ -2,7 +2,7 @@
 
 import { useRef, useState, useEffect } from "react"
 import Link from "next/link"
-import { ArrowRight } from "lucide-react"
+import { ArrowRight, ArrowUpRight } from "lucide-react"
 
 export default function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -62,11 +62,11 @@ export default function Hero() {
         <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row items-start md:items-end justify-between gap-4 sm:gap-6 md:gap-8">
           {/* Left Side - Text */}
           <div className="text-white flex-1 w-full md:w-auto">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-1 sm:mb-0.5 text-white leading-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-2 sm:mb-1 text-white leading-tight">
             IMAGINE ENTERTAINMENT
           </h1>
-            <p className="text-xs sm:text-sm md:text-base lg:text-lg text-white/90 max-w-2xl leading-relaxed mt-1 sm:mt-0">
-              Sri Lanka's premier destination for immersive production and creative storytelling.
+            <p className="text-sm sm:text-base md:text-lg lg:text-xl text-white/90 max-w-2xl leading-relaxed mt-2 sm:mt-1">
+              Imagine Entertainment creates unforgettable live experiences, offering end-to-end event production, from creative design, lighting, sound, LED screens, creative visuals, Stage installation and equipment rentals to flawless execution and professional rigging, bringing every concert, corporate event, or large-scale production to life.
           </p>
           </div>
 
@@ -74,9 +74,10 @@ export default function Hero() {
           <div className="w-full md:w-auto flex md:block">
             <Link
               href="/gallery"
-              className="inline-flex items-center justify-start md:justify-center gap-2 px-5 md:px-6 py-2.5 md:py-3 bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 transition-all rounded-full font-medium text-sm w-auto"
+              className="inline-flex items-center justify-start md:justify-center gap-2 px-6 md:px-8 py-3 md:py-4 bg-gradient-to-r from-white/20 to-white/10 backdrop-blur-md border-2 border-white/30 text-white hover:from-white/30 hover:to-white/20 hover:border-white/40 transition-all rounded-full font-semibold text-base md:text-lg shadow-lg hover:shadow-xl transform hover:scale-105 w-auto"
             >
               View Our Work
+              <ArrowUpRight className="w-5 h-5" />
             </Link>
           </div>
         </div>

@@ -24,12 +24,23 @@ export default function ContactPage() {
 
   return (
     <main className="min-h-screen bg-background">
-      <section className="pt-28 pb-12 md:pt-36 md:pb-16 px-6 md:px-10">
-        <div className="max-w-[1400px] mx-auto">
+      {/* Hero Section with Image */}
+      <section className="relative min-h-[60vh] md:min-h-[70vh] bg-foreground dark:bg-black text-white overflow-hidden flex items-end">
+        <div className="absolute inset-0">
+          <img
+            src="/behind-the-scenes-event-production-crew-working-ba.jpg"
+            alt="Let's talk"
+            className="w-full h-full object-cover opacity-40 dark:opacity-70"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-foreground via-foreground/60 to-foreground/40 dark:from-black/90 dark:via-black/70 dark:to-black/50" />
+          <div className="absolute inset-0 bg-black/40 dark:bg-black/50" />
+        </div>
+
+        <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 md:px-10 pb-16 md:pb-20">
           <div className="max-w-3xl">
             <div className="overflow-hidden mb-3">
               <p
-                className={`text-muted-foreground text-xs tracking-[0.15em] transition-all duration-700 ${
+                className={`text-white/50 dark:text-white/70 text-xs tracking-[0.15em] transition-all duration-700 ${
                   isLoaded ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"
                 }`}
               >
@@ -39,18 +50,23 @@ export default function ContactPage() {
             <h1>
               <div className="overflow-hidden">
                 <span
-                  className={`block text-4xl md:text-5xl lg:text-6xl font-medium leading-[1.1] transition-all duration-700 ${
+                  className={`block text-4xl md:text-5xl lg:text-6xl font-medium leading-[1.1] text-white dark:text-white transition-all duration-700 ${
                     isLoaded ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"
                   }`}
                   style={{ transitionDelay: "0.15s" }}
                 >
                   Let's Create Something
                   <br />
-                  <span className="italic font-normal text-muted-foreground">Extraordinary</span>
+                  <span className="italic font-normal text-white/80 dark:text-white/70">Extraordinary</span>
                 </span>
               </div>
             </h1>
           </div>
+        </div>
+      </section>
+
+      <section className="pt-12 md:pt-16 px-6 md:px-10">
+        <div className="max-w-[1400px] mx-auto">
         </div>
       </section>
 

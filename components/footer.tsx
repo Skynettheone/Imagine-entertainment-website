@@ -53,6 +53,9 @@ export default function Footer() {
               alt="Imagine Entertainment" 
               className="h-16 md:h-20 w-auto mb-4 transition-all duration-300" 
             />
+            <p className="text-foreground/90 text-base font-medium mb-2">
+              Bringing stories to life
+            </p>
             <p className="text-foreground/70 text-sm leading-relaxed max-w-xs">
               Creating extraordinary experiences for corporate events, television, film, and theatre worldwide.
             </p>
@@ -112,39 +115,39 @@ export default function Footer() {
             <div className="flex items-center gap-4">
               <a
                 href={socialLinks.facebook}
-                className="text-foreground/70 hover:text-foreground transition-colors duration-300"
+                className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors duration-300"
                 aria-label="Facebook"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <FacebookIcon className="w-5 h-5" />
+                <FacebookIcon className="w-6 h-6" />
               </a>
               <a
                 href={socialLinks.instagram}
-                className="text-foreground/70 hover:text-foreground transition-colors duration-300"
+                className="text-pink-600 hover:text-pink-700 dark:text-pink-400 dark:hover:text-pink-300 transition-colors duration-300"
                 aria-label="Instagram"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <InstagramIcon className="w-5 h-5" />
+                <InstagramIcon className="w-6 h-6" />
               </a>
               <a
                 href={socialLinks.linkedin}
-                className="text-foreground/70 hover:text-foreground transition-colors duration-300"
+                className="text-blue-700 hover:text-blue-800 dark:text-blue-300 dark:hover:text-blue-200 transition-colors duration-300"
                 aria-label="LinkedIn"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <LinkedInIcon className="w-5 h-5" />
+                <LinkedInIcon className="w-6 h-6" />
               </a>
               <a
                 href={socialLinks.twitter}
-                className="text-foreground/70 hover:text-foreground transition-colors duration-300"
+                className="text-sky-500 hover:text-sky-600 dark:text-sky-400 dark:hover:text-sky-300 transition-colors duration-300"
                 aria-label="Twitter"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <TwitterIcon className="w-5 h-5" />
+                <TwitterIcon className="w-6 h-6" />
               </a>
             </div>
           </div>

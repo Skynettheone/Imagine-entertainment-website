@@ -51,16 +51,18 @@ export default function Navigation() {
   }, [isOpen])
 
   const menuItems = [
-    { label: "Work", href: "/work" },
+    { label: "Our Portfolio", href: "/work" },
     { label: "Services", href: "/services", hasDropdown: true },
     { label: "About", href: "/about" },
     { label: "Gallery", href: "/gallery" },
   ]
 
   const servicesItems = [
-    { label: "Corporate Events", href: "/services#corporate-events", number: "01" },
-    { label: "Television & Film", href: "/services#television-and-film", number: "02" },
-    { label: "Theatre Production", href: "/services#theatre-production", number: "03" },
+    { label: "Corporate Events", href: "/services#corporate", number: "01" },
+    { label: "Television & Film Production", href: "/services#television-and-film-production", number: "02" },
+    { label: "Musical Concert", href: "/services#musical-concert", number: "03" },
+    { label: "Fixed Installation", href: "/services#fixed-installation", number: "04" },
+    { label: "Weddings & Private Celebrations", href: "/services#weddings-and-private-celebrations", number: "05" },
   ]
 
   // Handle hover with delay to prevent flickering
@@ -169,12 +171,21 @@ export default function Navigation() {
       >
         <div className="max-w-[1400px] mx-auto px-6 md:px-10" suppressHydrationWarning>
           <div className="flex items-center justify-between h-16 md:h-20 min-h-[4rem] md:min-h-[5rem] w-full" suppressHydrationWarning>
-            <Link href="/" className="relative z-50 flex items-center gap-2" onClick={() => setIsOpen(false)}>
+            <Link href="/" className="relative z-50 flex items-center gap-3" onClick={() => setIsOpen(false)}>
               <img
                 src={getLogoSource()}
                 alt="Imagine Entertainment"
-                className="h-8 md:h-10 w-auto transition-all duration-300"
+                className="h-10 md:h-12 lg:h-14 w-auto transition-all duration-300"
               />
+              <span className={`hidden md:block text-lg md:text-xl font-semibold transition-colors duration-300 ${
+                scrolled || !hasHeroSection
+                  ? isDarkMode
+                    ? "text-white"
+                    : "text-black"
+                  : "text-white"
+              }`}>
+                Imagine Entertainment
+              </span>
             </Link>
 
             <div className="hidden lg:flex items-center gap-12" suppressHydrationWarning>
@@ -240,17 +251,6 @@ export default function Navigation() {
                               </DropdownMenuItem>
                             ))}
                           </div>
-                          <div className="my-2 h-px bg-border" />
-                          <DropdownMenuItem asChild className="focus:bg-transparent p-0 m-0">
-                            <Link
-                              href="/services"
-                              className="w-full flex items-center justify-between px-4 py-3 rounded-lg text-sm font-medium text-foreground hover:bg-muted transition-colors"
-                              onClick={() => setServicesOpen(false)}
-                            >
-                              <span>View All Services</span>
-                              <ArrowUpRight className="w-4 h-4 text-muted-foreground" />
-                            </Link>
-                          </DropdownMenuItem>
                         </DropdownMenuContent>
                       </div>
                     </DropdownMenu>
@@ -290,15 +290,18 @@ export default function Navigation() {
               
               <Link
                 href="/contact"
-                className={`hidden lg:flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 flex-shrink-0 ${
+                className={`hidden lg:flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold transition-all duration-300 flex-shrink-0 shadow-lg hover:shadow-xl transform hover:scale-105 ${
                   scrolled || !hasHeroSection
                     ? isDarkMode
-                      ? "bg-white text-black hover:bg-white/90 border border-white"
-                      : "bg-black text-white hover:bg-black/90 border border-black"
-                    : "bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20"
+                      ? "bg-gradient-to-r from-white to-white/95 text-black hover:from-white/95 hover:to-white border-2 border-white"
+                      : "bg-gradient-to-r from-black to-black/95 text-white hover:from-black/95 hover:to-black border-2 border-black"
+                    : "bg-gradient-to-r from-white/20 to-white/10 backdrop-blur-md border-2 border-white/30 text-white hover:from-white/30 hover:to-white/20 hover:border-white/40"
                 }`}
               >
-                Talk to Us
+                <span className="relative">
+                  Talk to Us
+                  <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+                </span>
                 <ArrowUpRight className="w-4 h-4 flex-shrink-0" />
               </Link>
 

@@ -85,61 +85,49 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Expertise section */}
+      {/* The Minds Behind the Experience */}
       <section className="pb-20 md:pb-28 px-6 md:px-10 border-t border-border pt-20 md:pt-28">
         <div className="max-w-[1400px] mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20">
-            <div>
-              <p className="text-muted-foreground text-xs tracking-[0.15em] mb-3">//Expertise</p>
-              <h2 className="text-xl md:text-2xl font-medium mb-6 leading-relaxed">
-                A single, experienced team producers, directors, and technicians working side-by-side.
-              </h2>
-              <p className="text-muted-foreground leading-relaxed mb-6">
-                IMAGINE ENTERTAINMENT is a full-service event production company that takes ideas from concept to
-                execution. Our cross-functional crew collaborates under one roof, so you deal with one accountable
-                partner.
-              </p>
-              <Link
-                href="/contact"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-foreground text-background text-sm font-medium hover:bg-foreground/90 transition-colors"
-              >
-                Let's work together
-                <ArrowRight className="w-4 h-4" />
-              </Link>
+          <div className="text-center mb-12 md:mb-16">
+            <p className="text-muted-foreground text-xs tracking-[0.15em] mb-4">//Leadership</p>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-medium mb-4">
+              The Minds Behind the Experience
+            </h2>
+            <p className="text-muted-foreground text-lg mb-8">Meet Our Founders</p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-12 md:gap-16 lg:gap-20 mb-12">
+            {/* Founder 1 */}
+            <div className="text-center">
+              <div className="relative w-64 h-64 md:w-80 md:h-80 mx-auto mb-6 rounded-full overflow-hidden bg-muted">
+                <img
+                  src="/professional-event-production-team-working-stage-s.jpg"
+                  alt="Mr. Sajith Morawaka Kodikara"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <h3 className="text-xl md:text-2xl font-medium mb-2">Mr. Sajith Morawaka Kodikara</h3>
+              <p className="text-muted-foreground mb-4">Managing Director</p>
             </div>
 
-            <div className="grid grid-cols-2 gap-8">
-              <div>
-                <p className="text-muted-foreground text-xs tracking-[0.15em] mb-4">//Services</p>
-                <ul className="space-y-2">
-                  {[
-                    "Creative Direction",
-                    "Technical Production",
-                    "Event Management",
-                    "Audio & Video",
-                    "Lighting Design",
-                    "Staging & Scenic",
-                  ].map((item) => (
-                    <li key={item} className="text-base">
-                      {item}
-                    </li>
-                  ))}
-                </ul>
+            {/* Founder 2 */}
+            <div className="text-center">
+              <div className="relative w-64 h-64 md:w-80 md:h-80 mx-auto mb-6 rounded-full overflow-hidden bg-muted">
+                <img
+                  src="/creative-team-meeting-modern-office-collaboration-e.jpg"
+                  alt="Mr. Sandun Morawaka Kodikara"
+                  className="w-full h-full object-cover"
+                />
               </div>
-
-              <div>
-                <p className="text-muted-foreground text-xs tracking-[0.15em] mb-4">//Industries</p>
-                <ul className="space-y-2">
-                  {["Corporate", "Television & Film", "Fashion", "Music & Live", "Automotive"].map(
-                    (item) => (
-                      <li key={item} className="text-base">
-                        {item}
-                      </li>
-                    ),
-                  )}
-                </ul>
-              </div>
+              <h3 className="text-xl md:text-2xl font-medium mb-2">Mr. Sandun Morawaka Kodikara</h3>
+              <p className="text-muted-foreground mb-4">Director</p>
             </div>
+          </div>
+
+          <div className="max-w-3xl mx-auto text-center">
+            <p className="text-muted-foreground leading-relaxed text-base md:text-lg">
+              With over 37 years of experience in the events and entertainment industry, our founders have shaped Imagine Entertainment into a premier full-service production company. Their vision, expertise, and dedication continue to drive creativity, innovation, and flawless execution in every event we produce.
+            </p>
           </div>
         </div>
       </section>

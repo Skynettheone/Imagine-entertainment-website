@@ -39,7 +39,7 @@ const services = [
   },
   {
     number: "03",
-    title: "Music",
+    title: "Musical Concert",
     description: "Full production services for concerts, festivals, and music events of all scales.",
     items: ["Concerts & Tours", "Music Festivals", "Dance Music Events", "Classical Music Concerts"],
     image: "/music-festival-outdoor-stage-crowd-night-lights.jpg",
@@ -61,6 +61,37 @@ const services = [
     title: "Public, Sports & Major Events",
     description: "Large-scale event production for public gatherings, sporting events, and ceremonies.",
     items: ["Sporting Events", "Public Events", "Opening & Closing Ceremonies"],
+    image: "/dramatic-stage-lighting-corporate-event-dark-green.jpg",
+  },
+  {
+    number: "06",
+    title: "Fixed Installation",
+    description: "Imagine Entertainment (Pvt) Ltd delivers reliable and high-impact fixed LED screen solutions, sound system and light systems for commercial and hospitality environments across Sri Lanka.",
+    items: [
+      "LED screen supply",
+      "Installation and structural framing",
+      "System configuration and commissioning",
+      "Maintenance and technical support",
+      "Weather-resistant construction for outdoor conditions",
+      "Designed for continuous operation",
+      "Corrosion-resistant for long-term durability",
+    ],
+    image: "/professional-event-production-team-working-stage-s.jpg",
+  },
+  {
+    number: "07",
+    title: "Weddings & Private Celebrations",
+    description: "Expert event production and creative direction for unforgettable weddings and private gatherings.",
+    items: [
+      "Full Wedding Planning & Concept Design",
+      "Stage & Decor Design",
+      "Lighting, Sound & AV Production",
+      "Live Entertainment & Performances",
+      "Ceremony & Reception Coordination",
+      "Wedding Videography & Cinematic Films",
+      "Destination Weddings & Luxury Experiences",
+      "Themed & Cultural Wedding Productions",
+    ],
     image: "/dramatic-stage-lighting-corporate-event-dark-green.jpg",
   },
 ]
@@ -195,7 +226,13 @@ function ServiceCard({ service, index }: { service: (typeof services)[0]; index:
     return () => observer.disconnect()
   }, [])
 
-  const serviceId = service.title.toLowerCase().replace(/\s+/g, "-").replace(/&/g, "and").replace(/,/g, "").replace(/\s*,\s*/g, "-")
+  const serviceId = service.title.toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/&/g, "and")
+    .replace(/,/g, "")
+    .replace(/\s*,\s*/g, "-")
+    .replace(/\s+and\s+/g, "-and-")
+    .trim()
 
   return (
     <div
