@@ -233,8 +233,9 @@ export default function Navigation() {
     return isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground"
   }
 
-  // Nav background: transparent when not scrolled, solid when scrolled
+  // Nav background: transparent when not scrolled or when mobile menu is open
   const getNavAnimationState = () => {
+    if (isOpen) return "transparent"
     if (!mounted || !scrolled) return "transparent"
     return isDarkMode ? "scrolledDark" : "scrolledLight"
   }
@@ -466,18 +467,20 @@ export default function Navigation() {
             animate="open"
             exit="closed"
             variants={mobileMenuVariants}
-            className="fixed inset-0 z-40 bg-background dark:bg-background text-foreground dark:text-foreground backdrop-blur-md"
+            className="fixed inset-0 z-40 bg-background/95 dark:bg-black/90 text-foreground dark:text-foreground backdrop-blur-md supports-[backdrop-filter]:bg-background/95"
             suppressHydrationWarning
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={{ right: 0.2 }}
+            onDragEnd={(e, { offset, velocity }) => {
+              const swipe = offset.x > 100 || velocity.x > 500
+              if (swipe) {
+                setIsOpen(false)
+              }
+            }}
           >
-            <div className="h-full flex flex-col justify-start pt-24 pb-6 px-6 md:px-10 overflow-y-auto no-scrollbar" suppressHydrationWarning>
-              <motion.div 
-                className="space-y-2"
-                variants={menuContainerVariants}
-                initial="closed"
-                animate="open"
-                exit="closed"
-                suppressHydrationWarning
-              >
+            <div className="h-full flex flex-col px-6 md:px-10 pb-8 pt-24 overflow-y-auto no-scrollbar" suppressHydrationWarning>
+              <div className="flex-1 flex flex-col justify-start space-y-6">
                 {menuItems.map((item) => {
                   if (item.hasDropdown) {
                     return (
@@ -487,14 +490,13 @@ export default function Navigation() {
                         className="overflow-hidden"
                         suppressHydrationWarning
                       >
-                        <div className="py-2">
+                        <div className="py-1">
                           <button
                             onClick={() => setMobileServicesOpen(!mobileServicesOpen)}
-                            className="flex items-center gap-3 mb-3 w-full text-left"
+                            className="flex items-center justify-between w-full text-left group"
                           >
                             <motion.span 
-                              className="text-2xl sm:text-3xl md:text-5xl font-medium text-foreground dark:text-foreground"
-                              whileHover={{ opacity: 0.6 }}
+                              className="text-2xl sm:text-3xl md:text-4xl font-normal text-foreground"
                               transition={{ duration: 0.2 }}
                             >
                               {item.label}
@@ -502,8 +504,9 @@ export default function Navigation() {
                             <motion.div
                               animate={{ rotate: mobileServicesOpen ? 180 : 0 }}
                               transition={{ duration: 0.3 }}
+                              className="text-muted-foreground group-hover:text-foreground transition-colors"
                             >
-                              <ChevronDown className="w-5 h-5 md:w-8 md:h-8 text-foreground" />
+                              <ChevronDown className="w-5 h-5 md:w-6 md:h-6" />
                             </motion.div>
                           </button>
                           
@@ -516,38 +519,43 @@ export default function Navigation() {
                             transition={{ duration: 0.3, ease: "easeInOut" }}
                             className="overflow-hidden"
                           >
-                            <div className="pl-4 flex flex-col gap-2 mt-2 border-l border-border/50 ml-2">
+                            <div className="flex flex-col gap-3 mt-4 mb-2 pl-2">
                               {servicesItems.map((service, index) => (
                                 <motion.div
                                   key={service.label}
-                                  initial={{ x: -20, opacity: 0 }}
-                                  animate={mobileServicesOpen ? { x: 0, opacity: 1 } : { x: -20, opacity: 0 }}
-                                  transition={{ duration: 0.3, delay: index * 0.05 }}
+                                  initial={{ x: -10, opacity: 0 }}
+                                  animate={mobileServicesOpen ? { x: 0, opacity: 1 } : { x: -10, opacity: 0 }}
+                                  transition={{ duration: 0.2, delay: index * 0.03 }}
                                 >
                                   <Link
                                     href={service.href}
                                     onClick={() => setIsOpen(false)}
-                                    className="block py-2"
+                                    className="block group"
                                   >
-                                    <span className="text-base sm:text-lg md:text-2xl font-normal text-muted-foreground hover:text-foreground transition-colors break-words">
-                                      {service.label}
-                                    </span>
+                                    <div className="flex items-center justify-between">
+                                      <span className="text-sm sm:text-base text-muted-foreground group-hover:text-foreground transition-colors font-light">
+                                        {service.label}
+                                      </span>
+                                      <span className="opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <ArrowUpRight className="w-3 h-3 text-muted-foreground" />
+                                      </span>
+                                    </div>
                                   </Link>
                                 </motion.div>
                               ))}
                               
                               <motion.div
-                                initial={{ x: -20, opacity: 0 }}
-                                animate={mobileServicesOpen ? { x: 0, opacity: 1 } : { x: -20, opacity: 0 }}
-                                transition={{ duration: 0.3, delay: servicesItems.length * 0.05 }}
+                                initial={{ opacity: 0 }}
+                                animate={mobileServicesOpen ? { opacity: 1 } : { opacity: 0 }}
+                                transition={{ duration: 0.2, delay: servicesItems.length * 0.03 }}
+                                className="pt-2"
                               >
                                 <Link
                                   href="/services"
                                   onClick={() => setIsOpen(false)}
-                                  className="flex items-center gap-2 py-3 mt-2 text-foreground font-medium group"
+                                  className="text-sm font-medium text-foreground flex items-center gap-2"
                                 >
-                                  <span className="text-base sm:text-lg md:text-2xl">View all services</span>
-                                  <ArrowUpRight className="w-4 h-4 md:w-6 md:h-6 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                                  View all services <ArrowUpRight className="w-3 h-3" />
                                 </Link>
                               </motion.div>
                             </div>
@@ -563,87 +571,80 @@ export default function Navigation() {
                       className="overflow-hidden"
                       suppressHydrationWarning
                     >
-                      <Link href={item.href} onClick={() => setIsOpen(false)} className="block py-2">
-                        <motion.span 
-                          className="text-2xl sm:text-3xl md:text-5xl font-medium text-foreground dark:text-foreground"
-                          whileHover={{ opacity: 0.6 }}
-                          transition={{ duration: 0.2 }}
-                        >
-                          {item.label}
-                        </motion.span>
+                      <Link href={item.href} onClick={() => setIsOpen(false)} className="block py-1">
+                        <div className="flex items-center justify-between group">
+                          <motion.span 
+                            className="text-2xl sm:text-3xl md:text-4xl font-normal text-foreground"
+                            transition={{ duration: 0.2 }}
+                          >
+                            {item.label}
+                          </motion.span>
+                          <span className="text-muted-foreground group-hover:text-foreground transition-colors">
+                            <ArrowUpRight className="w-5 h-5 md:w-6 md:h-6 opacity-0 group-hover:opacity-100 transition-opacity" />
+                          </span>
+                        </div>
                       </Link>
                     </motion.div>
                   )
                 })}
-                <motion.div
-                  variants={menuItemVariants}
-                  className="overflow-hidden"
-                  suppressHydrationWarning
-                >
-                  <Link href="/contact" onClick={() => setIsOpen(false)} className="block py-2">
-                    <motion.span 
-                      className={`inline-block text-xl sm:text-2xl md:text-4xl font-medium px-5 py-1.5 rounded-full ${
+              </div>
+
+              {/* Bottom Section: CTA & Socials */}
+              <motion.div
+                variants={menuContainerVariants}
+                className="mt-8 flex flex-col gap-6"
+              >
+                <motion.div variants={menuItemVariants} className="w-full">
+                  <Link href="/contact" onClick={() => setIsOpen(false)} className="block w-full">
+                    <motion.div 
+                      className={`w-full flex items-center justify-center gap-2 py-4 rounded-full text-base font-medium transition-all ${
                         isDarkMode 
-                          ? "bg-white text-black" 
-                          : "bg-black text-white"
+                          ? "bg-white text-black hover:bg-white/90" 
+                          : "bg-black text-white hover:bg-black/90"
                       }`}
-                      whileHover={{ opacity: 0.8 }}
-                      transition={{ duration: 0.2 }}
+                      whileTap={{ scale: 0.98 }}
                     >
-                      Contact
-                    </motion.span>
+                      <span>Contact</span>
+                    </motion.div>
                   </Link>
                 </motion.div>
                 
-                {/* Social Icons */}
                 <motion.div
                   variants={menuItemVariants}
-                  className="flex items-center gap-6 pt-4 mt-auto"
+                  className="flex items-center justify-center gap-8"
                   suppressHydrationWarning
                 >
                   <a
                     href={socialLinks.facebook}
-                    className="text-foreground/70"
+                    className="text-muted-foreground hover:text-foreground transition-colors"
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label="Facebook"
                   >
-                    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                    </svg>
+                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
                   </a>
                   <a
                     href={socialLinks.instagram}
-                    className="text-foreground/70"
+                    className="text-muted-foreground hover:text-foreground transition-colors"
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label="Instagram"
                   >
-                    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                    </svg>
+                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
                   </a>
                   <a
                     href="https://tiktok.com/@imagineentertainment"
-                    className="text-foreground/70"
+                    className="text-muted-foreground hover:text-foreground transition-colors"
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label="TikTok"
                   >
-                    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
-                    </svg>
+                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg>
                   </a>
                   <a
                     href="https://youtube.com/@imagineentertainment"
-                    className="text-foreground/70"
+                    className="text-muted-foreground hover:text-foreground transition-colors"
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label="YouTube"
                   >
-                    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                    </svg>
+                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
                   </a>
                 </motion.div>
               </motion.div>
