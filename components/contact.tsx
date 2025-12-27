@@ -18,7 +18,7 @@ export default function Contact() {
   }
 
   return (
-    <section id="contact" className="py-20 px-6 border-t border-border">
+    <section id="contact" className="py-12 pb-16 px-6 border-t border-border">
       <div className="max-w-4xl mx-auto">
         <div className="mb-16 text-center">
           <h2 className="text-4xl md:text-5xl font-bold mb-4 text-balance">Ready to Create Something?</h2>

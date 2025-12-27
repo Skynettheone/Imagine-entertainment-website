@@ -6,13 +6,110 @@ import { usePathname } from "next/navigation"
 import { ArrowUpRight, ChevronDown, Menu, X } from "lucide-react"
 import { useTheme } from "next-themes"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { motion, AnimatePresence, type Variants } from "framer-motion"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu"
+import { socialLinks } from "@/lib/socials"
+
+// Animation variants for smooth, optimized animations
+const navVariants = {
+  transparent: {
+    backgroundColor: "rgba(0, 0, 0, 0)",
+    backdropFilter: "blur(0px)",
+  },
+  scrolledDark: {
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
+    backdropFilter: "blur(20px)",
+  },
+  scrolledLight: {
+    backgroundColor: "rgba(255, 255, 255, 0.7)",
+    backdropFilter: "blur(20px)",
+  },
+}
+
+const mobileMenuVariants: Variants = {
+  closed: {
+    opacity: 0,
+    transition: {
+      duration: 0.3,
+      ease: [0.77, 0, 0.175, 1] as const,
+    },
+  },
+  open: {
+    opacity: 1,
+    transition: {
+      duration: 0.4,
+      ease: [0.77, 0, 0.175, 1] as const,
+    },
+  },
+}
+
+const menuContainerVariants: Variants = {
+  closed: {
+    transition: {
+      staggerChildren: 0.05,
+      staggerDirection: -1,
+    },
+  },
+  open: {
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.1,
+    },
+  },
+}
+
+const menuItemVariants: Variants = {
+  closed: {
+    opacity: 0,
+    y: 40,
+    transition: {
+      duration: 0.3,
+      ease: [0.77, 0, 0.175, 1] as const,
+    },
+  },
+  open: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: [0.77, 0, 0.175, 1] as const,
+    },
+  },
+}
+
+const subMenuItemVariants: Variants = {
+  closed: {
+    opacity: 0,
+    y: 20,
+    transition: {
+      duration: 0.2,
+      ease: [0.77, 0, 0.175, 1] as const,
+    },
+  },
+  open: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.4,
+      ease: [0.77, 0, 0.175, 1] as const,
+    },
+  },
+}
+
+const hamburgerVariants = {
+  closed: { rotate: 0, scale: 1 },
+  open: { rotate: 90, scale: 0 },
+}
+
+const closeVariants = {
+  closed: { rotate: -90, scale: 0 },
+  open: { rotate: 0, scale: 1 },
+}
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
@@ -61,8 +158,10 @@ export default function Navigation() {
     { label: "Corporate Events", href: "/services#corporate", number: "01" },
     { label: "Television & Film Production", href: "/services#television-and-film-production", number: "02" },
     { label: "Musical Concert", href: "/services#musical-concert", number: "03" },
-    { label: "Fixed Installation", href: "/services#fixed-installation", number: "04" },
-    { label: "Weddings & Private Celebrations", href: "/services#weddings-and-private-celebrations", number: "05" },
+    { label: "Rigging Services", href: "/services#rigging-services", number: "04" },
+    { label: "Public, Sports & Major Events", href: "/services#public-sports-and-major-events", number: "05" },
+    { label: "Fixed Installation", href: "/services#fixed-installation", number: "06" },
+    { label: "Weddings & Private Celebrations", href: "/services#weddings-and-private-celebrations", number: "07" },
   ]
 
   // Handle hover with delay to prevent flickering
@@ -77,7 +176,7 @@ export default function Navigation() {
   const handleServicesMouseLeave = () => {
     servicesTimeoutRef.current = setTimeout(() => {
       setServicesOpen(false)
-    }, 200) // Small delay to prevent flickering when moving between trigger and content
+    }, 200)
   }
 
   useEffect(() => {
@@ -91,61 +190,52 @@ export default function Navigation() {
   const isDarkPage = pathname === "/" || pathname === "/about"
   const isDarkMode = mounted && (resolvedTheme === "dark" || theme === "dark")
   const isHeroPage = pathname === "/"
-  // Pages with hero sections (images/videos at the top): home page, about page, and work detail pages
   const hasHeroSection = pathname === "/" || pathname === "/about" || pathname.startsWith("/work/")
   
   // Determine which logo to show
   const getLogoSource = () => {
     if (!mounted) return "/Imagine_logo_black_long.png"
-    // If menu is open, use theme-appropriate logo (consider both theme and page background)
+    // When mobile menu is open, use theme-based logo (menu background matches theme)
     if (isOpen) {
-      // If on dark page or dark mode, show white logo
-      return (isDarkMode || isDarkPage) ? "/Imagine_logo_white_long.png" : "/Imagine_logo_black_long.png" 
+      return isDarkMode ? "/Imagine_logo_white_long.png" : "/Imagine_logo_black_long.png" 
     }
-    // If scrolled, use theme-based logo
     if (scrolled) {
       return isDarkMode ? "/Imagine_logo_white_long.png" : "/Imagine_logo_black_long.png"
     }
-    // On work detail page with hero image: show white logo when not scrolled
     if (pathname.startsWith("/work/") && !scrolled) return "/Imagine_logo_white_long.png"
-    // If on dark page, show white logo
     if (isDarkPage) return "/Imagine_logo_white_long.png"
-    // Otherwise use theme-based logo
     return isDarkMode ? "/Imagine_logo_white_long.png" : "/Imagine_logo_black_long.png"
   }
 
-  // Determine icon color for hero page
+  // Icon color: white on hero pages when not scrolled, foreground otherwise
   const getIconColor = () => {
-    // When menu is open, the menu overlay has a background, so use foreground color
-    if (isOpen) {
-      return "text-foreground"
-    }
-    // On hero page: white when not scrolled, dark when scrolled
-    if (isHeroPage) return scrolled ? "text-foreground" : "text-white"
-    // On work detail page with hero image: white when not scrolled
-    if (pathname.startsWith("/work/") && !scrolled) return "text-white"
-    // If scrolled, use theme-based color
-    if (scrolled) return "text-foreground"
-    // If on dark page, use white
-    if (isDarkPage) return "text-white"
-    // Otherwise use theme-based color (black in light mode)
-    return "text-black dark:text-foreground"
+    if (isOpen) return "text-foreground"
+    if (hasHeroSection && !scrolled) return "text-white"
+    return "text-foreground"
   }
 
-  // Determine theme toggle icon color - keep consistent, don't change on scroll
+  // Theme toggle color: white on hero pages when not scrolled, foreground otherwise
   const getThemeToggleColor = () => {
-    // When menu is open, use foreground color (visible on menu overlay background)
-    if (isOpen) return "foreground"
-    // On hero page: white when not scrolled
-    if (isHeroPage && !scrolled) return "white"
-    // On work detail page with hero image: white when not scrolled
-    if (pathname.startsWith("/work/") && !scrolled) return "white"
-    // If on dark page, use white
-    if (isDarkPage && !scrolled) return "white"
-    // If scrolled, use theme-based color
-    if (scrolled) return isDarkMode ? "white" : "foreground"
-    // Otherwise use foreground (consistent regardless of scroll)
-    return "foreground"
+    if (isOpen) return isDarkMode ? "white" : "foreground"
+    if (hasHeroSection && !scrolled) return "white"
+    return isDarkMode ? "white" : "foreground"
+  }
+
+  // Check if nav should use "hero mode" styling (white text on dark background)
+  const isHeroMode = hasHeroSection && !scrolled && !isOpen
+
+  // Nav link color based on hero mode
+  const getNavLinkClass = (isActive: boolean) => {
+    if (isHeroMode) {
+      return isActive ? "text-white" : "text-white/70 hover:text-white"
+    }
+    return isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+  }
+
+  // Nav background: transparent when not scrolled, solid when scrolled
+  const getNavAnimationState = () => {
+    if (!mounted || !scrolled) return "transparent"
+    return isDarkMode ? "scrolledDark" : "scrolledLight"
   }
 
   const iconColor = getIconColor()
@@ -153,14 +243,17 @@ export default function Navigation() {
 
   return (
     <>
-      <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-500 ${
-          mounted && scrolled
-            ? isDarkMode
-              ? "bg-black/95 backdrop-blur-md"
-              : "bg-white/95 backdrop-blur-md"
-            : "bg-transparent"
-        }`}
+      <motion.nav
+        initial="transparent"
+        animate={getNavAnimationState()}
+        variants={navVariants}
+        transition={{ 
+          duration: 0.5, 
+          ease: [0.25, 0.1, 0.25, 1],
+          backgroundColor: { duration: 0.4, ease: "easeInOut" },
+          backdropFilter: { duration: 0.6, ease: "easeOut" }
+        }}
+        className="fixed top-0 left-0 right-0 z-50"
         style={{ 
           transform: 'translateZ(0)',
           backfaceVisibility: 'hidden',
@@ -172,10 +265,14 @@ export default function Navigation() {
         <div className="max-w-[1400px] mx-auto px-6 md:px-10" suppressHydrationWarning>
           <div className="flex items-center justify-between h-16 md:h-20 min-h-[4rem] md:min-h-[5rem] w-full" suppressHydrationWarning>
             <Link href="/" className="relative z-50 flex items-center gap-2" onClick={() => setIsOpen(false)}>
-              <img
+              <motion.img
                 src={getLogoSource()}
                 alt="Imagine Entertainment"
-                className="h-8 md:h-9 w-auto transition-all duration-300"
+                className="h-10 md:h-11 w-auto"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
+                key={getLogoSource()}
               />
             </Link>
 
@@ -195,52 +292,84 @@ export default function Navigation() {
                         className="relative"
                       >
                         <DropdownMenuTrigger asChild>
-                          <button
-                            className={`text-sm font-medium transition-colors duration-300 flex items-center gap-1.5 ${
-                              pathname === item.href || pathname.startsWith("/services")
-                                ? scrolled
-                                  ? "text-foreground"
-                                  : isDarkPage || (pathname.startsWith("/work/") && !scrolled)
-                                    ? "text-white"
-                                    : "text-foreground"
-                                : scrolled
-                                  ? "text-muted-foreground hover:text-foreground"
-                                  : isDarkPage || (pathname.startsWith("/work/") && !scrolled)
-                                    ? "text-white/70 hover:text-white"
-                                    : "text-muted-foreground hover:text-foreground"
-                            }`}
-                          >
-                            {item.label}
-                            <ChevronDown
-                              className={`w-3.5 h-3.5 transition-transform duration-300 ${
-                                servicesOpen ? "rotate-180" : ""
-                              }`}
-                            />
-                          </button>
+                          <div className="flex items-center gap-1.5">
+                            <motion.div
+                              whileHover={{ scale: 1.02 }}
+                              whileTap={{ scale: 0.98 }}
+                            >
+                              <Link
+                                href="/services"
+                                className={`text-sm font-medium transition-colors duration-300 ${getNavLinkClass(
+                                  pathname === item.href || pathname.startsWith("/services")
+                                )}`}
+                              >
+                                {item.label}
+                              </Link>
+                            </motion.div>
+                            <motion.div
+                              animate={{ rotate: servicesOpen ? 180 : 0 }}
+                              transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+                              className={`cursor-pointer ${getNavLinkClass(false)}`}
+                            >
+                              <ChevronDown className="w-3.5 h-3.5" />
+                            </motion.div>
+                          </div>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent
                           align="start"
-                          sideOffset={12}
-                          className="w-64 bg-background/80 dark:bg-background/80 backdrop-blur-md border border-border shadow-lg rounded-xl p-2 min-w-[240px]"
+                          sideOffset={10}
+                          className="bg-background/90 dark:bg-background/90 backdrop-blur-xl border border-border shadow-xl rounded-xl p-3"
                           onMouseEnter={handleServicesMouseEnter}
                           onMouseLeave={handleServicesMouseLeave}
                         >
-                          <div className="space-y-1">
-                            {servicesItems.map((service) => (
-                              <DropdownMenuItem
-                                key={service.label}
-                                asChild
-                                className="focus:bg-transparent p-0 m-0"
-                              >
+                          <div className="grid grid-cols-2 gap-x-3">
+                            {/* Column 1 */}
+                            <div>
+                              {servicesItems.slice(0, 4).map((service) => (
+                                <DropdownMenuItem
+                                  key={service.label}
+                                  asChild
+                                  className="focus:bg-transparent p-0 m-0"
+                                >
+                                  <Link
+                                    href={service.href}
+                                    className="w-full flex items-center px-3 py-2 rounded-lg text-sm text-foreground hover:bg-white/10 dark:hover:bg-white/10 transition-colors"
+                                    onClick={() => setServicesOpen(false)}
+                                  >
+                                    <span>{service.label}</span>
+                                  </Link>
+                                </DropdownMenuItem>
+                              ))}
+                            </div>
+                            {/* Column 2 */}
+                            <div>
+                              {servicesItems.slice(4).map((service) => (
+                                <DropdownMenuItem
+                                  key={service.label}
+                                  asChild
+                                  className="focus:bg-transparent p-0 m-0"
+                                >
+                                  <Link
+                                    href={service.href}
+                                    className="w-full flex items-center px-3 py-2 rounded-lg text-sm text-foreground hover:bg-white/10 dark:hover:bg-white/10 transition-colors"
+                                    onClick={() => setServicesOpen(false)}
+                                  >
+                                    <span>{service.label}</span>
+                                  </Link>
+                                </DropdownMenuItem>
+                              ))}
+                              {/* View All Services as 4th item in column 2 */}
+                              <DropdownMenuItem asChild className="focus:bg-transparent p-0 m-0">
                                 <Link
-                                  href={service.href}
-                                  className="w-full flex items-center justify-between px-4 py-3 rounded-lg text-sm text-foreground hover:bg-muted transition-colors"
+                                  href="/services"
+                                  className="w-full flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-foreground hover:bg-white/10 dark:hover:bg-white/10 transition-colors"
                                   onClick={() => setServicesOpen(false)}
                                 >
-                                  <span>{service.label}</span>
+                                  <span>View All Services</span>
+                                  <ArrowUpRight className="w-3.5 h-3.5" />
                                 </Link>
                               </DropdownMenuItem>
-                            ))}
+                            </div>
                           </div>
                         </DropdownMenuContent>
                       </div>
@@ -248,25 +377,20 @@ export default function Navigation() {
                   )
                 }
                 return (
-                  <Link
+                  <motion.div
                     key={item.label}
-                    href={item.href}
-                    className={`text-sm font-medium transition-colors duration-300 ${
-                      pathname === item.href
-                        ? scrolled
-                          ? "text-foreground"
-                          : isDarkPage || (pathname.startsWith("/work/") && !scrolled)
-                            ? "text-white"
-                            : "text-foreground"
-                        : scrolled
-                          ? "text-muted-foreground hover:text-foreground"
-                          : isDarkPage || (pathname.startsWith("/work/") && !scrolled)
-                            ? "text-white/70 hover:text-white"
-                            : "text-muted-foreground hover:text-foreground"
-                    }`}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                   >
-                    {item.label}
-                  </Link>
+                    <Link
+                      href={item.href}
+                      className={`text-sm font-medium transition-colors duration-300 ${getNavLinkClass(
+                        pathname === item.href
+                      )}`}
+                    >
+                      {item.label}
+                    </Link>
+                  </motion.div>
                 )
               })}
             </div>
@@ -279,142 +403,229 @@ export default function Navigation() {
                 />
               </div>
               
-              <Link
-                href="/contact"
-                className={`hidden lg:flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold transition-all duration-300 flex-shrink-0 shadow-lg hover:shadow-xl transform hover:scale-105 ${
-                  scrolled || !hasHeroSection
-                    ? isDarkMode
-                      ? "bg-gradient-to-r from-white to-white/95 text-black hover:from-white/95 hover:to-white border-2 border-white"
-                      : "bg-gradient-to-r from-black to-black/95 text-white hover:from-black/95 hover:to-black border-2 border-black"
-                    : "bg-gradient-to-r from-white/20 to-white/10 backdrop-blur-md border-2 border-white/30 text-white hover:from-white/30 hover:to-white/20 hover:border-white/40"
-                }`}
+              <motion.div
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                className="hidden lg:block"
               >
-                <span className="relative">
-                  Talk to Us
-                  <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
-                </span>
-                <ArrowUpRight className="w-4 h-4 flex-shrink-0" />
-              </Link>
+                <Link
+                  href="/contact"
+                  className={`flex items-center gap-2 h-11 md:h-12 px-6 rounded-full text-sm font-bold transition-all duration-300 shadow-lg hover:shadow-2xl ${
+                    isHeroMode || isDarkMode
+                      ? "bg-white text-black hover:bg-white/90 border-2 border-white"
+                      : "bg-black text-white hover:bg-black/90 border-2 border-black"
+                  }`}
+                >
+                  <span>Talk to Us</span>
+                  <ArrowUpRight className="w-4 h-4 shrink-0 stroke-[2.5]" />
+                </Link>
+              </motion.div>
 
               <button
                 onClick={() => setIsOpen(!isOpen)}
                 className="lg:hidden relative z-50 w-8 h-8 flex items-center justify-center"
                 aria-label="Toggle menu"
               >
-                <Menu 
-                  className={`w-5 h-5 transition-all duration-300 absolute ${iconColor} ${
-                    isOpen ? "opacity-0 rotate-90 scale-0" : "opacity-100 rotate-0 scale-100"
-                  }`} 
-                />
-                <X 
-                  className={`w-5 h-5 transition-all duration-300 absolute ${iconColor} ${
-                    isOpen ? "opacity-100 rotate-0 scale-100" : "opacity-0 -rotate-90 scale-0"
-                  }`} 
-                />
+                <motion.div
+                  initial={false}
+                  animate={isOpen ? "open" : "closed"}
+                  className="absolute"
+                >
+                  <motion.div
+                    variants={hamburgerVariants}
+                    transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+                  >
+                    <Menu className={`w-5 h-5 ${iconColor}`} />
+                  </motion.div>
+                </motion.div>
+                <motion.div
+                  initial={false}
+                  animate={isOpen ? "open" : "closed"}
+                  className="absolute"
+                >
+                  <motion.div
+                    variants={closeVariants}
+                    transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+                  >
+                    <X className={`w-5 h-5 ${iconColor}`} />
+                  </motion.div>
+                </motion.div>
               </button>
             </div>
           </div>
         </div>
-      </nav>
+      </motion.nav>
 
-      <div
-        className={`fixed inset-0 z-40 bg-background dark:bg-background text-foreground dark:text-foreground backdrop-blur-md transition-all duration-700 ease-[cubic-bezier(0.77,0,0.175,1)] ${
-          isOpen ? "opacity-100 visible" : "opacity-0 invisible"
-        }`}
-        suppressHydrationWarning
-      >
-        <div className="h-full flex flex-col justify-center px-6 md:px-10" suppressHydrationWarning>
-          <div className="space-y-2" suppressHydrationWarning>
-            {menuItems.map((item, index) => {
-              if (item.hasDropdown) {
-                return (
-                  <div
-                    key={item.label}
-                    className="overflow-hidden"
-                    suppressHydrationWarning
-                    style={{
-                      opacity: isOpen ? 1 : 0,
-                      transform: isOpen ? "translateY(0)" : "translateY(100%)",
-                      transition: `all 0.5s cubic-bezier(0.77, 0, 0.175, 1) ${isOpen ? index * 0.08 : 0}s`,
-                    }}
-                  >
-                    <div className="py-2">
-                      <Link
-                        href={item.href}
-                        onClick={() => setIsOpen(false)}
-                        className="block mb-3"
+      {/* Mobile Menu with AnimatePresence for smooth enter/exit */}
+      <AnimatePresence mode="wait">
+        {isOpen && (
+          <motion.div
+            initial="closed"
+            animate="open"
+            exit="closed"
+            variants={mobileMenuVariants}
+            className="fixed inset-0 z-40 bg-background dark:bg-background text-foreground dark:text-foreground backdrop-blur-md"
+            suppressHydrationWarning
+          >
+            <div className="h-full flex flex-col justify-center px-6 md:px-10" suppressHydrationWarning>
+              <motion.div 
+                className="space-y-2"
+                variants={menuContainerVariants}
+                initial="closed"
+                animate="open"
+                exit="closed"
+                suppressHydrationWarning
+              >
+                {menuItems.map((item) => {
+                  if (item.hasDropdown) {
+                    return (
+                      <motion.div
+                        key={item.label}
+                        variants={menuItemVariants}
+                        className="overflow-hidden"
+                        suppressHydrationWarning
                       >
-                        <span className="text-4xl md:text-5xl font-medium text-foreground dark:text-foreground hover:opacity-60 dark:hover:opacity-80 transition-opacity duration-300">
-                          {item.label}
-                        </span>
-                      </Link>
-                      <div className="pl-4 space-y-1">
-                        {servicesItems.map((service, serviceIndex) => (
-                          <div
-                            key={service.label}
-                            className="overflow-hidden"
-                            suppressHydrationWarning
-                            style={{
-                              opacity: isOpen ? 1 : 0,
-                              transform: isOpen ? "translateY(0)" : "translateY(100%)",
-                              transition: `all 0.5s cubic-bezier(0.77, 0, 0.175, 1) ${
-                                isOpen ? index * 0.08 + (serviceIndex + 1) * 0.05 : 0
-                              }s`,
-                            }}
+                        <div className="py-2">
+                          <Link
+                            href={item.href}
+                            onClick={() => setIsOpen(false)}
+                            className="block mb-3"
                           >
-                            <Link
-                              href={service.href}
-                              onClick={() => setIsOpen(false)}
-                              className="block py-1"
+                            <motion.span 
+                              className="text-4xl md:text-5xl font-medium text-foreground dark:text-foreground"
+                              whileHover={{ opacity: 0.6 }}
+                              transition={{ duration: 0.2 }}
                             >
-                              <span className="text-xl md:text-2xl font-normal text-muted-foreground hover:text-foreground dark:hover:text-foreground transition-colors duration-300">
-                                {service.label}
-                              </span>
-                            </Link>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )
-              }
-              return (
-                <div
-                  key={item.label}
+                              {item.label}
+                            </motion.span>
+                          </Link>
+                          <motion.div 
+                            className="pl-4 space-y-1"
+                            variants={menuContainerVariants}
+                          >
+                            {servicesItems.map((service) => (
+                              <motion.div
+                                key={service.label}
+                                variants={subMenuItemVariants}
+                                className="overflow-hidden"
+                                suppressHydrationWarning
+                              >
+                                <Link
+                                  href={service.href}
+                                  onClick={() => setIsOpen(false)}
+                                  className="block py-1"
+                                >
+                                  <motion.span 
+                                    className="text-xl md:text-2xl font-normal text-muted-foreground"
+                                    whileHover={{ color: "var(--foreground)" }}
+                                    transition={{ duration: 0.2 }}
+                                  >
+                                    {service.label}
+                                  </motion.span>
+                                </Link>
+                              </motion.div>
+                            ))}
+                          </motion.div>
+                        </div>
+                      </motion.div>
+                    )
+                  }
+                  return (
+                    <motion.div
+                      key={item.label}
+                      variants={menuItemVariants}
+                      className="overflow-hidden"
+                      suppressHydrationWarning
+                    >
+                      <Link href={item.href} onClick={() => setIsOpen(false)} className="block py-2">
+                        <motion.span 
+                          className="text-4xl md:text-5xl font-medium text-foreground dark:text-foreground"
+                          whileHover={{ opacity: 0.6 }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          {item.label}
+                        </motion.span>
+                      </Link>
+                    </motion.div>
+                  )
+                })}
+                <motion.div
+                  variants={menuItemVariants}
                   className="overflow-hidden"
                   suppressHydrationWarning
-                  style={{
-                    opacity: isOpen ? 1 : 0,
-                    transform: isOpen ? "translateY(0)" : "translateY(100%)",
-                    transition: `all 0.5s cubic-bezier(0.77, 0, 0.175, 1) ${isOpen ? index * 0.08 : 0}s`,
-                  }}
                 >
-                  <Link href={item.href} onClick={() => setIsOpen(false)} className="block py-2">
-                    <span className="text-4xl md:text-5xl font-medium text-foreground dark:text-foreground hover:opacity-60 dark:hover:opacity-80 transition-opacity duration-300">
-                      {item.label}
-                    </span>
+                  <Link href="/contact" onClick={() => setIsOpen(false)} className="block py-2">
+                    <motion.span 
+                      className={`inline-block text-4xl md:text-5xl font-medium px-6 py-2 rounded-full ${
+                        isDarkMode 
+                          ? "bg-white text-black" 
+                          : "bg-black text-white"
+                      }`}
+                      whileHover={{ opacity: 0.8 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      Contact
+                    </motion.span>
                   </Link>
-                </div>
-              )
-            })}
-            <div
-              className="overflow-hidden"
-              suppressHydrationWarning
-              style={{
-                opacity: isOpen ? 1 : 0,
-                transform: isOpen ? "translateY(0)" : "translateY(100%)",
-                transition: `all 0.5s cubic-bezier(0.77, 0, 0.175, 1) ${isOpen ? menuItems.length * 0.08 : 0}s`,
-              }}
-            >
-              <Link href="/contact" onClick={() => setIsOpen(false)} className="block py-2">
-                <span className="text-4xl md:text-5xl font-medium text-foreground dark:text-foreground hover:opacity-60 dark:hover:opacity-80 transition-opacity duration-300">
-                  Contact
-                </span>
-              </Link>
+                </motion.div>
+                
+                {/* Social Icons */}
+                <motion.div
+                  variants={menuItemVariants}
+                  className="flex items-center gap-6 pt-12 mt-4"
+                  suppressHydrationWarning
+                >
+                  <a
+                    href={socialLinks.facebook}
+                    className="text-foreground/70"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Facebook"
+                  >
+                    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                    </svg>
+                  </a>
+                  <a
+                    href={socialLinks.instagram}
+                    className="text-foreground/70"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Instagram"
+                  >
+                    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                    </svg>
+                  </a>
+                  <a
+                    href="https://tiktok.com/@imagineentertainment"
+                    className="text-foreground/70"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="TikTok"
+                  >
+                    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                    </svg>
+                  </a>
+                  <a
+                    href="https://youtube.com/@imagineentertainment"
+                    className="text-foreground/70"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="YouTube"
+                  >
+                    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                    </svg>
+                  </a>
+                </motion.div>
+              </motion.div>
             </div>
-          </div>
-        </div>
-      </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   )
 }

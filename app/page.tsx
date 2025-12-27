@@ -9,14 +9,18 @@ import ClientsMarquee from "@/components/clients-marquee"
 import Testimonials from "@/components/testimonials"
 import Footer from "@/components/footer"
 
+// Services data - 5 column bento grid (matches user's sketch)
+// Row 1: Corporate(1), Television(1), Musical(2), Rigging(1) = 5 cols
+// Row 2: Fixed(1), Sports(2), Wedding(1), CTA(1) = 5 cols
 const services = [
+  // Row 1
   {
     id: 1,
     title: "Corporate Events",
     eventType: "Corporate",
     filterCategory: "Corporate",
     image: "/corporate-event-stage-blue-lighting-conference.jpg",
-    span: "lg:col-start-1 lg:col-span-1 lg:row-start-1 lg:row-span-2",
+    span: "md:col-span-1", // 1 column
   },
   {
     id: 2,
@@ -24,7 +28,7 @@ const services = [
     eventType: "Television & Film",
     filterCategory: "Television & Film Production",
     image: "/brit-awards-stage-red-lighting-production.jpg",
-    span: "lg:col-start-2 lg:col-span-1 lg:row-start-1 lg:row-span-1",
+    span: "md:col-span-1", // 1 column
   },
   {
     id: 3,
@@ -32,23 +36,7 @@ const services = [
     eventType: "Musical Concert",
     filterCategory: "Music",
     image: "/music-festival-outdoor-stage-crowd-night-lights.jpg",
-    span: "lg:col-start-3 lg:col-span-1 lg:row-start-1 lg:row-span-1",
-  },
-  {
-    id: 6,
-    title: "Fixed Installation",
-    eventType: "Fixed Installation",
-    filterCategory: "Fixed Installation",
-    image: "/professional-event-production-team-working-stage-s.jpg",
-    span: "lg:col-start-1 lg:col-span-1 lg:row-start-3 lg:row-span-1",
-  },
-  {
-    id: 7,
-    title: "Weddings & Private Celebrations",
-    eventType: "Weddings & Private Celebrations",
-    filterCategory: "Weddings & Private Celebrations",
-    image: "/dramatic-stage-lighting-corporate-event-dark-green.jpg",
-    span: "sm:col-span-2 lg:col-start-2 lg:col-span-2 lg:row-start-3 lg:row-span-1",
+    span: "md:col-span-2", // 2 columns (wide)
   },
   {
     id: 4,
@@ -56,15 +44,32 @@ const services = [
     eventType: "Rigging",
     filterCategory: "Rigging Services",
     image: "/professional-event-production-team-working-stage-s.jpg",
-    span: "lg:col-start-4 lg:col-span-1 lg:row-start-1 lg:row-span-1",
+    span: "md:col-span-1", // 1 column
   },
+  // Row 2
   {
     id: 5,
+    title: "Fixed Installation",
+    eventType: "Fixed Installation",
+    filterCategory: "Fixed Installation",
+    image: "/professional-event-production-team-working-stage-s.jpg",
+    span: "md:col-span-1", // 1 column
+  },
+  {
+    id: 6,
     title: "Public, Sports & Major Events",
     eventType: "Major Events",
     filterCategory: "Public, Sports & Major Events",
     image: "/dramatic-stage-lighting-corporate-event-dark-green.jpg",
-    span: "sm:col-span-2 lg:col-start-2 lg:col-span-2 lg:row-start-2 lg:row-span-1",
+    span: "md:col-span-2", // 2 columns (wide)
+  },
+  {
+    id: 7,
+    title: "Weddings & Private",
+    eventType: "Weddings & Private Celebrations",
+    filterCategory: "Weddings & Private Celebrations",
+    image: "/dramatic-stage-lighting-corporate-event-dark-green.jpg",
+    span: "md:col-span-1", // 1 column
   },
 ]
 
@@ -85,7 +90,7 @@ export default function Home() {
       {/* Services Bento Grid */}
       <section className="pt-10 md:pt-14 pb-20 md:pb-28 mx-4 md:mx-6">
         <div className="max-w-[1400px] mx-auto">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 auto-rows-[minmax(300px,auto)]">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-4 md:gap-5 auto-rows-[220px] md:auto-rows-[280px]">
             {services.map((service, index) => (
               <ServiceBentoCard key={service.id} service={service} index={index} />
             ))}
@@ -95,68 +100,85 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Services */}
-      <section className="py-20 md:py-28 bg-muted mx-4 md:mx-6 rounded-2xl">
-        <div className="max-w-[1400px] mx-auto px-6 md:px-10">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-24">
-            {/* Left Column - Expertise */}
-            <div className="flex flex-col justify-center items-start">
-              <p className="text-muted-foreground text-xs tracking-[0.15em] mb-4 font-medium uppercase">//Expertise</p>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-6">
-                One Vision. One Team. One Flawless Event.
-              </h2>
-              <p className="text-muted-foreground leading-relaxed mb-8 max-w-lg text-base md:text-lg">
-                At Imagine Entertainment, a single, seasoned team of producers, directors, and technicians brings your ideas to life from concept to execution. With our full-service, cross-functional crew working side by side under one roof, you get one accountable partner delivering seamless, unforgettable experiences.
+      {/* Expertise Section */}
+      <section className="py-16 md:py-20 bg-muted mx-4 md:mx-6 rounded-2xl">
+        <div className="max-w-[1200px] mx-auto px-6 md:px-10 text-center">
+          {/* Label */}
+          <p className="text-muted-foreground text-xs tracking-[0.2em] mb-4 font-medium uppercase">
+            //Why Choose Us
+          </p>
+          
+          {/* Heading */}
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-medium leading-[1.15] mb-4 tracking-tight">
+            One Vision. One Team.
+            <br />
+            <span className="text-muted-foreground italic font-normal">One Flawless Event.</span>
+          </h2>
+          
+          {/* Description */}
+          <p className="text-muted-foreground leading-relaxed mb-6 max-w-2xl mx-auto text-sm md:text-base">
+            At Imagine Entertainment, a single, seasoned team of producers, directors, and technicians brings your ideas to life from concept to execution. With our full-service, cross-functional crew working side by side under one roof, you get one accountable partner delivering seamless, unforgettable experiences.
+          </p>
+          
+          {/* CTA Button */}
+          <Link
+            href="/contact"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-foreground text-background text-sm font-semibold hover:bg-foreground/90 transition-all shadow-md hover:shadow-lg mb-10"
+          >
+            Start Your Project
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+          
+          {/* Tags - Single Row Layout */}
+          <div className="flex flex-col md:flex-row justify-center gap-6 md:gap-10">
+            {/* Services */}
+            <div className="flex flex-col items-center">
+              <p className="text-muted-foreground text-xs tracking-[0.15em] mb-3 font-medium uppercase">
+                Services
               </p>
-              <Link
-                href="/contact"
-                className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-gradient-to-r from-foreground to-foreground/90 text-background text-base font-semibold hover:from-foreground/90 hover:to-foreground transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
-              >
-                Start Your Project Today
-                <ArrowRight className="w-5 h-5" />
-              </Link>
+              <div className="flex flex-wrap justify-center gap-1.5">
+                {[
+                  "Creative Direction",
+                  "Technical Production",
+                  "Event Management",
+                  "Audio & Video",
+                  "Lighting Design",
+                  "Staging & Scenic",
+                ].map((item) => (
+                  <span 
+                    key={item} 
+                    className="px-3 py-1.5 rounded-full bg-background/50 dark:bg-background/30 text-xs font-medium text-foreground/80 border border-border/40"
+                  >
+                    {item}
+                  </span>
+                ))}
+              </div>
             </div>
 
-            {/* Right Column - Services & Industries */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 lg:gap-12">
-              {/*  Services */}
-              <div>
-                <p className="text-muted-foreground text-xs tracking-[0.15em] mb-6 font-medium uppercase">//Services</p>
-                <ul className="space-y-3">
-                  {[
-                    "Creative Direction",
-                    "Technical Production",
-                    "Event Management",
-                    "Audio & Video",
-                    "Lighting Design",
-                    "Staging & Scenic",
-                  ].map((item) => (
-                    <li key={item} className="text-base text-foreground/80 font-medium">
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+            {/* Divider */}
+            <div className="hidden md:block w-px bg-border/30 self-stretch" />
 
-              {/* Industries */}
-              <div>
-                <p className="text-muted-foreground text-xs tracking-[0.15em] mb-6 font-medium uppercase">
-                  //Industries
-                </p>
-                <ul className="space-y-3">
-                  {[
-                    "Corporate",
-                    "Television & Film",
-                    "Theatre",
-                    "Fashion",
-                    "Music & Live",
-                    "Automotive",
-                  ].map((item) => (
-                    <li key={item} className="text-base text-foreground/80 font-medium">
-                      {item}
-                    </li>
-                  ))}
-                </ul>
+            {/* Industries */}
+            <div className="flex flex-col items-center">
+              <p className="text-muted-foreground text-xs tracking-[0.15em] mb-3 font-medium uppercase">
+                Industries
+              </p>
+              <div className="flex flex-wrap justify-center gap-1.5">
+                {[
+                  "Corporate",
+                  "Television & Film",
+                  "Theatre",
+                  "Fashion",
+                  "Music & Live",
+                  "Automotive",
+                ].map((item) => (
+                  <span 
+                    key={item} 
+                    className="px-3 py-1.5 rounded-full bg-background/50 dark:bg-background/30 text-xs font-medium text-foreground/80 border border-border/40"
+                  >
+                    {item}
+                  </span>
+                ))}
               </div>
             </div>
           </div>
@@ -170,7 +192,7 @@ export default function Home() {
       <StatsSection />
 
       {/* Pre-footer CTA */}
-      <section className="relative h-[50vh] md:h-[70vh] overflow-hidden mx-4 md:mx-6 rounded-2xl">
+      <section className="relative h-[45vh] md:h-[60vh] overflow-hidden mx-4 md:mx-6 rounded-2xl">
         <Image
           src="/dramatic-concert-stage-lighting-dark-atmospheric-p.jpg"
           alt="Let's talk"
@@ -228,7 +250,7 @@ function StatsSection() {
                 isVisible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
               }`}
             >
-              //By The Numbers
+              //BY THE NUMBERS
             </p>
           </div>
 
@@ -298,7 +320,7 @@ function StatementReveal() {
         }`}
         style={{ transitionDelay: "0.15s" }}
       >
-        Every great experience starts with a story. We partner with you to shape that story—from imagination to impact—creating moments people remember.
+        Every great experience starts with a story. We partner with you to shape that story-from imagination to impact-creating moments people remember.
       </p>
     </div>
   )
@@ -323,7 +345,7 @@ function ServiceBentoCard({ service, index }: { service: (typeof services)[0]; i
     <Link
       href={`/work?category=${encodeURIComponent(service.filterCategory || service.eventType)}`}
       ref={ref}
-      className={`group relative block h-full min-h-[300px] md:min-h-[350px] overflow-hidden rounded-xl transition-all duration-700 ${
+      className={`group relative block h-full overflow-hidden rounded-xl transition-all duration-700 ${
         isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
       } ${service.span} w-full`}
       style={{ transitionDelay: `${index * 0.1}s` }}
@@ -375,7 +397,7 @@ function ViewServicesCard({ index }: { index: number }) {
     <Link
       href="/services"
       ref={ref}
-      className={`group relative block h-full min-h-[300px] md:min-h-[350px] overflow-hidden rounded-xl transition-all duration-700 lg:col-start-4 lg:row-start-2 lg:col-span-1 lg:row-span-1 w-full ${
+      className={`group relative block h-full overflow-hidden rounded-xl transition-all duration-700 md:col-span-1 w-full ${
         isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
       }`}
       style={{ transitionDelay: `${index * 0.1}s` }}

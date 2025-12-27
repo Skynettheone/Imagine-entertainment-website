@@ -2,29 +2,9 @@
 
 import { useEffect, useState, useRef } from "react"
 import { ArrowLeft, ArrowRight } from "lucide-react"
+import { motion, AnimatePresence, useInView } from "framer-motion"
 
 const testimonials = [
-  {
-    quote:
-      "IMAGINE delivered beyond our expectations. Their attention to detail transformed our product launch into an unforgettable experience.",
-    author: "Sarah Mitchell",
-    role: "Marketing Director",
-    company: "Mercedes-Benz UK",
-  },
-  {
-    quote:
-      "Working with IMAGINE on the BRIT Awards was seamless. Their technical expertise and ability to handle pressure made them invaluable.",
-    author: "James Crawford",
-    role: "Executive Producer",
-    company: "BBC Studios",
-  },
-  {
-    quote:
-      "The team's creativity and professionalism are unmatched. They turned our vision into reality with precision and style.",
-    author: "Emma Thompson",
-    role: "Events Director",
-    company: "Live Nation UK",
-  },
   {
     quote:
       "I wish to extend my sincere appreciation and heartfelt gratitude to each of you at imagine entertainment for the outstanding professionalism, dedication, flexibility, and unwavering positivity demonstrated throughout the planning and execution of the 2025 Litro Gas Channel Award Ceremony. This year's event was a remarkable success, and it is clear that such excellence was achieved through your collective effort, creativity, and commitment to delivering nothing short of the best.",
@@ -48,30 +28,41 @@ const testimonials = [
   },
 ]
 
+// Same as original CSS: transition-all duration-500, translate-y-4 -> translate-y-0
+const quoteVariants = {
+  initial: { 
+    opacity: 0, 
+    y: 16, // Same as CSS translate-y-4 (16px)
+  },
+  animate: { 
+    opacity: 1, 
+    y: 0,
+    transition: {
+      duration: 0.5, // Same as CSS duration-500
+    },
+  },
+  exit: { 
+    opacity: 0, 
+    y: -16,
+    transition: {
+      duration: 0.3,
+    },
+  },
+}
+
 export default function Testimonials() {
-  const [isVisible, setIsVisible] = useState(false)
   const [activeIndex, setActiveIndex] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setIsVisible(true)
-      },
-      { threshold: 0.2 },
-    )
-    if (ref.current) observer.observe(ref.current)
-    return () => observer.disconnect()
-  }, [])
+  const isInView = useInView(ref, { once: true, amount: 0.2 })
 
   // Auto-rotate testimonials
   useEffect(() => {
-    if (isVisible && !isPaused) {
+    if (isInView && !isPaused) {
       intervalRef.current = setInterval(() => {
         setActiveIndex((prev) => (prev + 1) % testimonials.length)
-      }, 5000) // Change testimonial every 5 seconds
+      }, 5000)
     } else {
       if (intervalRef.current) {
         clearInterval(intervalRef.current)
@@ -84,26 +75,34 @@ export default function Testimonials() {
         clearInterval(intervalRef.current)
       }
     }
-  }, [isVisible, isPaused])
+  }, [isInView, isPaused])
 
   const nextTestimonial = () => {
     setActiveIndex((prev) => (prev + 1) % testimonials.length)
-    // Pause auto-rotation temporarily when user interacts
     setIsPaused(true)
-    setTimeout(() => setIsPaused(false), 10000) // Resume after 10 seconds
+    setTimeout(() => setIsPaused(false), 10000)
   }
 
   const prevTestimonial = () => {
     setActiveIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length)
-    // Pause auto-rotation temporarily when user interacts
     setIsPaused(true)
-    setTimeout(() => setIsPaused(false), 10000) // Resume after 10 seconds
+    setTimeout(() => setIsPaused(false), 10000)
+  }
+
+  const currentTestimonial = testimonials[activeIndex]
+
+  // Dynamic text size based on quote length
+  const getQuoteTextSize = (quoteLength: number) => {
+    if (quoteLength < 150) return "text-xl md:text-2xl lg:text-3xl"
+    if (quoteLength < 250) return "text-lg md:text-xl lg:text-2xl"
+    if (quoteLength < 400) return "text-base md:text-lg lg:text-xl"
+    return "text-sm md:text-base lg:text-lg"
   }
 
   return (
     <section
       ref={ref}
-      className="py-20 md:py-28 bg-muted/30 mx-4 md:mx-6 rounded-2xl"
+      className="py-16 md:py-20 bg-muted/30 mx-4 md:mx-6 rounded-2xl"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
@@ -111,12 +110,13 @@ export default function Testimonials() {
         <div className="grid lg:grid-cols-12 gap-8 lg:gap-16">
           {/* Left column - title and nav */}
           <div className="lg:col-span-4">
-            <div
-              className={`transition-all duration-700 ${
-                isVisible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
-              }`}
+            {/* Same as CSS: transition-all duration-700, translate-y-6 -> translate-y-0 */}
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+              transition={{ duration: 0.7 }}
             >
-              <p className="text-muted-foreground text-xs tracking-[0.2em] mb-4">//Testimonials</p>
+              <p className="text-muted-foreground text-xs tracking-[0.2em] mb-4">//TESTIMONIALS</p>
               <h2 className="text-2xl md:text-3xl lg:text-4xl font-medium mb-8">
                 What Our
                 <br />
@@ -143,49 +143,49 @@ export default function Testimonials() {
                   {String(activeIndex + 1).padStart(2, "0")} / {String(testimonials.length).padStart(2, "0")}
                 </span>
               </div>
-            </div>
+            </motion.div>
           </div>
 
-          {/* Right column - testimonial content */}
+          {/* Right column - testimonial content with AnimatePresence */}
           <div className="lg:col-span-8">
-            <div
-              className={`relative transition-all duration-700 ${
-                isVisible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
-              }`}
-              style={{ transitionDelay: "0.15s" }}
+            {/* Same as CSS: transition-all duration-700 delay-150ms */}
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+              transition={{ duration: 0.7, delay: 0.15 }}
+              className="relative min-h-[280px]"
             >
-              {testimonials.map((testimonial, index) => (
-                <div
-                  key={index}
-                  className={`transition-all duration-500 ${
-                    index === activeIndex
-                      ? "opacity-100 translate-y-0 pointer-events-auto"
-                      : "opacity-0 translate-y-4 absolute inset-0 pointer-events-none"
-                  }`}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeIndex}
+                  variants={quoteVariants}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
                 >
-                  <blockquote className="text-xl md:text-2xl lg:text-3xl font-medium leading-relaxed mb-8 text-foreground">
-                    {testimonial.quote}
+                  <blockquote className={`${getQuoteTextSize(currentTestimonial.quote.length)} font-medium leading-relaxed mb-6 text-foreground`}>
+                    "{currentTestimonial.quote}"
                   </blockquote>
 
                   <div className="flex items-center gap-4 pt-6 border-t border-border">
                     <div className="w-12 h-12 rounded-full bg-foreground text-background flex items-center justify-center flex-shrink-0">
                       <span className="text-sm font-medium">
-                        {testimonial.author
+                        {currentTestimonial.author
                           .split(" ")
                           .map((n) => n[0])
                           .join("")}
                       </span>
                     </div>
                     <div>
-                      <p className="font-medium text-base mb-0.5">{testimonial.author}</p>
+                      <p className="font-medium text-base mb-0.5">{currentTestimonial.author}</p>
                       <p className="text-sm text-muted-foreground">
-                        {testimonial.role}, {testimonial.company}
+                        {currentTestimonial.role}, {currentTestimonial.company}
                       </p>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                </motion.div>
+              </AnimatePresence>
+            </motion.div>
           </div>
         </div>
       </div>

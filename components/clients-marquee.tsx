@@ -72,7 +72,7 @@ export default function ClientsMarquee() {
             isVisible ? "opacity-100" : "opacity-0"
           }`}
         >
-          TRUSTED BY
+          //TRUSTED BY
         </p>
         <h2
           className={`text-3xl md:text-4xl lg:text-5xl font-medium text-center transition-all duration-700 ${

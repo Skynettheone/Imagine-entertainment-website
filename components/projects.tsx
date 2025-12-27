@@ -1,7 +1,8 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useRef, useState } from "react"
 import { ArrowUpRight } from "lucide-react"
+import { motion, useInView } from "framer-motion"
 
 const projects = [
   {
@@ -45,26 +46,9 @@ const projects = [
 const categories = ["All", "Corporate Events", "Television Production", "Theatre", "Fashion Shows", "Film Events"]
 
 export default function Projects() {
-  const [isVisible, setIsVisible] = useState(false)
   const [activeCategory, setActiveCategory] = useState("All")
   const sectionRef = useRef<HTMLElement>(null)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true)
-        }
-      },
-      { threshold: 0.1 },
-    )
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current)
-    }
-
-    return () => observer.disconnect()
-  }, [])
+  const isInView = useInView(sectionRef, { once: true, amount: 0.1 })
 
   const filteredProjects = activeCategory === "All" ? projects : projects.filter((p) => p.category === activeCategory)
 
@@ -74,36 +58,43 @@ export default function Projects() {
         {/* Header */}
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-12">
           <div>
-            <p
-              className={`text-xs tracking-[0.2em] text-muted-foreground mb-4 transition-all duration-700 ${
-                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-              }`}
+            {/* Same as CSS: transition-all duration-700, translate-y-8 -> translate-y-0 */}
+            <motion.p
+              initial={{ opacity: 0, y: 32 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 32 }}
+              transition={{ duration: 0.7 }}
+              className="text-xs tracking-[0.2em] text-muted-foreground mb-4"
             >
               //Featured Projects
-            </p>
-            <h2
-              className={`text-3xl md:text-4xl lg:text-5xl font-medium transition-all duration-700 delay-100 ${
-                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-              }`}
+            </motion.p>
+            {/* Same as CSS: delay-100 = 0.1s */}
+            <motion.h2
+              initial={{ opacity: 0, y: 32 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 32 }}
+              transition={{ duration: 0.7, delay: 0.1 }}
+              className="text-3xl md:text-4xl lg:text-5xl font-medium"
             >
               WORK & PORTFOLIO
-            </h2>
+            </motion.h2>
           </div>
 
-          <p
-            className={`text-muted-foreground max-w-md transition-all duration-700 delay-200 ${
-              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-            }`}
+          {/* Same as CSS: delay-200 = 0.2s */}
+          <motion.p
+            initial={{ opacity: 0, y: 32 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 32 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="text-muted-foreground max-w-md"
           >
             Our creative playground, where you would find real projects and extraordinary productions.
-          </p>
+          </motion.p>
         </div>
 
-        {/* Category Filter */}
-        <div
-          className={`flex flex-wrap gap-4 mb-12 transition-all duration-700 delay-300 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
+        {/* Category Filter - Same as CSS: delay-300 = 0.3s */}
+        <motion.div
+          initial={{ opacity: 0, y: 32 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 32 }}
+          transition={{ duration: 0.7, delay: 0.3 }}
+          className="flex flex-wrap gap-4 mb-12"
         >
           {categories.map((category) => (
             <button
@@ -118,17 +109,18 @@ export default function Projects() {
               {category}
             </button>
           ))}
-        </div>
+        </motion.div>
 
         {/* Projects Grid */}
         <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
           {filteredProjects.map((project, index) => (
-            <div
+            // Same as CSS: translate-y-12 -> translate-y-0, delay = 400ms + index * 100ms
+            <motion.div
               key={project.id}
-              className={`group cursor-pointer transition-all duration-700 ${
-                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
-              }`}
-              style={{ transitionDelay: `${400 + index * 100}ms` }}
+              initial={{ opacity: 0, y: 48 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 48 }}
+              transition={{ duration: 0.7, delay: 0.4 + index * 0.1 }}
+              className="group cursor-pointer"
             >
               {/* Image Container */}
               <div className="relative overflow-hidden aspect-[4/3] mb-4 bg-muted">
@@ -137,9 +129,10 @@ export default function Projects() {
                   alt={project.title}
                   className="w-full h-full object-cover img-zoom"
                 />
+                {/* Same as CSS: group-hover:bg-foreground/10 transition-all duration-500 */}
                 <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/10 transition-all duration-500" />
 
-                {/* Hover Arrow */}
+                {/* Hover Arrow - Same as CSS: opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 duration-300 */}
                 <div className="absolute top-4 right-4 w-10 h-10 bg-background flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
                   <ArrowUpRight className="w-5 h-5" />
                 </div>
@@ -152,21 +145,22 @@ export default function Projects() {
                   {project.title}
                 </h3>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
 
-        {/* See All Link */}
-        <div
-          className={`mt-12 text-right transition-all duration-700 delay-700 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
+        {/* See All Link - Same as CSS: delay-700 = 0.7s */}
+        <motion.div
+          initial={{ opacity: 0, y: 32 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 32 }}
+          transition={{ duration: 0.7, delay: 0.7 }}
+          className="mt-12 text-right"
         >
           <button className="text-sm font-medium inline-flex items-center gap-2 group link-underline">
             See All Work
             <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
           </button>
-        </div>
+        </motion.div>
       </div>
     </section>
   )

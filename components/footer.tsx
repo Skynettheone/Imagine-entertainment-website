@@ -1,9 +1,10 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import Link from "next/link"
 import { useTheme } from "next-themes"
 import { socialLinks } from "@/lib/socials"
+import { motion, useInView } from "framer-motion"
 
 // Filled social media icons
 const FacebookIcon = ({ className }: { className?: string }) => (
@@ -33,6 +34,8 @@ const TwitterIcon = ({ className }: { className?: string }) => (
 export default function Footer() {
   const [mounted, setMounted] = useState(false)
   const { theme, resolvedTheme } = useTheme()
+  const footerRef = useRef<HTMLElement>(null)
+  const isInView = useInView(footerRef, { once: true, amount: 0.2 })
 
   useEffect(() => {
     setMounted(true)
@@ -44,10 +47,16 @@ export default function Footer() {
     : "/Imagine Logo Black Alpha.png"
 
   return (
-    <footer className="bg-background text-foreground border-t border-border mt-6">
+    <footer ref={footerRef} className="bg-background text-foreground border-t border-border mt-6">
       <div className="max-w-[1400px] mx-auto px-6 md:px-10">
         <div className="py-16 md:py-20 grid grid-cols-2 md:grid-cols-4 gap-10">
-          <div className="col-span-2 md:col-span-1">
+          {/* Logo section - fade in */}
+          <motion.div 
+            className="col-span-2 md:col-span-1"
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            transition={{ duration: 0.5 }}
+          >
             <img 
               src={logoSource}
               alt="Imagine Entertainment" 
@@ -59,10 +68,14 @@ export default function Footer() {
             <p className="text-foreground/70 text-sm leading-relaxed max-w-xs">
               Creating extraordinary experiences for corporate events, television, film, and theatre worldwide.
             </p>
-          </div>
+          </motion.div>
 
-          {/* Navigation */}
-          <div>
+          {/* Navigation - staggered */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+          >
             <p className="text-xs tracking-[0.15em] text-foreground/50 mb-4">QUICK LINKS</p>
             <ul className="space-y-3">
               {["About", "Work", "Services", "Contact"].map((item) => (
@@ -76,11 +89,14 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
+          </motion.div>
 
-          {/* Services */}
           {/* Quick Contact */}
-          <div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
             <p className="text-xs tracking-[0.15em] text-foreground/50 mb-4 uppercase">Quick Contact</p>
             <address className="text-sm text-foreground/70 not-italic space-y-4 leading-relaxed">
               <p>
@@ -107,10 +123,14 @@ export default function Footer() {
                 </p>
               </div>
             </address>
-          </div>
+          </motion.div>
 
           {/* Social */}
-          <div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
             <p className="text-xs tracking-[0.15em] text-foreground/50 mb-4">FOLLOW US</p>
             <div className="flex items-center gap-4">
               {mounted ? (
@@ -153,7 +173,6 @@ export default function Footer() {
                   </a>
                 </>
               ) : (
-                // Placeholder to prevent layout shift
                 <div className="flex items-center gap-4">
                   <div className="w-6 h-6" />
                   <div className="w-6 h-6" />
@@ -162,7 +181,7 @@ export default function Footer() {
                 </div>
               )}
             </div>
-          </div>
+          </motion.div>
         </div>
 
 
