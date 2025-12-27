@@ -8,21 +8,21 @@ const testimonials = [
   {
     quote:
       "I wish to extend my sincere appreciation and heartfelt gratitude to each of you at imagine entertainment for the outstanding professionalism, dedication, flexibility, and unwavering positivity demonstrated throughout the planning and execution of the 2025 Litro Gas Channel Award Ceremony. This year's event was a remarkable success, and it is clear that such excellence was achieved through your collective effort, creativity, and commitment to delivering nothing short of the best.",
-    author: "Mr Janaka Pathirathna",
+    author: "Mr. Janaka Pathirathna",
     role: "Director Sales & Marketing/ Corporate Affairs",
     company: "Litro Gas Lanka Ltd.",
   },
   {
     quote:
       "A huge thank you to Imagine Entertainment for all their support and expertise this year. From start to finish, their team was incredibly professional, accommodating, and went above and beyond to make our event a success. The production truly elevated entertainment standards in Sri Lanka, and we look forward to working with Imagine Entertainment for many more events in the future.",
-    author: "Mr Akash Rathnasingham",
+    author: "Mr. Akash Rathnasingham",
     role: "Director",
     company: "serendisco Team",
   },
   {
     quote:
       "Thank you for the excellent job done in organizing our Staff Get-Together. Your hard work, creativity, and attention to detail made the event truly memorable. From planning to execution, every element reflected your dedication and teamwork. We sincerely appreciate the effort each of you put in to ensure everything ran smoothly and successfully. Thank you once again for your outstanding contribution and commitment make Siyapatha night a special night",
-    author: "Mr Prasad Udugampola",
+    author: "Mr. Prasad Udugampola",
     role: "Chief Human Resources Officer",
     company: "Siyapatha Finance PLC",
   },
@@ -147,13 +147,22 @@ export default function Testimonials() {
           </div>
 
           {/* Right column - testimonial content with AnimatePresence */}
-          <div className="lg:col-span-8">
+          <div className="lg:col-span-8 relative">
+            {/* Large quote watermark - right upper corner */}
+            <svg 
+              className="absolute -top-16 -right-16 md:-right-24 w-64 h-64 md:w-[28rem] md:h-[28rem] lg:w-[36rem] lg:h-[36rem] text-foreground/[0.06] dark:text-white/[0.06]"
+              viewBox="0 0 100 100" 
+              fill="currentColor"
+            >
+              <path d="M30 70 Q20 70 20 55 Q20 40 35 30 L40 38 Q30 45 30 55 Q30 60 40 60 Q45 60 45 65 Q45 70 40 70 Z M60 70 Q50 70 50 55 Q50 40 65 30 L70 38 Q60 45 60 55 Q60 60 70 60 Q75 60 75 65 Q75 70 70 70 Z" />
+            </svg>
+            
             {/* Same as CSS: transition-all duration-700 delay-150ms */}
             <motion.div
               initial={{ opacity: 0, y: 24 }}
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
               transition={{ duration: 0.7, delay: 0.15 }}
-              className="relative min-h-[280px]"
+              className="relative min-h-[280px] z-10"
             >
               <AnimatePresence mode="wait">
                 <motion.div
