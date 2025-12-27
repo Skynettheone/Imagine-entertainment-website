@@ -468,7 +468,7 @@ export default function Navigation() {
             className="fixed inset-0 z-40 bg-background dark:bg-background text-foreground dark:text-foreground backdrop-blur-md"
             suppressHydrationWarning
           >
-            <div className="h-full flex flex-col justify-center px-6 md:px-10" suppressHydrationWarning>
+            <div className="h-full flex flex-col justify-start pt-32 pb-10 px-6 md:px-10 overflow-y-auto no-scrollbar" suppressHydrationWarning>
               <motion.div 
                 className="space-y-2"
                 variants={menuContainerVariants}
@@ -493,7 +493,7 @@ export default function Navigation() {
                             className="block mb-3"
                           >
                             <motion.span 
-                              className="text-4xl md:text-5xl font-medium text-foreground dark:text-foreground"
+                              className="text-2xl sm:text-3xl md:text-5xl font-medium text-foreground dark:text-foreground"
                               whileHover={{ opacity: 0.6 }}
                               transition={{ duration: 0.2 }}
                             >
@@ -501,7 +501,7 @@ export default function Navigation() {
                             </motion.span>
                           </Link>
                           <motion.div 
-                            className="pl-4 space-y-1"
+                            className="pl-4 space-y-2 mt-2"
                             variants={menuContainerVariants}
                           >
                             {servicesItems.map((service) => (
@@ -517,7 +517,7 @@ export default function Navigation() {
                                   className="block py-1"
                                 >
                                   <motion.span 
-                                    className="text-xl md:text-2xl font-normal text-muted-foreground"
+                                    className="text-base sm:text-lg md:text-2xl font-normal text-muted-foreground"
                                     whileHover={{ color: "var(--foreground)" }}
                                     transition={{ duration: 0.2 }}
                                   >
@@ -540,7 +540,7 @@ export default function Navigation() {
                     >
                       <Link href={item.href} onClick={() => setIsOpen(false)} className="block py-2">
                         <motion.span 
-                          className="text-4xl md:text-5xl font-medium text-foreground dark:text-foreground"
+                          className="text-2xl sm:text-3xl md:text-5xl font-medium text-foreground dark:text-foreground"
                           whileHover={{ opacity: 0.6 }}
                           transition={{ duration: 0.2 }}
                         >
@@ -557,7 +557,7 @@ export default function Navigation() {
                 >
                   <Link href="/contact" onClick={() => setIsOpen(false)} className="block py-2">
                     <motion.span 
-                      className={`inline-block text-4xl md:text-5xl font-medium px-6 py-2 rounded-full ${
+                      className={`inline-block text-3xl sm:text-4xl md:text-5xl font-medium px-6 py-2 rounded-full ${
                         isDarkMode 
                           ? "bg-white text-black" 
                           : "bg-black text-white"
