@@ -102,7 +102,7 @@ export default function Testimonials() {
   return (
     <section
       ref={ref}
-      className="py-16 md:py-20 bg-muted/30 mx-4 md:mx-6 rounded-2xl"
+      className="py-16 md:py-20 bg-muted/30 mx-4 md:mx-6 rounded-2xl overflow-hidden"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
