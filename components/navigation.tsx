@@ -469,12 +469,12 @@ export default function Navigation() {
             variants={mobileMenuVariants}
             className="fixed inset-0 z-40 bg-background/95 dark:bg-black/90 text-foreground dark:text-foreground backdrop-blur-md supports-[backdrop-filter]:bg-background/95"
             suppressHydrationWarning
-            drag="x"
-            dragConstraints={{ left: 0, right: 0 }}
-            dragElastic={{ right: 0.2 }}
+            drag="y"
+            dragConstraints={{ top: 0, bottom: 0 }}
+            dragElastic={{ top: 0.2, bottom: 0.05 }}
             onDragEnd={(e, { offset, velocity }) => {
-              const swipe = offset.x > 100 || velocity.x > 500
-              if (swipe) {
+              const swipeUp = offset.y < -100 || velocity.y < -500
+              if (swipeUp) {
                 setIsOpen(false)
               }
             }}
