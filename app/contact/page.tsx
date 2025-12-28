@@ -34,7 +34,7 @@ export default function ContactPage() {
             alt="Let's talk"
             className="w-full h-full object-cover opacity-40 dark:opacity-70"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-foreground via-foreground/60 to-foreground/40 dark:from-black/90 dark:via-black/70 dark:to-black/50" />
+          <div className="absolute inset-0 bg-linear-to-t from-foreground via-foreground/60 to-foreground/40 dark:from-black/90 dark:via-black/70 dark:to-black/50" />
           <div className="absolute inset-0 bg-black/40 dark:bg-black/50" />
         </div>
 
@@ -180,7 +180,7 @@ export default function ContactPage() {
               {/* Highlighted Form Container */}
               <div className="relative overflow-hidden bg-stone-100 dark:bg-white/5 rounded-3xl p-8 md:p-10 border border-stone-200/80 dark:border-white/10 shadow-lg dark:shadow-none">
                 {/* Subtle glare/shine effect */}
-                <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-white/40 via-transparent to-transparent dark:from-white/5 dark:via-transparent pointer-events-none" />
+                <div className="absolute top-0 left-0 w-full h-full bg-linear-to-br from-white/40 via-transparent to-transparent dark:from-white/5 dark:via-transparent pointer-events-none" />
                 <div className="relative z-10">
                   {/* Form Header */}
                   <div className="mb-8">
@@ -415,7 +415,7 @@ function ContactForm() {
           maxLength={500}
           value={formData.message}
           onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-          className="w-full bg-transparent border-b border-border pb-3 focus:border-foreground outline-none transition-colors resize-none text-base placeholder:text-muted-foreground/50"
+          className="w-full bg-transparent border-b border-border pb-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm transition-all text-base placeholder:text-muted-foreground/70"
           placeholder="Tell us about your project..."
         />
       </div>

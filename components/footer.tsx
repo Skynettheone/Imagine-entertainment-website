@@ -89,7 +89,7 @@ export default function Footer() {
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.5, delay: 0.1 }}
           >
-            <p className="text-xs tracking-[0.15em] text-foreground/50 mb-4">QUICK LINKS</p>
+            <p className="text-xs tracking-[0.15em] text-foreground/70 mb-4">QUICK LINKS</p>
             <ul className="space-y-3">
               {["About", "Work", "Services", "Contact"].map((item) => (
                 <li key={item}>
@@ -110,7 +110,7 @@ export default function Footer() {
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <p className="text-xs tracking-[0.15em] text-foreground/50 mb-4 uppercase">Quick Contact</p>
+            <p className="text-xs tracking-[0.15em] text-foreground/70 mb-4 uppercase">Quick Contact</p>
             <address className="text-sm text-foreground/70 not-italic space-y-4 leading-relaxed">
               <p>
                 No : 97 Delkanda,
@@ -144,7 +144,7 @@ export default function Footer() {
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            <p className="text-xs tracking-[0.15em] text-foreground/50 mb-4">FOLLOW US</p>
+            <p className="text-xs tracking-[0.15em] text-foreground/70 mb-4">FOLLOW US</p>
             <div className="flex items-center gap-4">
               {mounted ? (
                 <>
@@ -202,7 +202,7 @@ export default function Footer() {
         </div>
 
 
-        <div className="border-t border-border py-8 flex flex-col md:flex-row justify-between items-center gap-6 text-xs text-foreground/50">
+        <div className="border-t border-border py-8 flex flex-col md:flex-row justify-between items-center gap-6 text-xs text-foreground/70">
           <p className="order-2 md:order-1 text-center md:text-left">© IMAGINE ENTERTAINMENT (PVT) LTD. All rights reserved.</p>
           
           <div className="flex flex-col items-center gap-4 md:flex-row md:gap-6 order-1 md:order-2">

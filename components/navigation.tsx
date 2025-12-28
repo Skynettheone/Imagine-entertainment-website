@@ -279,7 +279,7 @@ export default function Navigation() {
         suppressHydrationWarning
       >
         <div className="max-w-[1400px] mx-auto px-6 md:px-10" suppressHydrationWarning>
-          <div className="flex items-center justify-between h-16 md:h-20 min-h-[4rem] md:min-h-[5rem] w-full" suppressHydrationWarning>
+          <div className="flex items-center justify-between h-16 md:h-20 min-h-16 md:min-h-20 w-full" suppressHydrationWarning>
             <Link href="/" className="relative z-50 flex items-center gap-2" onClick={() => setIsOpen(false)}>
               <motion.img
                 src={getLogoSource()}
@@ -411,8 +411,8 @@ export default function Navigation() {
               })}
             </div>
 
-            <div className="flex items-center gap-3 flex-shrink-0 min-w-fit" suppressHydrationWarning>
-              <div className="flex-shrink-0 w-[42px] h-[42px] flex items-center justify-center">
+            <div className="flex items-center gap-3 min-w-fit shrink-0" suppressHydrationWarning>
+              <div className="shrink-0 w-[42px] h-[42px] flex items-center justify-center">
                 <ThemeToggle 
                   iconColor={scrolled ? (isDarkMode ? "white" : "foreground") : themeToggleColor} 
                   noGlass={scrolled} 
@@ -481,7 +481,7 @@ export default function Navigation() {
             animate="open"
             exit="closed"
             variants={mobileMenuVariants}
-            className="fixed inset-0 z-40 bg-background/95 dark:bg-black/90 text-foreground dark:text-foreground backdrop-blur-md supports-[backdrop-filter]:bg-background/95"
+            className="fixed inset-0 z-40 bg-background/95 dark:bg-black/90 text-foreground dark:text-foreground backdrop-blur-md supports-backdrop-filter:bg-background/95"
             suppressHydrationWarning
             drag="y"
             dragConstraints={{ top: 0, bottom: 0 }}
