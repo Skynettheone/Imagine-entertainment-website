@@ -37,59 +37,62 @@ export default async function EventsPage() {
           {events.map((event) => (
             <div
               key={event.id}
-              className="group flex items-center gap-4 p-4 hover:bg-muted/50 transition-colors"
+              className="group flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 p-4 hover:bg-muted/50 transition-colors"
             >
-              {/* Thumbnail */}
-              <Link href={`/dashboard/events/${event.id}`} className="shrink-0 cursor-pointer">
-                <div className="relative size-20 rounded-lg overflow-hidden bg-muted">
-                  {event.cover_image_url ? (
-                    <Image
-                      src={event.cover_image_url}
-                      alt={event.title}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                  ) : (
-                    <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-muted to-muted/50">
-                      <Calendar className="size-6 text-muted-foreground/30" />
-                    </div>
-                  )}
-                </div>
-              </Link>
-
-              {/* Content */}
-              <Link href={`/dashboard/events/${event.id}`} className="flex-1 min-w-0 cursor-pointer">
-                <h3 className="font-semibold truncate group-hover:text-primary transition-colors mb-1">
-                  {event.title}
-                </h3>
-                <p className="text-sm text-muted-foreground mb-1">
-                  {event.category}
-                </p>
-                {(event.event_date || event.location) && (
-                  <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                    {event.event_date && (
-                      <span className="flex items-center gap-1.5">
-                        <Calendar className="size-3" />
-                        {new Date(event.event_date).toLocaleDateString('en-US', { 
-                          month: 'numeric', 
-                          day: 'numeric', 
-                          year: 'numeric' 
-                        })}
-                      </span>
-                    )}
-                    {event.location && (
-                      <span className="flex items-center gap-1.5">
-                        <MapPin className="size-3" />
-                        {event.location}
-                      </span>
+              {/* Thumbnail and Content Row on Mobile */}
+              <div className="flex items-start gap-3 sm:flex-1 sm:items-center">
+                {/* Thumbnail */}
+                <Link href={`/dashboard/events/${event.id}`} className="shrink-0 cursor-pointer">
+                  <div className="relative size-16 sm:size-20 rounded-lg overflow-hidden bg-muted">
+                    {event.cover_image_url ? (
+                      <Image
+                        src={event.cover_image_url}
+                        alt={event.title}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-muted to-muted/50">
+                        <Calendar className="size-5 sm:size-6 text-muted-foreground/30" />
+                      </div>
                     )}
                   </div>
-                )}
-              </Link>
+                </Link>
+
+                {/* Content */}
+                <Link href={`/dashboard/events/${event.id}`} className="flex-1 min-w-0 cursor-pointer">
+                  <h3 className="font-semibold text-sm sm:text-base line-clamp-2 sm:truncate group-hover:text-primary transition-colors mb-0.5 sm:mb-1">
+                    {event.title}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-muted-foreground mb-1">
+                    {event.category}
+                  </p>
+                  {(event.event_date || event.location) && (
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-[10px] sm:text-xs text-muted-foreground">
+                      {event.event_date && (
+                        <span className="flex items-center gap-1">
+                          <Calendar className="size-3" />
+                          {new Date(event.event_date).toLocaleDateString('en-US', { 
+                            month: 'numeric', 
+                            day: 'numeric', 
+                            year: 'numeric' 
+                          })}
+                        </span>
+                      )}
+                      {event.location && (
+                        <span className="flex items-center gap-1">
+                          <MapPin className="size-3" />
+                          <span className="truncate max-w-[120px] sm:max-w-none">{event.location}</span>
+                        </span>
+                      )}
+                    </div>
+                  )}
+                </Link>
+              </div>
 
               {/* Right side - Status and Delete */}
-              <div className="flex items-center gap-2 shrink-0">
-                <span className={`px-3 py-1.5 text-xs font-medium rounded-md ${
+              <div className="flex items-center justify-between sm:justify-end gap-2 pl-[calc(4rem+0.75rem)] sm:pl-0">
+                <span className={`px-2.5 sm:px-3 py-1 sm:py-1.5 text-[10px] sm:text-xs font-medium rounded-md ${
                   event.is_published 
                     ? 'bg-green-500/10 text-green-500 border border-green-500/20' 
                     : 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/20'

@@ -193,12 +193,12 @@ export default function NewEventPage() {
       <div className="flex items-center gap-4">
         <Link 
           href="/dashboard/events" 
-          className="p-2.5 hover:bg-muted rounded-xl transition-colors border border-transparent hover:border-border"
+          className="p-2.5 hover:bg-muted rounded-xl transition-colors border border-transparent hover:border-border shrink-0"
         >
           <ArrowLeft className="size-5" />
         </Link>
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">Create New Event</h1>
+        <div className="min-w-0">
+          <h1 className="text-xl sm:text-2xl font-bold tracking-tight truncate">Create New Event</h1>
           <p className="text-muted-foreground">Add a new event to your portfolio</p>
         </div>
       </div>

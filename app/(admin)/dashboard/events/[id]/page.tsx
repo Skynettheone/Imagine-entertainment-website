@@ -29,18 +29,20 @@ export default async function EventDetailPage({ params }: PageProps) {
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div className="flex items-center gap-4">
-        <Link
-          href="/dashboard/events"
-          className="p-2.5 hover:bg-muted rounded-xl transition-colors border border-transparent hover:border-border"
-        >
-          <ArrowLeft className="size-5" />
-        </Link>
-        <div className="flex-1">
-          <h1 className="text-2xl font-bold tracking-tight">{event.title}</h1>
-          <p className="text-muted-foreground">{event.category}</p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-4">
+          <Link
+            href="/dashboard/events"
+            className="p-2.5 hover:bg-muted rounded-xl transition-colors border border-transparent hover:border-border shrink-0"
+          >
+            <ArrowLeft className="size-5" />
+          </Link>
+          <div className="min-w-0">
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight truncate">{event.title}</h1>
+            <p className="text-muted-foreground">{event.category}</p>
+          </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 pl-[3.25rem] sm:pl-0">
           <DeleteEventButton eventId={event.id} />
           <span className={`px-3 py-1.5 text-sm font-medium rounded-full ${
             event.is_published 

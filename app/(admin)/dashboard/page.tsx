@@ -127,12 +127,12 @@ function MetricCard({
 
 function TrafficChartSkeleton() {
   return (
-    <Card className="col-span-4">
-      <CardHeader>
-        <Skeleton className="h-5 w-32" />
+    <Card className="col-span-1 sm:col-span-4">
+      <CardHeader className="pb-2 sm:pb-6">
+        <Skeleton className="h-4 sm:h-5 w-28 sm:w-32" />
       </CardHeader>
       <CardContent>
-        <Skeleton className="h-64 w-full" />
+        <Skeleton className="h-48 sm:h-64 w-full" />
       </CardContent>
     </Card>
   );
@@ -151,12 +151,12 @@ function TrafficChart({ data }: { data: AnalyticsData }) {
   };
 
   return (
-    <Card className="col-span-4">
-      <CardHeader>
-        <CardTitle>Traffic Overview</CardTitle>
-        <CardDescription>Last 7 days</CardDescription>
+    <Card className="col-span-1 sm:col-span-4">
+      <CardHeader className="pb-2 sm:pb-6">
+        <CardTitle className="text-base sm:text-lg">Traffic Overview</CardTitle>
+        <CardDescription className="text-xs sm:text-sm">Last 7 days</CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="pt-0 sm:pt-2">
         <ChartContainer config={chartConfig}>
           <AreaChart data={data.traffic.last7Days}>
             <CartesianGrid strokeDasharray="3 3" />
@@ -195,14 +195,14 @@ function TrafficChart({ data }: { data: AnalyticsData }) {
 
 function TopPagesSkeleton() {
   return (
-    <Card className="col-span-2">
-      <CardHeader>
-        <Skeleton className="h-5 w-32" />
+    <Card className="col-span-1 sm:col-span-2">
+      <CardHeader className="pb-2 sm:pb-6">
+        <Skeleton className="h-4 sm:h-5 w-28 sm:w-32" />
       </CardHeader>
       <CardContent>
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           {[1, 2, 3, 4, 5].map((i) => (
-            <Skeleton key={i} className="h-12 w-full" />
+            <Skeleton key={i} className="h-10 sm:h-12 w-full" />
           ))}
         </div>
       </CardContent>
@@ -212,12 +212,12 @@ function TopPagesSkeleton() {
 
 function TopPages({ data }: { data: AnalyticsData }) {
   return (
-    <Card className="col-span-2">
-      <CardHeader>
-        <CardTitle>Top Pages</CardTitle>
-        <CardDescription>Most viewed pages</CardDescription>
+    <Card className="col-span-1 sm:col-span-2">
+      <CardHeader className="pb-2 sm:pb-6">
+        <CardTitle className="text-base sm:text-lg">Top Pages</CardTitle>
+        <CardDescription className="text-xs sm:text-sm">Most viewed pages</CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="pt-0">
         <Table>
           <TableHeader>
             <TableRow>
@@ -271,12 +271,12 @@ function TopReferrers({ data }: { data: AnalyticsData }) {
   };
 
   return (
-    <Card className="col-span-2">
-      <CardHeader>
-        <CardTitle>Top Referrers</CardTitle>
-        <CardDescription>Traffic sources</CardDescription>
+    <Card className="col-span-1 sm:col-span-2">
+      <CardHeader className="pb-2 sm:pb-6">
+        <CardTitle className="text-base sm:text-lg">Top Referrers</CardTitle>
+        <CardDescription className="text-xs sm:text-sm">Traffic sources</CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="pt-0">
         <ChartContainer config={chartConfig}>
           <BarChart data={data.topReferrers}>
             <CartesianGrid strokeDasharray="3 3" />
@@ -315,20 +315,20 @@ function DevicesChart({ data }: { data: AnalyticsData }) {
   const COLORS = ["#4b5563", "#2563eb", "#1e40af"];
 
   return (
-    <Card className="col-span-2">
-      <CardHeader>
-        <CardTitle>Devices</CardTitle>
-        <CardDescription>Traffic by device type</CardDescription>
+    <Card className="col-span-1 sm:col-span-2">
+      <CardHeader className="pb-2 sm:pb-6">
+        <CardTitle className="text-base sm:text-lg">Devices</CardTitle>
+        <CardDescription className="text-xs sm:text-sm">Traffic by device type</CardDescription>
       </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
+      <CardContent className="pt-0">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-4">
           <ChartContainer
             config={{
               desktop: { label: "Desktop", color: COLORS[0] },
               mobile: { label: "Mobile", color: COLORS[1] },
               tablet: { label: "Tablet", color: COLORS[2] },
             }}
-            className="h-48"
+            className="h-32 sm:h-48 w-full sm:flex-1"
           >
             <PieChart>
               <Pie
@@ -336,8 +336,7 @@ function DevicesChart({ data }: { data: AnalyticsData }) {
                 cx="50%"
                 cy="50%"
                 labelLine={false}
-                label={({ name, value }) => `${name}: ${value.toFixed(1)}%`}
-                outerRadius={80}
+                outerRadius={50}
                 dataKey="value"
               >
                 {deviceData.map((entry, index) => (
@@ -350,17 +349,21 @@ function DevicesChart({ data }: { data: AnalyticsData }) {
               <ChartTooltip content={<ChartTooltipContent />} />
             </PieChart>
           </ChartContainer>
-          <div className="space-y-2">
+          <div className="space-y-1.5 sm:space-y-2 flex-shrink-0">
             {deviceData.map((device, index) => (
               <div
                 key={device.name}
-                className="flex items-center justify-between"
+                className="flex items-center justify-between gap-4 sm:gap-8"
               >
                 <div className="flex items-center gap-2">
-                  <device.icon className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm">{device.name}</span>
+                  <div 
+                    className="w-2.5 h-2.5 rounded-full" 
+                    style={{ backgroundColor: COLORS[index] }}
+                  />
+                  <device.icon className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-muted-foreground" />
+                  <span className="text-xs sm:text-sm">{device.name}</span>
                 </div>
-                <span className="font-medium">
+                <span className="font-medium text-xs sm:text-sm tabular-nums">
                   {device.value.toFixed(1)}%
                 </span>
               </div>
@@ -374,7 +377,7 @@ function DevicesChart({ data }: { data: AnalyticsData }) {
 
 function TopCountriesSkeleton() {
   return (
-    <Card className="col-span-2">
+    <Card className="col-span-1 sm:col-span-2">
       <CardHeader>
         <Skeleton className="h-5 w-32" />
       </CardHeader>
@@ -391,7 +394,7 @@ function TopCountriesSkeleton() {
 
 function TopCountries({ data }: { data: AnalyticsData }) {
   return (
-    <Card className="col-span-2">
+    <Card className="col-span-1 sm:col-span-2">
       <CardHeader>
         <CardTitle>Top Countries</CardTitle>
         <CardDescription>Traffic by country</CardDescription>
@@ -429,7 +432,7 @@ function TopCountries({ data }: { data: AnalyticsData }) {
 
 function BrowsersChartSkeleton() {
   return (
-    <Card className="col-span-2">
+    <Card className="col-span-1 sm:col-span-2">
       <CardHeader>
         <Skeleton className="h-5 w-32" />
       </CardHeader>
@@ -449,7 +452,7 @@ function BrowsersChart({ data }: { data: AnalyticsData }) {
   };
 
   return (
-    <Card className="col-span-2">
+    <Card className="col-span-1 sm:col-span-2">
       <CardHeader>
         <CardTitle>Browsers</CardTitle>
         <CardDescription>Traffic by browser</CardDescription>
