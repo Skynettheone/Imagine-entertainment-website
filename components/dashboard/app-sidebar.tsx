@@ -55,12 +55,18 @@ interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
 
 export function AppSidebar({ user, ...props }: AppSidebarProps) {
   const pathname = usePathname()
-  const { isMobile } = useSidebar()
+  const { isMobile, setOpenMobile } = useSidebar()
 
   const getInitials = () => {
     if (user?.name) return user.name.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2)
     if (user?.email) return user.email[0].toUpperCase()
     return "A"
+  }
+
+  const handleMobileNav = () => {
+    if (isMobile) {
+      setOpenMobile(false)
+    }
   }
 
   return (
@@ -69,7 +75,7 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild tooltip="IMAGINE ENTERTAINMENT">
-              <Link href="/dashboard">
+              <Link href="/dashboard" onClick={handleMobileNav}>
                 <div className="flex aspect-square size-8 shrink-0 items-center justify-center rounded-md overflow-hidden">
                   <Image
                     src="/imagine-logo.png"
@@ -99,7 +105,7 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
                 return (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild isActive={isActive} tooltip={item.title}>
-                      <Link href={item.url}>
+                      <Link href={item.url} onClick={handleMobileNav}>
                         <item.icon />
                         <span>{item.title}</span>
                       </Link>
