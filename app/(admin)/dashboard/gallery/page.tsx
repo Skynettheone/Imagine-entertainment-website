@@ -8,7 +8,7 @@ import { GalleryUpload } from '@/components/dashboard/gallery-upload'
 import { toast } from 'sonner'
 import { ConfirmDialog } from '@/components/ui/confirm-dialog'
 import { Activity } from 'lucide-react'
-import { logActivity } from '../actions'
+import { logActivity } from '@/lib/actions/log-activity'
 
 interface GalleryImage {
   id: string
