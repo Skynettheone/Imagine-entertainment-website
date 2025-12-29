@@ -76,6 +76,27 @@ CREATE POLICY "Authenticated users can manage gallery images" ON gallery_images
 -- Insert sample event for testing
 INSERT INTO events (title, category, event_date, location, cover_image_url, is_published)
 VALUES 
-  ('BRIT AWARDS 2024', 'Television & Film', '2024-03-02', 'London, UK', '/brit-awards-stage-red-lighting-production.jpg', true),
-  ('LONDON FASHION WEEK', 'Corporate', '2024-02-15', 'London, UK', '/fashion-runway-show-pink-dramatic-lighting.jpg', true),
   ('CORPORATE SUMMIT 2024', 'Corporate', '2024-01-20', 'Colombo, Sri Lanka', '/corporate-event-stage-blue-lighting-conference.jpg', true);
+
+-- Activity Logs table
+CREATE TABLE IF NOT EXISTS activity_logs (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
+  action TEXT NOT NULL,
+  entity_type TEXT,
+  entity_id TEXT,
+  details JSONB,
+  device_info JSONB, -- Stores browser/OS details
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+
+-- Enable RLS for activity_logs
+ALTER TABLE activity_logs ENABLE ROW LEVEL SECURITY;
+
+-- Admins can read all logs (assuming authenticated users are admins for this app)
+CREATE POLICY "Admins can view activity logs" ON activity_logs
+  FOR SELECT USING (auth.role() = 'authenticated');
+
+-- Admins can insert logs
+CREATE POLICY "Admins can insert activity logs" ON activity_logs
+  FOR INSERT WITH CHECK (auth.role() = 'authenticated');
