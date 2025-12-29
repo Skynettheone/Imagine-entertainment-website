@@ -183,150 +183,170 @@ export default function SetupAccountPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      <div className="w-full max-w-md">
-        {/* Logo */}
-        <div className="flex justify-center mb-8">
-          <Link href="/">
-            <Image
-              src="/imagine-logo.png"
-              alt="IMAGINE ENTERTAINMENT"
-              width={80}
-              height={80}
-              className="rounded-xl"
-            />
-          </Link>
-        </div>
-
-        {/* Card */}
-        <div className="bg-card border border-border rounded-2xl p-8 shadow-lg">
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center size-12 rounded-full bg-primary/10 mb-4">
-              <Lock className="size-6 text-primary" />
-            </div>
-            <h1 className="text-2xl font-bold">Set Up Your Account</h1>
-            <p className="text-muted-foreground mt-2">
-              Create a password to complete your account setup
-            </p>
-          </div>
-
-          {/* Email Display */}
-          <div className="mb-6 p-4 rounded-lg bg-muted/50 border border-border">
-            <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">
-              Your Email
-            </p>
-            <p className="font-medium">{email}</p>
-          </div>
-
-          {/* Error Message */}
-          {error && (
-            <div className="flex items-center gap-3 p-4 rounded-lg bg-red-500/10 border border-red-500/20 mb-6">
-              <AlertCircle className="size-5 text-red-500 shrink-0" />
-              <p className="text-sm text-red-500">{error}</p>
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Password */}
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <div className="relative">
-                <Input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Create a password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  disabled={isLoading}
-                  className="pr-10"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
-                </button>
-              </div>
-              
-              {/* Password Strength */}
-              {password && (
-                <div className="space-y-1">
-                  <div className="h-1.5 rounded-full bg-muted overflow-hidden">
-                    <div 
-                      className={`h-full ${strength.color} transition-all duration-300`}
-                      style={{ width: strength.width }}
-                    />
+      <div className="w-full max-w-4xl">
+        <div className="overflow-hidden rounded-xl border border-border bg-card shadow-lg">
+          <div className="grid md:grid-cols-2">
+            {/* Left Column: Form */}
+            <div className="p-6 md:p-8">
+              <div className="flex flex-col gap-6">
+                {/* Header */}
+                <div className="flex flex-col items-center gap-2 text-center">
+                  <div className="inline-flex items-center justify-center size-12 rounded-full bg-primary/10 mb-2">
+                    <Lock className="size-6 text-primary" />
                   </div>
-                  <p className={`text-xs ${
-                    strength.label === "Weak" ? "text-red-500" :
-                    strength.label === "Medium" ? "text-yellow-500" :
-                    "text-green-500"
-                  }`}>
-                    {strength.label}
+                  <h1 className="text-2xl font-bold">Set Up Your Account</h1>
+                  <p className="text-muted-foreground text-balance text-sm">
+                    Create a password to complete your account setup
                   </p>
                 </div>
-              )}
-            </div>
 
-            {/* Confirm Password */}
-            <div className="space-y-2">
-              <Label htmlFor="confirm-password">Confirm Password</Label>
-              <div className="relative">
-                <Input
-                  id="confirm-password"
-                  type={showConfirm ? "text" : "password"}
-                  placeholder="Confirm your password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  disabled={isLoading}
-                  className="pr-10"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowConfirm(!showConfirm)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  {showConfirm ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
-                </button>
+                {/* Email Display */}
+                <div className="p-4 rounded-lg bg-muted/50 border border-border">
+                  <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">
+                    Your Email
+                  </p>
+                  <p className="font-medium">{email}</p>
+                </div>
+
+                {/* Error Message */}
+                {error && (
+                  <div className="text-sm text-red-500 bg-red-500/10 p-3 rounded-lg border border-red-500/20">
+                    {error}
+                  </div>
+                )}
+
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  {/* Password */}
+                  <div className="grid gap-2">
+                    <Label htmlFor="password">Password</Label>
+                    <div className="relative">
+                      <Input
+                        id="password"
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Create a password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        disabled={isLoading}
+                        className="h-11 pr-10"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground hover:text-foreground font-medium"
+                      >
+                        {showPassword ? 'Hide' : 'Show'}
+                      </button>
+                    </div>
+                    
+                    {/* Password Strength */}
+                    {password && (
+                      <div className="space-y-1">
+                        <div className="h-1.5 rounded-full bg-muted overflow-hidden">
+                          <div 
+                            className={`h-full ${strength.color} transition-all duration-300`}
+                            style={{ width: strength.width }}
+                          />
+                        </div>
+                        <p className={`text-xs ${
+                          strength.label === "Weak" ? "text-red-500" :
+                          strength.label === "Medium" ? "text-yellow-500" :
+                          "text-green-500"
+                        }`}>
+                          {strength.label}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Confirm Password */}
+                  <div className="grid gap-2">
+                    <Label htmlFor="confirm-password">Confirm Password</Label>
+                    <div className="relative">
+                      <Input
+                        id="confirm-password"
+                        type={showConfirm ? "text" : "password"}
+                        placeholder="Confirm your password"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        disabled={isLoading}
+                        className="h-11 pr-10"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowConfirm(!showConfirm)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground hover:text-foreground font-medium"
+                      >
+                        {showConfirm ? 'Hide' : 'Show'}
+                      </button>
+                    </div>
+                    
+                    {/* Match indicator */}
+                    {confirmPassword && (
+                      <p className={`text-xs ${
+                        password === confirmPassword ? "text-green-500" : "text-red-500"
+                      }`}>
+                        {password === confirmPassword ? "Passwords match" : "Passwords do not match"}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Requirements */}
+                  <p className="text-xs text-muted-foreground">
+                    <span className="font-medium">Requirements:</span>{" "}
+                    <span className={password.length >= 6 ? "text-green-500" : ""}>6+ characters</span>
+                    {" • "}
+                    <span className={/[A-Z]/.test(password) ? "text-green-500" : ""}>uppercase</span>
+                    {" • "}
+                    <span className={/[a-z]/.test(password) ? "text-green-500" : ""}>lowercase</span>
+                    {" • "}
+                    <span className={/[0-9]/.test(password) ? "text-green-500" : ""}>number</span>
+                  </p>
+
+                  <Button 
+                    type="submit" 
+                    className="w-full h-11 font-medium"
+                    disabled={isLoading || !password || !confirmPassword}
+                  >
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="mr-2 size-4 animate-spin" />
+                        Setting up...
+                      </>
+                    ) : (
+                      "Complete Setup"
+                    )}
+                  </Button>
+                </form>
               </div>
-              
-              {/* Match indicator */}
-              {confirmPassword && (
-                <p className={`text-xs ${
-                  password === confirmPassword ? "text-green-500" : "text-red-500"
-                }`}>
-                  {password === confirmPassword ? "Passwords match" : "Passwords do not match"}
-                </p>
-              )}
             </div>
 
-            {/* Requirements */}
-            <p className="text-xs text-muted-foreground">
-              <span className="font-medium">Requirements:</span>{" "}
-              <span className={password.length >= 6 ? "text-green-500" : ""}>6+ characters</span>
-              {" • "}
-              <span className={/[A-Z]/.test(password) ? "text-green-500" : ""}>uppercase</span>
-              {" • "}
-              <span className={/[a-z]/.test(password) ? "text-green-500" : ""}>lowercase</span>
-              {" • "}
-              <span className={/[0-9]/.test(password) ? "text-green-500" : ""}>number</span>
-            </p>
-
-            <Button 
-              type="submit" 
-              className="w-full"
-              disabled={isLoading || !password || !confirmPassword}
-            >
-              {isLoading ? (
-                <>
-                  <Loader2 className="size-4 animate-spin" />
-                  Setting up...
-                </>
-              ) : (
-                "Complete Setup"
-              )}
-            </Button>
-          </form>
+            {/* Right Column: Branding Image */}
+            <div className="relative hidden md:flex items-center justify-center bg-muted/30 p-8 min-h-[400px]">
+              {/* Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/10" />
+              
+              {/* Logo & Branding */}
+              <div className="relative z-10 flex flex-col items-center gap-6 text-center">
+                <div className="relative size-24">
+                  <Image
+                    src="/Imagine Logo White Alpha.png"
+                    alt="IMAGINE Entertainment"
+                    fill
+                    className="object-contain"
+                    priority
+                  />
+                </div>
+                
+                <p className="text-sm text-muted-foreground max-w-[280px] leading-relaxed">
+                  Welcome to the team! Complete your account setup to access the admin dashboard.
+                </p>
+                
+                <p className="text-[10px] text-muted-foreground/40 tracking-wide">
+                  IMAGINE ENTERTAINMENT (PVT) LTD
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
