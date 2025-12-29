@@ -37,6 +37,10 @@ export default function GalleryClient({ initialImages }: GalleryClientProps) {
   }
 
   const [allImages] = useState<string[]>(() => {
+    // Ensure initialImages is an array
+    if (!initialImages || !Array.isArray(initialImages) || initialImages.length === 0) {
+      return []
+    }
     // Shuffle images on initial mount
     const shuffled = [...initialImages]
     for (let i = shuffled.length - 1; i > 0; i--) {
@@ -182,7 +186,7 @@ export default function GalleryClient({ initialImages }: GalleryClientProps) {
 
           {masonryItems.length > 0 ? (
             <Masonry data={masonryItems} />
-          ) : (
+          ) : allImages.length > 0 ? (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {Array.from({ length: 12 }).map((_, i) => (
                 <div
@@ -191,6 +195,11 @@ export default function GalleryClient({ initialImages }: GalleryClientProps) {
                   style={{ aspectRatio: [0.75, 1, 1.25, 1.5][i % 4] }}
                 />
               ))}
+            </div>
+          ) : (
+            <div className="text-center py-16">
+              <p className="text-muted-foreground">No images available yet.</p>
+              <p className="text-sm text-muted-foreground mt-2">Check back soon!</p>
             </div>
           )}
 
