@@ -35,7 +35,10 @@ export async function getEventById(id: string): Promise<EventWithImages | null> 
     .single()
   
   if (error) {
-    console.error('Error fetching event:', error)
+    // Only log if it's a real error (not just "not found")
+    if (error.message && error.code !== 'PGRST116') {
+      console.error('Error fetching event:', error.message)
+    }
     return null
   }
   

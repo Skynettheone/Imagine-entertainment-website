@@ -21,8 +21,10 @@ export function DashboardLayoutClient({ children, isAuthenticated, user }: Dashb
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-dvh bg-background">
-        <LoginForm />
+      <div className="min-h-dvh bg-muted flex flex-col items-center justify-center p-6 md:p-10">
+        <div className="w-full max-w-sm md:max-w-4xl">
+          <LoginForm />
+        </div>
       </div>
     )
   }
@@ -47,10 +49,10 @@ export function DashboardLayoutClient({ children, isAuthenticated, user }: Dashb
   return (
     <SidebarProvider>
       <AppSidebar user={user} />
-      <SidebarInset className="p-2">
-        <div className="flex h-[calc(100svh-1rem)] flex-col rounded-xl bg-background">
+      <SidebarInset className="p-2 overflow-hidden">
+        <div className="flex h-[calc(100svh-1rem)] flex-col rounded-xl bg-background overflow-hidden">
           <SiteHeader />
-          <div className="flex-1 overflow-auto px-4 pb-4 pt-6">
+          <div className="flex-1 overflow-y-auto overflow-x-hidden px-4 pb-4 pt-6">
             <div className="flex flex-col gap-4">
               {children}
             </div>

@@ -8,7 +8,8 @@ import {
   Settings,
   LogOut,
   ChevronsUpDown,
-  Command,
+  Users,
+  Activity,
 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
@@ -43,6 +44,8 @@ const navItems = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
   { title: "Events", url: "/dashboard/events", icon: Calendar },
   { title: "Gallery", url: "/dashboard/gallery", icon: ImageIcon },
+  { title: "Users", url: "/dashboard/users", icon: Users },
+  { title: "Activity Log", url: "/dashboard/activity", icon: Activity },
   { title: "Settings", url: "/dashboard/settings", icon: Settings },
 ]
 

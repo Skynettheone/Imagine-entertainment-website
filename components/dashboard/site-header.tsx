@@ -15,10 +15,13 @@ import {
 } from "@/components/ui/breadcrumb"
 import { Globe, ExternalLink } from "lucide-react"
 
+import { SystemStatusPill } from "@/components/dashboard/system-status-pill"
+
 export function SiteHeader() {
   const pathname = usePathname()
 
   const getBreadcrumbs = () => {
+    // ... existing Breadcrumb logic
     const segments = pathname.split("/").filter(Boolean)
     const items = [
       {
@@ -70,13 +73,17 @@ export function SiteHeader() {
         </BreadcrumbList>
       </Breadcrumb>
       <div className="flex-1" />
-      <Button variant="outline" asChild size="sm">
-        <Link href="/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
-          <Globe className="h-4 w-4" />
-          <span className="hidden sm:inline">View Website</span>
-          <ExternalLink className="h-3 w-3" />
-        </Link>
-      </Button>
+      
+      <div className="flex items-center gap-4">
+        <SystemStatusPill />
+        <Button variant="outline" asChild size="sm">
+          <Link href="/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+            <Globe className="h-4 w-4" />
+            <span className="hidden sm:inline">View Website</span>
+            <ExternalLink className="h-3 w-3" />
+          </Link>
+        </Button>
+      </div>
     </header>
   )
 }

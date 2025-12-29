@@ -1,4 +1,4 @@
-import { cookies } from 'next/headers'
+import { createClient } from '@/lib/supabase/server'
 import { DashboardLayoutClient } from '@/components/dashboard/layout-client'
 
 export default async function DashboardLayout({
@@ -6,21 +6,21 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode
 }) {
-  // Check for hardcoded session cookie
-  const cookieStore = await cookies()
-  const session = cookieStore.get('dashboard_session')
-  const isAuthenticated = session?.value === 'authenticated'
+  const supabase = await createClient()
+  
+  const { data: { user } } = await supabase.auth.getUser()
+  const isAuthenticated = !!user
 
-  // Mock user object for components
-  const user = {
-    email: 'admin@imaginesl.com',
-    name: 'Admin',
-  }
+  // User object for components
+  const userData = user ? {
+    email: user.email || '',
+    name: user.user_metadata?.name || user.email?.split('@')[0] || 'Admin',
+  } : undefined
 
   return (
     <DashboardLayoutClient 
       isAuthenticated={isAuthenticated} 
-      user={user}
+      user={userData}
     >
       {children}
     </DashboardLayoutClient>

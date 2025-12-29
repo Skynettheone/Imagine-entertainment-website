@@ -2,13 +2,26 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Loader2, Save, Trash2 } from 'lucide-react'
+import Image from 'next/image'
+import { Loader2, Save, FileText, ImageIcon, Images, Upload, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { EVENT_CATEGORIES, type EventWithImages } from '@/lib/types/database'
+import { Switch } from '@/components/ui/switch'
+import { EVENT_CATEGORIES, type EventWithImages, type EventCategory } from '@/lib/types/database'
 import { DatePicker } from '@/components/dashboard/date-picker'
 import { format } from 'date-fns'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { CoverUpload } from '@/components/dashboard/cover-upload'
+import { GalleryUpload } from '@/components/dashboard/gallery-upload'
+import { toast } from 'sonner'
+import { ConfirmDialog } from '@/components/ui/confirm-dialog'
 
 interface EventEditFormProps {
   event: EventWithImages
@@ -17,31 +30,130 @@ interface EventEditFormProps {
 export function EventEditForm({ event }: EventEditFormProps) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
-  const [deleting, setDeleting] = useState(false)
-  const [error, setError] = useState('')
-  const [success, setSuccess] = useState('')
+  const [isPublished, setIsPublished] = useState(event.is_published)
+  const [category, setCategory] = useState<EventCategory>(event.category as EventCategory)
+  
+  // Image state
+  const [coverImage, setCoverImage] = useState<string | null>(event.cover_image_url)
+  const [coverImageFile, setCoverImageFile] = useState<File | null>(null)
+  const [galleryImages, setGalleryImages] = useState<{ id?: string; url: string; file?: File }[]>(
+    event.event_images?.map(img => ({ id: img.id, url: img.image_url })) || []
+  )
+  const [newGalleryImages, setNewGalleryImages] = useState<{ file: File; preview: string }[]>([])
+  const [isUploadingCover, setIsUploadingCover] = useState(false)
+  const [isUploadingGallery, setIsUploadingGallery] = useState(false)
+
+  // Confirmation state
+  const [deleteId, setDeleteId] = useState<string | null>(null)
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
+
+  // Handle gallery images change
+  const handleGalleryImagesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || [])
+    const newImages = files.map(file => ({
+      file,
+      preview: URL.createObjectURL(file)
+    }))
+    setNewGalleryImages(prev => [...prev, ...newImages])
+  }
+
+  // Remove existing gallery image (Action)
+  const executeDeleteImage = async () => {
+    if (!deleteId) return
+
+    setIsDeleting(true)
+    try {
+      await fetch(`/api/admin/events/images/${deleteId}`, {
+        method: 'DELETE',
+      })
+      setGalleryImages(prev => prev.filter((img) => img.id !== deleteId))
+      toast.success("Image deleted")
+      setShowDeleteConfirm(false)
+    } catch (error) {
+      console.error('Failed to delete image:', error)
+      toast.error("Failed to delete image")
+    } finally {
+      setIsDeleting(false)
+      setDeleteId(null)
+    }
+  }
+
+  // Remove new gallery image
+  const removeNewGalleryImage = (index: number) => {
+    setNewGalleryImages(prev => {
+      const updated = [...prev]
+      URL.revokeObjectURL(updated[index].preview)
+      updated.splice(index, 1)
+      return updated
+    })
+  }
+
+  // Upload image to Cloudinary
+  const uploadToCloudinary = async (file: File, folderPath: string): Promise<string | null> => {
+    const formData = new FormData()
+    formData.append('file', file)
+    formData.append('upload_preset', 'imagine_events')
+    formData.append('folder', folderPath)
+    
+    try {
+      const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
+      if (!cloudName) {
+        console.error('Cloudinary cloud name not configured')
+        return null
+      }
+      
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+        { method: 'POST', body: formData }
+      )
+      
+      if (!response.ok) throw new Error('Upload failed')
+      
+      const data = await response.json()
+      return data.secure_url
+    } catch (error) {
+      console.error('Error uploading to Cloudinary:', error)
+      return null
+    }
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setLoading(true)
-    setError('')
-    setSuccess('')
 
     const formData = new FormData(e.currentTarget)
-    const data = {
-      title: formData.get('title') as string,
-      category: formData.get('category') as string,
-      description: formData.get('description') as string || null,
-      client: formData.get('client') as string || null,
-      event_date: formData.get('event_date') as string || null,
-      location: formData.get('location') as string || null,
-      overview: formData.get('overview') as string || null,
-      challenge: formData.get('challenge') as string || null,
-      solution: formData.get('solution') as string || null,
-      is_published: formData.get('is_published') === 'on',
+    const title = formData.get('title') as string
+    
+    if (!title) {
+        toast.error('Title is required')
+        setLoading(false)
+        return
     }
 
+    // Generate folder path: IMAGINE/Events/EVENT_NAME
+    const eventFolderName = title.trim().replace(/\s+/g, '_')
+    const cloudFolder = `IMAGINE/Events/${eventFolderName}`
+
     try {
+      // Upload cover image if changed
+      let coverImageUrl = coverImage
+      if (coverImageFile) {
+        setIsUploadingCover(true)
+        const url = await uploadToCloudinary(coverImageFile, cloudFolder)
+        if (url) coverImageUrl = url
+        setIsUploadingCover(false)
+      }
+      const data = {
+        title: formData.get('title') as string,
+        category: category,
+        description: formData.get('description') as string || null,
+        event_date: formData.get('event_date') as string || null,
+        location: formData.get('location') as string || null,
+        cover_image_url: coverImageUrl,
+        is_published: isPublished,
+      }
+
       const response = await fetch(`/api/events/${event.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -54,229 +166,240 @@ export function EventEditForm({ event }: EventEditFormProps) {
         throw new Error(result.error || 'Failed to update event')
       }
 
-      setSuccess('Event updated successfully')
+      // Upload new gallery images
+      if (newGalleryImages.length > 0) {
+        setIsUploadingGallery(true)
+        let successCount = 0
+        for (const img of newGalleryImages) {
+          const url = await uploadToCloudinary(img.file, cloudFolder)
+          if (url) {
+            await fetch('/api/admin/events/images', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                event_id: event.id,
+                image_url: url,
+              }),
+            })
+            successCount++
+          }
+        }
+        setIsUploadingGallery(false)
+        setNewGalleryImages([])
+         if (successCount < newGalleryImages.length) {
+             toast.warning(`Event updated, but some new images failed to upload (${successCount}/${newGalleryImages.length})`)
+        }
+      }
+
+      toast.success('Event updated successfully')
       router.refresh()
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Something went wrong')
+      toast.error(err instanceof Error ? err.message : 'Something went wrong')
     } finally {
       setLoading(false)
     }
   }
 
-  async function handleDelete() {
-    if (!confirm('Are you sure you want to delete this event? This action cannot be undone.')) {
-      return
-    }
-
-    setDeleting(true)
-    setError('')
-
-    try {
-      const response = await fetch(`/api/events/${event.id}`, {
-        method: 'DELETE',
-      })
-
-      if (!response.ok) {
-        const result = await response.json()
-        throw new Error(result.error || 'Failed to delete event')
-      }
-
-      router.push('/dashboard/events')
-      router.refresh()
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Something went wrong')
-      setDeleting(false)
-    }
-  }
-
   return (
+    <>
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Basic Info */}
-      <div className="bg-card border border-border rounded-lg p-6 space-y-6">
-        <h2 className="text-lg font-semibold">Basic Information</h2>
+      <div className="bg-card border border-border rounded-xl overflow-hidden">
+        <div className="flex items-center gap-3 px-6 py-4 border-b border-border bg-muted/30">
+          <div className="p-2 rounded-lg bg-primary/10">
+            <FileText className="size-4 text-primary" />
+          </div>
+          <h2 className="font-semibold">Event Details</h2>
+        </div>
         
-        {/* Title */}
-        <div className="space-y-2">
-          <Label htmlFor="title">Event Title *</Label>
-          <Input
-            id="title"
-            name="title"
-            defaultValue={event.title}
-            required
-            className="text-base"
-          />
-        </div>
-
-        {/* Category */}
-        <div className="space-y-2">
-          <Label htmlFor="category">Category *</Label>
-          <select
-            id="category"
-            name="category"
-            defaultValue={event.category}
-            required
-            className="w-full h-10 px-3 rounded-md border border-input bg-background text-sm"
-          >
-            {EVENT_CATEGORIES.map((cat) => (
-              <option key={cat} value={cat}>
-                {cat}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* Client */}
-        <div className="space-y-2">
-          <Label htmlFor="client">Client</Label>
-          <Input
-            id="client"
-            name="client"
-            defaultValue={event.client || ''}
-          />
-        </div>
-
-        {/* Date & Location */}
-        <div className="grid md:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="event_date">Event Date</Label>
-            <input type="hidden" name="event_date" id="event_date_hidden" defaultValue={event.event_date || ''} />
-            <DatePicker
-              date={event.event_date ? new Date(event.event_date) : undefined}
-              onDateChange={(date) => {
-                const hiddenInput = document.getElementById('event_date_hidden') as HTMLInputElement
-                if (hiddenInput) hiddenInput.value = date ? format(date, 'yyyy-MM-dd') : ''
-              }}
-              placeholder="Select event date"
-              className="w-full"
+        <div className="p-6 space-y-5">
+          {/* Title */}
+          <div>
+            <Label htmlFor="title">Event Title *</Label>
+            <Input
+              id="title"
+              name="title"
+              defaultValue={event.title}
+              placeholder="e.g., BRIT AWARDS 2024"
+              required
+              className="mt-2"
             />
           </div>
-          <div className="space-y-2">
+
+          <div className="grid md:grid-cols-2 gap-5">
+            {/* Category */}
+            <div>
+              <Label htmlFor="category">Category *</Label>
+              <Select value={category} onValueChange={(value) => setCategory(value as EventCategory)}>
+                <SelectTrigger className="mt-2 w-full">
+                  <SelectValue placeholder="Select category" />
+                </SelectTrigger>
+                <SelectContent>
+                  {EVENT_CATEGORIES.map((cat) => (
+                    <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Event Date */}
+            <div>
+              <Label htmlFor="event_date">Event Date</Label>
+              <input type="hidden" name="event_date" id="event_date_hidden" defaultValue={event.event_date || ''} />
+              <div className="mt-2">
+                <DatePicker
+                  date={event.event_date ? new Date(event.event_date) : undefined}
+                  onDateChange={(date) => {
+                    const hiddenInput = document.getElementById('event_date_hidden') as HTMLInputElement
+                    if (hiddenInput) hiddenInput.value = date ? format(date, 'yyyy-MM-dd') : ''
+                  }}
+                  placeholder="Select event date"
+                  className="w-full"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Location */}
+          <div>
             <Label htmlFor="location">Location</Label>
             <Input
               id="location"
               name="location"
               defaultValue={event.location || ''}
+              placeholder="e.g., London, UK"
+              className="mt-2"
+            />
+          </div>
+
+          {/* Description */}
+          <div>
+            <Label htmlFor="description">Internal Notes</Label>
+            <p className="text-xs text-muted-foreground mt-0.5 mb-2">Not shown publicly</p>
+            <textarea
+              id="description"
+              name="description"
+              rows={4}
+              defaultValue={event.description || ''}
+              placeholder="Add any internal notes about this event..."
+              className="w-full px-3 py-2 rounded-md border border-input bg-background text-sm resize-none focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
             />
           </div>
         </div>
-
-        {/* Description */}
-        <div className="space-y-2">
-          <Label htmlFor="description">Short Description</Label>
-          <textarea
-            id="description"
-            name="description"
-            rows={2}
-            defaultValue={event.description || ''}
-            className="w-full px-3 py-2 rounded-md border border-input bg-background text-sm resize-none"
-          />
-        </div>
       </div>
 
-      {/* Detailed Content */}
-      <div className="bg-card border border-border rounded-lg p-6 space-y-6">
-        <h2 className="text-lg font-semibold">Detailed Content</h2>
+      {/* Cover Image */}
+      <div className="bg-card border border-border rounded-xl overflow-hidden">
+        <div className="flex items-center gap-3 px-6 py-4 border-b border-border bg-muted/30">
+          <div className="p-2 rounded-lg bg-primary/10">
+            <ImageIcon className="size-4 text-primary" />
+          </div>
+          <div>
+            <h2 className="font-semibold">Cover Image</h2>
+            <p className="text-xs text-muted-foreground">Used as banner and thumbnail</p>
+          </div>
+        </div>
         
-        {/* Overview */}
-        <div className="space-y-2">
-          <Label htmlFor="overview">Overview</Label>
-          <textarea
-            id="overview"
-            name="overview"
-            rows={4}
-            defaultValue={event.overview || ''}
-            className="w-full px-3 py-2 rounded-md border border-input bg-background text-sm resize-none"
-          />
-        </div>
-
-        {/* Challenge */}
-        <div className="space-y-2">
-          <Label htmlFor="challenge">Challenge</Label>
-          <textarea
-            id="challenge"
-            name="challenge"
-            rows={3}
-            defaultValue={event.challenge || ''}
-            className="w-full px-3 py-2 rounded-md border border-input bg-background text-sm resize-none"
-          />
-        </div>
-
-        {/* Solution */}
-        <div className="space-y-2">
-          <Label htmlFor="solution">Solution</Label>
-          <textarea
-            id="solution"
-            name="solution"
-            rows={3}
-            defaultValue={event.solution || ''}
-            className="w-full px-3 py-2 rounded-md border border-input bg-background text-sm resize-none"
+        <div className="p-6">
+          <CoverUpload
+            defaultImage={coverImage}
+            onImageChange={(file) => {
+              setTimeout(() => {
+                if (file) {
+                  setCoverImageFile(file)
+                  const preview = URL.createObjectURL(file)
+                  setCoverImage(preview)
+                } else {
+                  setCoverImageFile(null)
+                  setCoverImage(null)
+                }
+              }, 0)
+            }}
           />
         </div>
       </div>
 
-      {/* Publishing */}
-      <div className="bg-card border border-border rounded-lg p-6">
-        <div className="flex items-center gap-3">
-          <input
-            id="is_published"
-            name="is_published"
-            type="checkbox"
-            defaultChecked={event.is_published}
-            className="size-4 rounded border-input"
-          />
-          <Label htmlFor="is_published" className="font-normal">
-            Published (visible on public site)
-          </Label>
+      {/* Gallery Images */}
+      <div className="bg-card border border-border rounded-xl overflow-hidden">
+        <div className="flex items-center gap-3 px-6 py-4 border-b border-border bg-muted/30">
+          <div className="p-2 rounded-lg bg-primary/10">
+            <Images className="size-4 text-primary" />
+          </div>
+          <div>
+            <h2 className="font-semibold">Gallery Images</h2>
+            <p className="text-xs text-muted-foreground">Additional photos for the event</p>
+          </div>
         </div>
-      </div>
-
-      {/* Messages */}
-      {error && (
-        <div className="p-4 bg-destructive/10 text-destructive rounded-lg text-sm">
-          {error}
-        </div>
-      )}
-      {success && (
-        <div className="p-4 bg-green-500/10 text-green-500 rounded-lg text-sm">
-          {success}
-        </div>
-      )}
-
-      {/* Actions */}
-      <div className="flex items-center justify-between">
-        <Button
-          type="button"
-          variant="destructive"
-          onClick={handleDelete}
-          disabled={deleting}
-        >
-          {deleting ? (
-            <>
-              <Loader2 className="size-4 mr-2 animate-spin" />
-              Deleting...
-            </>
-          ) : (
-            <>
-              <Trash2 className="size-4 mr-2" />
-              Delete Event
-            </>
-          )}
-        </Button>
         
-        <Button type="submit" disabled={loading}>
-          {loading ? (
-            <>
-              <Loader2 className="size-4 mr-2 animate-spin" />
-              Saving...
-            </>
-          ) : (
-            <>
-              <Save className="size-4 mr-2" />
-              Save Changes
-            </>
-          )}
-        </Button>
+        <div className="p-6">
+          <GalleryUpload
+            defaultImages={galleryImages.filter(img => img.id).map((img) => ({
+              id: img.id!,
+              url: img.url,
+            }))}
+            maxFiles={20}
+            onFilesChange={(files) => {
+              // Wrap in setTimeout to prevent render-phase updates
+              setTimeout(() => {
+                const previews = files.map((file) => ({
+                  file,
+                  preview: URL.createObjectURL(file),
+                }))
+                setNewGalleryImages(previews)
+              }, 0)
+            }}
+            onRemoveExisting={async (id) => {
+               setDeleteId(id)
+               setShowDeleteConfirm(true)
+            }}
+          />
+        </div>
+      </div>
+
+      {/* Bottom Actions Bar */}
+      <div className="bg-card border border-border rounded-xl overflow-hidden">
+        <div className="p-6 flex flex-col sm:flex-row items-center justify-between gap-6">
+          <div className="flex items-center gap-4 w-full sm:w-auto">
+            <Switch
+              checked={isPublished}
+              onCheckedChange={setIsPublished}
+              id="publish-toggle"
+            />
+            <label htmlFor="publish-toggle" className="cursor-pointer">
+              <span className="font-medium block">Publish Event</span>
+              <span className="text-sm text-muted-foreground">Make visible on your site</span>
+            </label>
+          </div>
+
+          <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
+            <Button type="submit" disabled={loading || isUploadingCover || isUploadingGallery} size="lg" className="gap-2">
+              {loading || isUploadingCover || isUploadingGallery ? (
+                <>
+                  <Loader2 className="size-4 animate-spin" />
+                  {isUploadingCover ? 'Uploading Cover...' : isUploadingGallery ? 'Uploading Photos...' : 'Saving...'}
+                </>
+              ) : (
+                <>
+                  <Save className="size-4" />
+                  Save Changes
+                </>
+              )}
+            </Button>
+          </div>
+        </div>
       </div>
     </form>
+    
+    <ConfirmDialog
+      open={showDeleteConfirm}
+      onOpenChange={setShowDeleteConfirm}
+      title="Delete Image?"
+      description="This action cannot be undone. This image will be permanently removed from the event gallery."
+      onConfirm={executeDeleteImage}
+      loading={isDeleting}
+      variant="destructive"
+      confirmText="Delete Image"
+    />
+    </>
   )
 }

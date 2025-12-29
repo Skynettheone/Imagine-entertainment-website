@@ -10,6 +10,9 @@ import Testimonials from "@/components/testimonials"
 import Footer from "@/components/footer"
 import PublicLayout from "@/components/layouts/public-layout"
 
+// Force static generation - page is built at deploy time
+// No database calls, maximum resilience
+
 // Services data - 5 column bento grid (matches user's sketch)
 // Row 1: Corporate(1), Television(1), Musical(2), Rigging(1) = 5 cols
 // Row 2: Fixed(1), Sports(2), Wedding(1), CTA(1) = 5 cols

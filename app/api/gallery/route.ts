@@ -1,27 +1,15 @@
 import { NextResponse } from 'next/server'
-import { readdir } from 'fs/promises'
-import { join } from 'path'
+import { getAllGalleryImages } from '@/lib/data/events'
 
 export async function GET() {
   try {
-    const imagesDir = join(process.cwd(), 'public', 'images')
-    const files = await readdir(imagesDir)
+    const images = await getAllGalleryImages()
     
-    // Filter for image files only (jpg, jpeg, png, webp, gif)
-    const imageExtensions = ['.jpg', '.jpeg', '.png', '.webp', '.gif']
-    const imageFiles = files
-      .filter(file => {
-        const ext = file.toLowerCase().substring(file.lastIndexOf('.'))
-        return imageExtensions.includes(ext)
-      })
-      .map(file => `/images/${file}`)
-      .sort() // Sort alphabetically for consistent ordering
-    
-    return NextResponse.json({ images: imageFiles })
+    return NextResponse.json({ images })
   } catch (error) {
-    console.error('Error reading images directory:', error)
+    console.error('Error fetching gallery images:', error)
     return NextResponse.json(
-      { error: 'Failed to read images directory', images: [] },
+      { error: 'Failed to fetch gallery images', images: [] },
       { status: 500 }
     )
   }

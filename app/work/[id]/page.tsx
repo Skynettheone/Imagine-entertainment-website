@@ -5,6 +5,7 @@ import { ArrowLeft, Calendar, MapPin } from 'lucide-react'
 import Footer from '@/components/footer'
 import PublicLayout from '@/components/layouts/public-layout'
 import { getEventById } from '@/lib/data/events'
+import WorkGallery from '@/components/work/work-gallery'
 
 // Fallback data for static projects (when Supabase not set up)
 const fallbackProjects: Record<string, any> = {
@@ -44,14 +45,20 @@ interface WorkDetailPageProps {
 export default async function WorkDetailPage({ params }: WorkDetailPageProps) {
   const { id } = await params
   
-  // Try to fetch from Supabase first, fall back to static data
-  let event = await getEventById(id)
-  
-  if (!event) {
-    // Check fallback data
+  // Check valid UUID format
+  const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)
+
+  let event = null
+
+  // 1. Check fallback data first (for static IDs like '1', '2')
+  if (fallbackProjects[id]) {
     event = fallbackProjects[id]
+  } 
+  // 2. If not in fallback and is valid UUID, try Supabase
+  else if (isUuid) {
+    event = await getEventById(id)
   }
-  
+
   if (!event) {
     notFound()
   }
@@ -125,24 +132,13 @@ export default async function WorkDetailPage({ params }: WorkDetailPageProps) {
           <section className="py-16 md:py-24 px-6 md:px-10">
             <div className="max-w-[1400px] mx-auto">
               <h2 className="text-2xl md:text-3xl font-medium mb-8">Project Gallery</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-                {event.event_images.map((image: any) => (
-                  <div key={image.id} className="relative aspect-4/3 rounded-xl overflow-hidden bg-muted">
-                    <Image
-                      src={image.image_url}
-                      alt={image.alt_text || event.title}
-                      fill
-                      className="object-cover hover:scale-105 transition-transform duration-500"
-                    />
-                  </div>
-                ))}
-              </div>
+              <WorkGallery images={event.event_images} />
             </div>
           </section>
         )}
 
         {/* CTA Section */}
-        <section className="py-16 md:py-24 px-6 md:px-10 bg-muted mx-4 md:mx-6 rounded-2xl text-center mb-16">
+        <section className="mt-16 md:mt-24 py-16 md:py-24 px-6 md:px-10 bg-muted mx-4 md:mx-6 rounded-2xl text-center mb-16">
           <div className="max-w-[1400px] mx-auto">
             <p className="text-muted-foreground text-xs tracking-[0.15em] mb-4">//Like What You See?</p>
             <h2 className="text-2xl md:text-4xl font-medium mb-6">Let's create something extraordinary</h2>

@@ -45,6 +45,21 @@ export interface GalleryImage {
   created_at: string
 }
 
+// Activity Log type
+export interface ActivityLog {
+  id: string
+  user_id: string | null
+  action: string
+  entity_type: string | null
+  entity_id: string | null
+  details: any | null
+  created_at: string
+  // Joined user data
+  user?: {
+    email: string
+  }
+}
+
 // Event with images
 export interface EventWithImages extends Event {
   event_images: EventImage[]

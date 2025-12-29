@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
+import { createClient } from '@/lib/supabase/server'
 import { addEventImage } from '@/lib/data/events'
 
 // Check authentication
 async function isAuthenticated() {
-  const cookieStore = await cookies()
-  const session = cookieStore.get('dashboard_session')
-  return session?.value === 'authenticated'
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  return !!user
 }
 
 // POST - Add image to event

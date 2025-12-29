@@ -1,7 +1,9 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
-import { Calendar, Plus, Search } from 'lucide-react'
+import Image from 'next/image'
+import { Calendar, Plus, MapPin, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { DeleteEventButton } from '@/components/dashboard/delete-event-button'
 
 export default async function EventsPage() {
   const supabase = await createClient()
@@ -12,82 +14,114 @@ export default async function EventsPage() {
     .order('created_at', { ascending: false })
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Page Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold">Events</h1>
+          <h1 className="text-3xl font-bold tracking-tight">Events</h1>
           <p className="text-muted-foreground mt-1">
             Manage your portfolio events
           </p>
         </div>
-        <Link href="/dashboard/events/new">
-          <Button>
-            <Plus className="size-4 mr-2" />
+        <Link href="/dashboard/events/new" className="cursor-pointer">
+          <Button size="lg" className="gap-2">
+            <Plus className="size-5" />
             New Event
           </Button>
         </Link>
       </div>
 
       {/* Events List */}
-      <div className="bg-card border border-border rounded-lg overflow-hidden">
-        {events && events.length > 0 ? (
-          <div className="divide-y divide-border">
-            {events.map((event) => (
-              <Link
-                key={event.id}
-                href={`/dashboard/events/${event.id}`}
-                className="block p-4 hover:bg-muted/50 transition-colors"
-              >
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-3">
-                      <h3 className="font-semibold truncate">{event.title}</h3>
-                      <span className={`px-2 py-0.5 text-xs rounded-full ${
-                        event.is_published 
-                          ? 'bg-green-500/10 text-green-500' 
-                          : 'bg-yellow-500/10 text-yellow-500'
-                      }`}>
-                        {event.is_published ? 'Published' : 'Draft'}
-                      </span>
+      {events && events.length > 0 ? (
+        <div className="bg-card border border-border rounded-xl overflow-hidden divide-y divide-border">
+          {events.map((event) => (
+            <div
+              key={event.id}
+              className="group flex items-center gap-4 p-4 hover:bg-muted/50 transition-colors"
+            >
+              {/* Thumbnail */}
+              <Link href={`/dashboard/events/${event.id}`} className="shrink-0 cursor-pointer">
+                <div className="relative size-20 rounded-lg overflow-hidden bg-muted">
+                  {event.cover_image_url ? (
+                    <Image
+                      src={event.cover_image_url}
+                      alt={event.title}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-muted to-muted/50">
+                      <Calendar className="size-6 text-muted-foreground/30" />
                     </div>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      {event.category}
-                    </p>
-                    {event.description && (
-                      <p className="text-sm text-muted-foreground mt-2 line-clamp-2">
-                        {event.description}
-                      </p>
-                    )}
-                  </div>
-                  <div className="text-right text-sm text-muted-foreground">
-                    {event.event_date && (
-                      <p>{new Date(event.event_date).toLocaleDateString()}</p>
-                    )}
-                    {event.location && (
-                      <p className="mt-1">{event.location}</p>
-                    )}
-                  </div>
+                  )}
                 </div>
               </Link>
-            ))}
-          </div>
-        ) : (
-          <div className="p-12 text-center">
-            <Calendar className="size-12 mx-auto mb-4 text-muted-foreground/50" />
-            <h3 className="text-lg font-medium">No events yet</h3>
-            <p className="text-muted-foreground mt-1 mb-4">
-              Create your first event to get started
+
+              {/* Content */}
+              <Link href={`/dashboard/events/${event.id}`} className="flex-1 min-w-0 cursor-pointer">
+                <h3 className="font-semibold truncate group-hover:text-primary transition-colors mb-1">
+                  {event.title}
+                </h3>
+                <p className="text-sm text-muted-foreground mb-1">
+                  {event.category}
+                </p>
+                {(event.event_date || event.location) && (
+                  <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                    {event.event_date && (
+                      <span className="flex items-center gap-1.5">
+                        <Calendar className="size-3" />
+                        {new Date(event.event_date).toLocaleDateString('en-US', { 
+                          month: 'numeric', 
+                          day: 'numeric', 
+                          year: 'numeric' 
+                        })}
+                      </span>
+                    )}
+                    {event.location && (
+                      <span className="flex items-center gap-1.5">
+                        <MapPin className="size-3" />
+                        {event.location}
+                      </span>
+                    )}
+                  </div>
+                )}
+              </Link>
+
+              {/* Right side - Status and Delete */}
+              <div className="flex items-center gap-2 shrink-0">
+                <span className={`px-3 py-1.5 text-xs font-medium rounded-md ${
+                  event.is_published 
+                    ? 'bg-green-500/10 text-green-500 border border-green-500/20' 
+                    : 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/20'
+                }`}>
+                  {event.is_published ? 'Published' : 'Draft'}
+                </span>
+                <DeleteEventButton eventId={event.id} />
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        /* Empty State */
+        <div className="relative overflow-hidden bg-gradient-to-b from-card to-card/50 border border-border rounded-2xl">
+          <div className="absolute inset-0 bg-grid-white/5 [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]" />
+          <div className="relative p-16 text-center">
+            <div className="inline-flex items-center justify-center size-20 rounded-2xl bg-primary/10 mb-6">
+              <Calendar className="size-10 text-primary" />
+            </div>
+            <h3 className="text-2xl font-semibold">No events yet</h3>
+            <p className="text-muted-foreground mt-2 mb-8 max-w-md mx-auto">
+              Create your first event to showcase your amazing work. Add photos, details, and publish it to your portfolio.
             </p>
-            <Link href="/dashboard/events/new">
-              <Button>
-                <Plus className="size-4 mr-2" />
-                Create Event
+            <Link href="/dashboard/events/new" className="cursor-pointer">
+              <Button size="lg" className="gap-2">
+                <Plus className="size-5" />
+                Create Your First Event
               </Button>
             </Link>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   )
 }

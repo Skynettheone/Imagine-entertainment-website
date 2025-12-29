@@ -25,79 +25,12 @@ const categories = [
   ...EVENT_CATEGORIES,
 ]
 
-// Fallback static projects (used when Supabase is not set up)
-const fallbackProjects: Project[] = [
-  {
-    id: "1",
-    title: "BRIT AWARDS 2024",
-    category: "Television & Film",
-    image: "/brit-awards-stage-red-lighting-production.jpg",
-  },
-  {
-    id: "2",
-    title: "LONDON FASHION WEEK",
-    category: "Corporate",
-    image: "/fashion-runway-show-pink-dramatic-lighting.jpg",
-  },
-  {
-    id: "3",
-    title: "CORPORATE SUMMIT 2024",
-    category: "Corporate",
-    image: "/corporate-event-stage-blue-lighting-conference.jpg",
-  },
-  {
-    id: "4",
-    title: "WEST END PREMIERE",
-    category: "Television & Film",
-    image: "/theatre-stage-dramatic-spotlight-performance.jpg",
-  },
-  {
-    id: "5",
-    title: "PRODUCT LAUNCH",
-    category: "Corporate",
-    image: "/product-launch-event-modern-minimal-tech-stage.jpg",
-  },
-  {
-    id: "6",
-    title: "FILM PREMIERE",
-    category: "Television & Film",
-    image: "/film-premiere-red-carpet-night-event-glamour-lond.jpg",
-  },
-  {
-    id: "7",
-    title: "SUMMER MUSIC FESTIVAL",
-    category: "Music",
-    image: "/music-festival-outdoor-stage-crowd-night-lights.jpg",
-  },
-  {
-    id: "8",
-    title: "STADIUM RIGGING INSTALL",
-    category: "Rigging Services",
-    image: "/professional-event-production-team-working-stage-s.jpg",
-  },
-  {
-    id: "9",
-    title: "NATIONAL SPORTS CEREMONY",
-    category: "Public/Sports Events",
-    image: "/dramatic-stage-lighting-corporate-event-dark-green.jpg",
-  },
-  {
-    id: "10",
-    title: "LED INSTALLATION PROJECT",
-    category: "Fixed Installation",
-    image: "/professional-event-production-team-working-stage-s.jpg",
-  },
-  {
-    id: "11",
-    title: "LUXURY WEDDING CELEBRATION",
-    category: "Weddings & Private",
-    image: "/dramatic-stage-lighting-corporate-event-dark-green.jpg",
-  },
-]
+// Fallback static projects (removed as per user request to avoid ghost data)
+const fallbackProjects: Project[] = []
 
 function WorkPageContent() {
   const [isLoaded, setIsLoaded] = useState(true)
-  const [projects, setProjects] = useState<Project[]>(fallbackProjects)
+  const [projects, setProjects] = useState<Project[]>([])
   const searchParams = useSearchParams()
   const [activeCategory, setActiveCategory] = useState("All")
 

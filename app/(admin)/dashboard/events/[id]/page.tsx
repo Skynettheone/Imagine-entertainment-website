@@ -1,8 +1,9 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, Trash2 } from 'lucide-react'
 import { EventEditForm } from '@/components/dashboard/event-edit-form'
+import { DeleteEventButton } from '@/components/dashboard/delete-event-button'
 
 type PageProps = {
   params: Promise<{ id: string }>
@@ -26,24 +27,25 @@ export default async function EventDetailPage({ params }: PageProps) {
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="space-y-8">
       {/* Header */}
       <div className="flex items-center gap-4">
         <Link
           href="/dashboard/events"
-          className="p-2 hover:bg-muted rounded-lg transition-colors"
+          className="p-2.5 hover:bg-muted rounded-xl transition-colors border border-transparent hover:border-border"
         >
           <ArrowLeft className="size-5" />
         </Link>
         <div className="flex-1">
-          <h1 className="text-2xl font-bold">{event.title}</h1>
+          <h1 className="text-2xl font-bold tracking-tight">{event.title}</h1>
           <p className="text-muted-foreground">{event.category}</p>
         </div>
         <div className="flex items-center gap-2">
-          <span className={`px-3 py-1 text-sm rounded-full ${
+          <DeleteEventButton eventId={event.id} />
+          <span className={`px-3 py-1.5 text-sm font-medium rounded-full ${
             event.is_published 
-              ? 'bg-green-500/10 text-green-500' 
-              : 'bg-yellow-500/10 text-yellow-500'
+              ? 'bg-green-500/10 text-green-500 border border-green-500/30' 
+              : 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/30'
           }`}>
             {event.is_published ? 'Published' : 'Draft'}
           </span>

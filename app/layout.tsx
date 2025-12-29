@@ -4,6 +4,7 @@ import { Outfit } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
+import { Toaster } from "@/components/ui/sonner"
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -63,6 +64,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           {children}
           <Analytics />
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>
