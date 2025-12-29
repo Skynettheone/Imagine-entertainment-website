@@ -5,9 +5,15 @@ export async function GET() {
   try {
     const events = await getPublishedEvents()
     
+    // Return with cache headers for faster subsequent loads
+    // Cache for 60 seconds, stale-while-revalidate for 5 minutes
     return NextResponse.json({ 
       events,
       success: true 
+    }, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300',
+      }
     })
   } catch (error) {
     console.error('Error in /api/events:', error)
