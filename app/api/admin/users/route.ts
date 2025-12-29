@@ -209,13 +209,13 @@ export async function DELETE(request: Request) {
       )
     }
 
-    // Log deletion
-    await logActivity(
+    // Log deletion (non-blocking)
+    logActivity(
       "Deleted User", 
       { email: userToDelete?.email }, 
       "user", 
       userId
-    )
+    ).catch(console.error)
 
     return NextResponse.json({ 
       success: true,
