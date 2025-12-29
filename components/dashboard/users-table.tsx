@@ -1,7 +1,7 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
-import { gsap } from "gsap"
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -32,7 +32,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-// Slider Toggle Component with GSAP animation
+// Slider Toggle Component with CSS animation
 function SliderToggle({ 
   addMode, 
   setAddMode 
@@ -40,31 +40,13 @@ function SliderToggle({
   addMode: "direct" | "invite"
   setAddMode: (mode: "direct" | "invite") => void 
 }) {
-  const sliderRef = useRef<HTMLDivElement>(null)
-  const containerRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    if (!sliderRef.current || !containerRef.current) return
-
-    const containerWidth = containerRef.current.offsetWidth
-    const sliderWidth = sliderRef.current.offsetWidth
-    const padding = 4 // 1 unit = 4px
-    
-    const targetX = addMode === "invite" ? containerWidth - sliderWidth - padding : padding
-
-    gsap.to(sliderRef.current, {
-      x: targetX - padding, // Adjust for initial left position
-      duration: 0.3,
-      ease: "power2.out"
-    })
-  }, [addMode])
-
   return (
-    <div ref={containerRef} className="relative bg-muted rounded-xl p-1">
+    <div className="relative bg-muted rounded-xl p-1">
       {/* Sliding indicator */}
       <div 
-        ref={sliderRef}
-        className="absolute top-1 bottom-1 left-1 w-[calc(50%-4px)] bg-background border border-border rounded-lg shadow-sm"
+        className={`absolute top-1 bottom-1 w-[calc(50%-4px)] bg-background border border-border rounded-lg shadow-sm transition-all duration-300 ease-out ${
+          addMode === 'invite' ? 'left-[calc(50%)]' : 'left-1'
+        }`}
       />
       
       {/* Buttons */}
@@ -108,6 +90,7 @@ interface User {
 }
 
 export function UsersTable() {
+  const router = useRouter()
   const [users, setUsers] = useState<User[]>([])
   const [currentUserId, setCurrentUserId] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -181,6 +164,7 @@ export function UsersTable() {
         setNewPassword("")
         setAddSuccess(null)
         fetchUsers() // Refresh list
+        router.refresh()
       }, 1500)
       
     } catch (err) {
@@ -210,6 +194,7 @@ export function UsersTable() {
       setShowDeleteDialog(false)
       setUserToDelete(null)
       fetchUsers() // Refresh list
+      router.refresh()
       
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to delete user')
