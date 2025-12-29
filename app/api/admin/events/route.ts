@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createEvent, getAllEvents, updateEvent, deleteEvent } from '@/lib/data/events'
+import { logActivity } from '@/lib/actions/log-activity'
 
 // Check authentication
 async function isAuthenticated() {
@@ -46,6 +47,14 @@ export async function POST(request: NextRequest) {
     if (error) {
       return NextResponse.json({ error }, { status: 400 })
     }
+
+    // Log event creation
+    await logActivity(
+      "Created Event", 
+      { title: event.title }, 
+      "event", 
+      event.id
+    )
 
     return NextResponse.json({ event, success: true })
   } catch (error) {

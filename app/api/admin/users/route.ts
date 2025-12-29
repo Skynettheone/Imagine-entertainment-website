@@ -1,5 +1,6 @@
 import { createAdminClient, createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
+import { logActivity } from '@/lib/actions/log-activity'
 
 export const dynamic = 'force-dynamic'
 
@@ -78,7 +79,7 @@ export async function POST(request: Request) {
     if (sendInvite) {
       // Send invitation email
       const { data, error } = await supabaseAdmin.auth.admin.inviteUserByEmail(email, {
-        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/setup-account`,
+        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/setup-account?type=invite`,
       })
 
       if (error) {
@@ -88,6 +89,14 @@ export async function POST(request: Request) {
           { status: 400 }
         )
       }
+
+      // Log invitation
+      await logActivity(
+        "Sent User Invitation", 
+        { email: data.user.email }, 
+        "user", 
+        data.user.id
+      )
 
       return NextResponse.json({ 
         success: true, 
@@ -126,6 +135,14 @@ export async function POST(request: Request) {
           { status: 400 }
         )
       }
+
+      // Log user creation
+      await logActivity(
+        "Created User", 
+        { email: data.user.email }, 
+        "user", 
+        data.user.id
+      )
 
       return NextResponse.json({ 
         success: true, 
@@ -179,6 +196,9 @@ export async function DELETE(request: Request) {
 
     const supabaseAdmin = createAdminClient()
 
+    // Get user email before deleting for log
+    const { data: { user: userToDelete } } = await supabaseAdmin.auth.admin.getUserById(userId)
+
     const { error } = await supabaseAdmin.auth.admin.deleteUser(userId)
 
     if (error) {
@@ -188,6 +208,14 @@ export async function DELETE(request: Request) {
         { status: 400 }
       )
     }
+
+    // Log deletion
+    await logActivity(
+      "Deleted User", 
+      { email: userToDelete?.email }, 
+      "user", 
+      userId
+    )
 
     return NextResponse.json({ 
       success: true,

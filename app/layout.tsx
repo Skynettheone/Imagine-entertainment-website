@@ -53,11 +53,15 @@ export const viewport: Viewport = {
   userScalable: true,
 }
 
+import { useAutoLogout } from "@/hooks/use-auto-logout"
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  useAutoLogout()
+  
   return (
     <html lang="en" className={outfit.variable} suppressHydrationWarning>
       <body className="font-sans antialiased overflow-x-hidden" suppressHydrationWarning>

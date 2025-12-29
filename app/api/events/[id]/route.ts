@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextRequest, NextResponse } from 'next/server'
 import type { EventFormData } from '@/lib/types/database'
+import { logActivity } from '@/lib/actions/log-activity'
 
 type RouteParams = { params: Promise<{ id: string }> }
 
@@ -82,6 +83,14 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       )
     }
 
+    // Log update
+    await logActivity(
+      "Updated Event", 
+      { title: data.title, updates: Object.keys(body) }, 
+      "event", 
+      id
+    )
+
     return NextResponse.json({ data })
   } catch (error) {
     console.error('Error updating event:', error)
@@ -107,6 +116,13 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
       )
     }
 
+    // Get event details before deleting for log
+    const { data: eventToDelete } = await supabase
+      .from('events')
+      .select('title')
+      .eq('id', id)
+      .single()
+
     const { error } = await supabase
       .from('events')
       .delete()
@@ -118,6 +134,14 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
         { status: 500 }
       )
     }
+
+    // Log deletion
+    await logActivity(
+      "Deleted Event", 
+      { title: eventToDelete?.title }, 
+      "event", 
+      id
+    )
 
     return NextResponse.json({ message: 'Event deleted successfully' })
   } catch (error) {

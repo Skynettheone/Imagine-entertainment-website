@@ -54,6 +54,12 @@ export interface ActivityLog {
   entity_id: string | null
   details: any | null
   created_at: string
+  device_info: {
+    browser?: string
+    os?: string
+    device?: string
+    ip?: string
+  } | null
   // Joined user data
   user?: {
     email: string

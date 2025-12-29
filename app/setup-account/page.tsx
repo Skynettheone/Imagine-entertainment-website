@@ -23,21 +23,36 @@ export default function SetupAccountPage() {
   const [success, setSuccess] = useState(false)
 
   useEffect(() => {
-    const checkSession = async () => {
-      const supabase = createClient()
-      const { data: { user } } = await supabase.auth.getUser()
-      
-      if (!user) {
-        // No session, redirect to dashboard (will show login form)
-        router.push("/dashboard?error=invalid_invite")
-        return
-      }
-      
-      setEmail(user.email || null)
-      setIsCheckingSession(false)
-    }
+    const supabase = createClient()
     
-    checkSession()
+    // Check if this is an invite flow
+    const params = new URLSearchParams(window.location.search)
+    const isInvite = params.get('type') === 'invite' || window.location.hash.includes('access_token')
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (session?.user) {
+        setEmail(session.user.email || null)
+        setIsCheckingSession(false)
+      } else if (!session && !isInvite) {
+        // Only redirect if not waiting for invite token processing
+        router.push("/dashboard?error=invalid_invite")
+      }
+    })
+
+    // Fallback check for existing session
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (user) {
+        setEmail(user.email || null)
+        setIsCheckingSession(false)
+      } else if (!isInvite) {
+        // If no user and not an invitation link, redirect
+         router.push("/dashboard?error=invalid_invite")
+      }
+    })
+
+    return () => {
+      subscription.unsubscribe()
+    }
   }, [router])
 
   const validatePassword = (password: string): string | null => {

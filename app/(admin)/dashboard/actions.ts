@@ -4,6 +4,8 @@ import { createClient, createAdminClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 
+import { logActivity } from '@/lib/actions/log-activity'
+
 export async function signIn(formData: FormData) {
   const email = formData.get('email') as string
   const password = formData.get('password') as string
@@ -16,23 +18,15 @@ export async function signIn(formData: FormData) {
   })
 
   if (error) {
+    // Log failed login attempt
+    await logActivity("Failed Login Attempt", { email, error: error.message }, "auth")
     return { error: error.message }
   }
 
   // Log successful login
-  // We need to get the user to log them
   const { data: { user } } = await supabase.auth.getUser()
   if (user) {
-    try {
-      await supabase.from('activity_logs').insert({
-        user_id: user.id,
-        action: "User Login",
-        entity_type: "auth",
-        entity_id: user.id
-      })
-    } catch (e) {
-      console.error("Failed to log login:", e)
-    }
+    await logActivity("User Login", { email: user.email }, "auth", user.id)
   }
 
   return { success: true }
@@ -45,12 +39,7 @@ export async function signOut() {
   try {
      const { data: { user } } = await supabase.auth.getUser()
      if (user) {
-        await supabase.from('activity_logs').insert({
-          user_id: user.id,
-          action: "User Logout",
-          entity_type: "auth",
-          entity_id: user.id
-        })
+        await logActivity("User Logout", { email: user.email }, "auth", user.id)
      }
   } catch (e) {
     console.error("Failed to log logout:", e)

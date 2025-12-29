@@ -84,7 +84,6 @@ export function ActivityLogList() {
               </AvatarFallback>
             </Avatar>
             <div className="space-y-1 flex-1">
-              <div className="flex items-center justify-between">
                 <p className="text-sm font-medium leading-none">
                   {log.action}
                 </p>
@@ -92,10 +91,15 @@ export function ActivityLogList() {
                   {formatDistanceToNow(new Date(log.created_at), { addSuffix: true })}
                 </span>
               </div>
-              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <div className="flex flex-col gap-1 text-xs text-muted-foreground">
                 <span className="font-medium text-foreground/80">
                  {log.details?.user_email || 'Admin'}
                 </span>
+                {log.device_info && (
+                  <span className="text-[10px] opacity-70">
+                    {log.device_info.browser} • {log.device_info.os} • {log.device_info.device}
+                  </span>
+                )}
               </div>
               {log.details && (
                  // Filter out user_email from details view to avoid clutter
