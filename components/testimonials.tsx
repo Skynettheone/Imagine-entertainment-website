@@ -21,7 +21,7 @@ const testimonials = [
   },
   {
     quote:
-      "Thank you for the excellent job done in organizing our Staff Get-Together. Your hard work, creativity, and attention to detail made the event truly memorable. From planning to execution, every element reflected your dedication and teamwork. We sincerely appreciate the effort each of you put in to ensure everything ran smoothly and successfully. Thank you once again for your outstanding contribution and commitment make Siyapatha night a special night",
+      "Thank you for the excellent job done in organizing our annual award ceremony. Your hard work, creativity, and attention to detail made the event truly memorable. From planning to execution, every element reflected your dedication and teamwork. We sincerely appreciate the effort each of you put in to ensure everything ran smoothly and successfully. Thank you once again for your outstanding contribution and commitment make Siyapatha night a special night",
     author: "Mr. Prasad Udugampola",
     role: "Chief Human Resources Officer",
     company: "Siyapatha Finance PLC",
