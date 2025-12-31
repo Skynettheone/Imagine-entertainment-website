@@ -284,7 +284,7 @@ export default function Navigation() {
               <motion.img
                 src={getLogoSource()}
                 alt="Imagine Entertainment"
-                className="h-10 md:h-11 w-auto"
+                className="h-10 md:h-11 w-auto text-transparent"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.2, ease: "easeOut" }}
