@@ -353,9 +353,9 @@ function TeamSection() {
           isVisible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
         }`}
       >
-        <p className="text-sm text-muted-foreground tracking-widest uppercase mb-4">Our Team</p>
+        <p className="text-sm text-muted-foreground tracking-widest uppercase mb-4">Our House</p>
         <h2 className="text-4xl md:text-5xl lg:text-6xl font-medium tracking-tight">
-          The <span className="italic font-light text-muted-foreground">Creators</span>
+          Bringing Moments <span className="italic font-light text-muted-foreground">to Life</span>
         </h2>
       </div>
       
@@ -369,7 +369,7 @@ function TeamSection() {
         <div className="relative h-[70vh] md:h-[80vh]">
           <img
             src="/creative-team-meeting-modern-office-collaboration-e.jpg"
-            alt="Our Team"
+            alt="Our House"
             className="w-full h-full object-cover"
           />
         </div>
