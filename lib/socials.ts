@@ -1,9 +1,9 @@
 export const socialLinks = {
-  facebook: "https://facebook.com/imaginesl",
-  instagram: "https://instagram.com/imagine_sl",
-  tiktok: "https://tiktok.com/@imagineentertainment",
-  youtube: "https://youtube.com/@imagineentertainment",
-  linkedin: "https://linkedin.com/company/imagine-entertainment-pvt-ltd",
+  facebook: "https://www.facebook.com/imagineentertainment",
+  instagram: "https://www.instagram.com/imagine.ent.sl",
+  tiktok: "https://www.tiktok.com/@imagineentertainmentsl",
+  youtube: "https://youtube.com/@theimagineent",
+  linkedin: "https://www.linkedin.com/company/imagineentertainmentsl",
 } as const;
 
 export type SocialPlatform = keyof typeof socialLinks;

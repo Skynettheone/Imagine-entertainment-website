@@ -167,7 +167,7 @@ export default function Footer() {
                     <InstagramIcon className="w-5 h-5" />
                   </a>
                   <a
-                    href="https://tiktok.com/@imagineentertainment"
+                    href="https://www.tiktok.com/@imagineentertainmentsl"
                     className="cursor-target flex shrink-0 items-center justify-center w-10 h-10 rounded-full bg-black/5 hover:bg-black/10 dark:bg-white/10 dark:hover:bg-white/20 transition-all duration-300 hover:opacity-80 text-black dark:text-white"
                     aria-label="TikTok"
                     target="_blank"
@@ -178,7 +178,7 @@ export default function Footer() {
                     </svg>
                   </a>
                   <a
-                    href="https://youtube.com/@imagineentertainment"
+                    href="https://youtube.com/@theimagineent"
                     className="cursor-target flex shrink-0 items-center justify-center w-10 h-10 rounded-full bg-black/5 hover:bg-black/10 dark:bg-white/10 dark:hover:bg-white/20 transition-all duration-300 hover:opacity-80 text-[#FF0000]"
                     aria-label="YouTube"
                     target="_blank"

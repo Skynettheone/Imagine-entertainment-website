@@ -122,7 +122,7 @@ export default function ContactPage() {
                 <div className="flex gap-3">
                   {/* Facebook */}
                   <a
-                    href="https://facebook.com/imaginesl"
+                    href="https://www.facebook.com/imagineentertainment"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center justify-center w-10 h-10 rounded-full bg-foreground/5 hover:bg-foreground/10 dark:bg-white/10 dark:hover:bg-white/20 transition-all duration-300"
@@ -134,7 +134,7 @@ export default function ContactPage() {
                   </a>
                   {/* Instagram */}
                   <a
-                    href="https://instagram.com/imagine_sl"
+                    href="https://www.instagram.com/imagine.ent.sl"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center justify-center w-10 h-10 rounded-full bg-foreground/5 hover:bg-foreground/10 dark:bg-white/10 dark:hover:bg-white/20 transition-all duration-300"
@@ -146,7 +146,7 @@ export default function ContactPage() {
                   </a>
                   {/* TikTok */}
                   <a
-                    href="https://tiktok.com/@imaginesl"
+                    href="https://www.tiktok.com/@imagineentertainmentsl"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center justify-center w-10 h-10 rounded-full bg-foreground/5 hover:bg-foreground/10 dark:bg-white/10 dark:hover:bg-white/20 transition-all duration-300"
@@ -158,7 +158,7 @@ export default function ContactPage() {
                   </a>
                   {/* YouTube */}
                   <a
-                    href="https://youtube.com/@imaginesl"
+                    href="https://youtube.com/@theimagineent"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center justify-center w-10 h-10 rounded-full bg-foreground/5 hover:bg-foreground/10 dark:bg-white/10 dark:hover:bg-white/20 transition-all duration-300"
@@ -170,7 +170,7 @@ export default function ContactPage() {
                   </a>
                   {/* LinkedIn */}
                   <a
-                    href="https://linkedin.com/company/imagine-entertainment-pvt-ltd"
+                    href="https://www.linkedin.com/company/imagineentertainmentsl"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center justify-center w-10 h-10 rounded-full bg-foreground/5 hover:bg-foreground/10 dark:bg-white/10 dark:hover:bg-white/20 transition-all duration-300"
