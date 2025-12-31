@@ -38,7 +38,8 @@ export default function Hero() {
 
   // Cloudinary URLs
   const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
-  const posterUrl = `https://res.cloudinary.com/${cloudName}/image/upload/q_auto,f_auto,w_1920/IMAGINE/3b90c805-d870-4868-84b5-33041e3f242b`
+  // Generate poster from the video itself (ensure 1st frame, 1080p quality)
+  const posterUrl = `https://res.cloudinary.com/${cloudName}/video/upload/so_0,q_auto,f_auto,w_1920/IMAGINE/Final_Web_vyhf3y.jpg`
   const videoUrl = `https://res.cloudinary.com/${cloudName}/video/upload/q_auto:eco,f_auto/IMAGINE/Final_Web_vyhf3y`
 
   return (
