@@ -130,7 +130,7 @@ graph LR
 
 This project includes a comprehensive `CLIENT_HANDOVER.md` for account transitions and `ARCHITECTURE.md` for deep technical diving.
 
-**Technical Support**: [developers@imaginesl.com](mailto:developers@imaginesl.com)
+**Technical Support**: [developers@imaginesl.com](mailto:hasaldharmagunawardana@gmail.com)
 **Project Lead**: Imagine Entertainment SL
 
 ---
