@@ -1,3 +1,5 @@
+import { uploadImageAction } from '@/lib/actions/upload';
+
 export interface CloudinaryUploadResult {
     url: string;
     public_id: string;
@@ -13,15 +15,11 @@ export async function uploadToCloudinary(
     formData.append('file', file);
     formData.append('folder', folder);
 
-    const response = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
-    });
-
-    if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || 'Upload failed');
+    try {
+        const result = await uploadImageAction(formData);
+        return result;
+    } catch (error) {
+        console.error('Upload to Cloudinary failed:', error);
+        throw error instanceof Error ? error : new Error('Upload failed');
     }
-
-    return response.json();
 }

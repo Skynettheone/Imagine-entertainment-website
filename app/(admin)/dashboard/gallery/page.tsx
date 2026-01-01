@@ -84,6 +84,7 @@ export default function GalleryPage() {
           }
         } catch (error) {
           console.error('Gallery upload failed for file:', error)
+          toast.error(error instanceof Error ? error.message : `Failed to upload ${file.name}`)
         }
       }
 

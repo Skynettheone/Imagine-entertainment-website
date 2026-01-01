@@ -11,6 +11,9 @@ const nextConfig = {
   experimental: {
     // Optimize package imports for tree-shaking
     optimizePackageImports: ['lucide-react', 'framer-motion'],
+    serverActions: {
+      bodySizeLimit: '10mb',
+    },
   },
   // Image optimization with modern formats
   images: {

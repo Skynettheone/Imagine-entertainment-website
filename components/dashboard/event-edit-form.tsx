@@ -120,7 +120,7 @@ export function EventEditForm({ event }: EventEditFormProps) {
           if (result?.url) coverImageUrl = result.url
         } catch (error) {
           console.error('Cover upload failed:', error)
-          toast.error('Failed to upload cover image')
+          toast.error(error instanceof Error ? error.message : 'Failed to upload cover image')
         } finally {
           setIsUploadingCover(false)
         }
@@ -167,6 +167,7 @@ export function EventEditForm({ event }: EventEditFormProps) {
             }
           } catch (error) {
             console.error('Gallery image upload failed:', error)
+            toast.error(error instanceof Error ? error.message : 'Gallery image upload failed')
           }
         }
         setIsUploadingGallery(false)

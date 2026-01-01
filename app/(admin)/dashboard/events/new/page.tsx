@@ -99,6 +99,11 @@ export default function NewEventPage() {
           const result = await uploadToCloudinary(coverImageFile, cloudFolder)
           if (result?.url) coverImageUrl = result.url
           else throw new Error("Failed to upload cover image")
+        } catch (error) {
+          console.error('Cover upload failed:', error)
+          toast.error(error instanceof Error ? error.message : 'Failed to upload cover image')
+          setIsSubmitting(false)
+          return
         } finally {
           setIsUploadingCover(false)
         }
@@ -145,6 +150,7 @@ export default function NewEventPage() {
             }
           } catch (error) {
             console.error('Gallery image upload failed:', error)
+            toast.error(error instanceof Error ? error.message : 'Gallery image upload failed')
           }
         }
         setIsUploadingGallery(false)
