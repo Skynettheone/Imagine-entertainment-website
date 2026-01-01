@@ -96,11 +96,11 @@ async function fetchCloudflareAnalytics(query: string, variables: Record<string,
   return data;
 }
 
-function getEmptyData() {
+function getEmptyData(days: number = 30) {
   const now = new Date();
-  const history = Array.from({ length: 30 }, (_, i) => {
+  const history = Array.from({ length: days }, (_, i) => {
     const date = new Date(now);
-    date.setDate(date.getDate() - (29 - i));
+    date.setDate(date.getDate() - (days - 1 - i));
     return {
       date: date.toISOString().split('T')[0],
       pageviews: 0,
@@ -137,7 +137,7 @@ export async function GET(request: NextRequest) {
   // 1. Validation
   if (!zoneId || !apiToken) {
     console.warn("Cloudflare credentials missing in environment variables.");
-    return NextResponse.json(getEmptyData());
+    return NextResponse.json(getEmptyData(days));
   }
 
   try {
@@ -217,15 +217,32 @@ export async function GET(request: NextRequest) {
     const zone1 = res1.data?.viewer?.zones?.[0];
 
     if (!zoneCurrent) {
-      return NextResponse.json(getEmptyData());
+      return NextResponse.json(getEmptyData(days));
     }
 
     // 4. Transform Data
-    const history = zoneCurrent.httpRequests1dGroups?.map((d) => ({
-      date: d.dimensions.date,
-      pageviews: d.sum.requests || 0,
-      visitors: d.uniq.uniques || 0,
-    })) || [];
+    // A. Fill missing dates in history to ensure a continuous chart
+    const historyMap = new Map();
+    zoneCurrent.httpRequests1dGroups?.forEach((d: any) => {
+      historyMap.set(d.dimensions.date, {
+        date: d.dimensions.date,
+        pageviews: d.sum.requests || 0,
+        visitors: d.uniq.uniques || 0,
+      });
+    });
+
+    const history = [];
+    for (let i = days - 1; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      const dateStr = d.toISOString().split('T')[0];
+
+      history.push(historyMap.get(dateStr) || {
+        date: dateStr,
+        pageviews: 0,
+        visitors: 0,
+      });
+    }
 
     const rawData = zone1?.httpRequestsAdaptiveGroups || [];
 
@@ -235,7 +252,7 @@ export async function GET(request: NextRequest) {
     const pageCounts: Record<string, { views: number; visitors: number }> = {};
     const referrerCounts: Record<string, number> = {};
 
-    rawData.forEach((item) => {
+    rawData.forEach((item: any) => {
       const views = item.count || 0;
       const visitors = 0;
 
@@ -260,7 +277,7 @@ export async function GET(request: NextRequest) {
 
     const topReferrers = Object.entries(referrerCounts)
       .map(([source, views]) => ({ source, views }))
-      .sort((a, b) => b.views - a.views)
+      .sort((a, b) => (b.views as number) - (a.views as number))
       .slice(0, 5);
 
     const totalDevices = deviceCounts.desktop + deviceCounts.mobile + deviceCounts.tablet;
@@ -273,7 +290,7 @@ export async function GET(request: NextRequest) {
     const totalBrowserViews = Object.values(browserCounts).reduce((a, b) => a + b, 0);
 
     const browsers = Object.entries(browserCounts)
-      .map(([name, val]) => ({ name, percentage: totalBrowserViews > 0 ? (val / totalBrowserViews) * 100 : 0 }))
+      .map(([name, val]) => ({ name, percentage: totalBrowserViews > 0 ? ((val as number) / totalBrowserViews) * 100 : 0 }))
       .sort((a, b) => b.percentage - a.percentage)
       .slice(0, 6);
 
@@ -294,8 +311,8 @@ export async function GET(request: NextRequest) {
     let pageviewsChange = 0;
     let visitorsChange = 0;
 
-    const prevTotalViews = zonePrev?.httpRequests1dGroups?.reduce((acc, d) => acc + (d.sum.requests || 0), 0) || 0;
-    const prevTotalVisitors = zonePrev?.httpRequests1dGroups?.reduce((acc, d) => acc + (d.uniq.uniques || 0), 0) || 0;
+    const prevTotalViews = zonePrev?.httpRequests1dGroups?.reduce((acc: number, d: any) => acc + (d.sum.requests || 0), 0) || 0;
+    const prevTotalVisitors = zonePrev?.httpRequests1dGroups?.reduce((acc: number, d: any) => acc + (d.uniq.uniques || 0), 0) || 0;
 
     if (prevTotalViews > 0) pageviewsChange = ((totalPageviews - prevTotalViews) / prevTotalViews) * 100;
     if (prevTotalVisitors > 0) visitorsChange = ((totalVisitors - prevTotalVisitors) / prevTotalVisitors) * 100;
@@ -329,6 +346,6 @@ export async function GET(request: NextRequest) {
       } catch (e) { }
     }
 
-    return NextResponse.json({ ...getEmptyData(), error: cleanMessage }, { status: 500 });
+    return NextResponse.json({ ...getEmptyData(days), error: cleanMessage }, { status: 500 });
   }
 }

@@ -161,6 +161,10 @@ function TrafficChart({ data }: { data: AnalyticsData }) {
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis
               dataKey="date"
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+              minTickGap={32}
               tickFormatter={(value) => {
                 const date = new Date(value);
                 return date.toLocaleDateString("en-US", {
@@ -606,8 +610,8 @@ export default function DashboardPage() {
               key={range.value}
               onClick={() => setDays(range.value)}
               className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${days === range.value
-                  ? "bg-background text-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground hover:bg-background/50"
+                ? "bg-background text-foreground shadow-sm"
+                : "text-muted-foreground hover:text-foreground hover:bg-background/50"
                 }`}
             >
               {range.label}
