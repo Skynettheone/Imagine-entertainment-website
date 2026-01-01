@@ -29,9 +29,8 @@ export default function Hero() {
     }
   }, [])
 
-  // Cloudinary URLs
-  const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
-  const videoUrl = `https://res.cloudinary.com/${cloudName}/video/upload/q_auto:eco,f_auto/IMAGINE/Final_Web_vyhf3y`
+  // Cloudinary video URL
+  const videoUrl = "https://res.cloudinary.com/dqhklh9nd/video/upload/q_auto:eco,f_auto/v1767202328/Final_Web_vyhf3y.mp4"
 
   return (
     <section className="relative min-h-dvh h-dvh bg-black overflow-hidden">

@@ -12,7 +12,20 @@ const CTASection = dynamic(() => import("@/components/home/cta-section").then(mo
 const ClientsMarquee = dynamic(() => import("@/components/clients-marquee"))
 const Testimonials = dynamic(() => import("@/components/testimonials"))
 
+// ... imports
+
+import type { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: "IMAGINE ENTERTAINMENT | Sri Lanka's Premier Event Production Company",
+  description: "Experience world-class event production with Imagine Entertainment. 37+ years of delivering turnkey solutions for corporate events, concerts, weddings, and TV production in Sri Lanka.",
+  alternates: {
+    canonical: '/',
+  },
+}
+
 export default function Home() {
+// ...
   return (
     <PublicLayout>
       <main className="min-h-screen bg-background">
