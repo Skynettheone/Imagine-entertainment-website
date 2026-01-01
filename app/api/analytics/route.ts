@@ -39,6 +39,68 @@ interface DateRange {
 
 const CLOUDFLARE_API_URL = "https://api.cloudflare.com/client/v4/graphql";
 
+const COUNTRY_NAME_TO_CODE: Record<string, string> = {
+  "United States": "us",
+  "United Kingdom": "gb",
+  "India": "in",
+  "Canada": "ca",
+  "Germany": "de",
+  "France": "fr",
+  "Japan": "jp",
+  "China": "cn",
+  "Australia": "au",
+  "Brazil": "br",
+  "Russia": "ru",
+  "South Korea": "kr",
+  "Italy": "it",
+  "Spain": "es",
+  "Netherlands": "nl",
+  "Switzerland": "ch",
+  "Sweden": "se",
+  "Norway": "no",
+  "Denmark": "dk",
+  "Finland": "fi",
+  "Ireland": "ie",
+  "New Zealand": "nz",
+  "Singapore": "sg",
+  "United Arab Emirates": "ae",
+  "Saudi Arabia": "sa",
+  "South Africa": "za",
+  "Mexico": "mx",
+  "Argentina": "ar",
+  "Turkey": "tr",
+  "Portugal": "pt",
+  "Belgium": "be",
+  "Austria": "at",
+  "Thailand": "th",
+  "Vietnam": "vn",
+  "Indonesia": "id",
+  "Malaysia": "my",
+  "Philippines": "ph",
+  "Poland": "pl",
+  "Czech Republic": "cz",
+  "Greece": "gr",
+  "Israel": "il",
+  "Ukraine": "ua",
+  "Hong Kong": "hk",
+  "Taiwan": "tw",
+  "Pakistan": "pk",
+  "Egypt": "eg",
+  "Nigeria": "ng",
+  "Sri Lanka": "lk",
+  "Unknown": "un"
+};
+
+function getCountryCode(name: string): string {
+  if (COUNTRY_NAME_TO_CODE[name]) return COUNTRY_NAME_TO_CODE[name];
+  // Basic search for common variations
+  const lowerName = name.toLowerCase();
+  for (const [key, code] of Object.entries(COUNTRY_NAME_TO_CODE)) {
+    if (key.toLowerCase() === lowerName) return code;
+  }
+  return "un";
+}
+
 function getDateRange(days: number): DateRange {
   const endDate = new Date();
   const startDate = new Date();
@@ -180,7 +242,6 @@ export async function GET(request: NextRequest) {
                 userAgent
                 clientRequestPath
                 clientCountryName
-                clientCountry
               }
               count
             }
@@ -265,7 +326,7 @@ export async function GET(request: NextRequest) {
       browserCounts[browser] = (browserCounts[browser] || 0) + views;
 
       const country = item.dimensions.clientCountryName || 'Unknown';
-      const code = item.dimensions.clientCountry || 'XX';
+      const code = getCountryCode(country);
       if (!countryCounts[country]) countryCounts[country] = { views: 0, visitors: 0, code };
       countryCounts[country].views += views;
       countryCounts[country].visitors += visitors;
