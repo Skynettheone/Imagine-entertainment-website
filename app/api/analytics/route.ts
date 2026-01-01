@@ -314,19 +314,18 @@ export async function GET() {
       .sort((a, b) => b.views - a.views)
       .slice(0, 5);
 
-    // D. Comparison Metrics
-    const totalPageviews = last7Days.reduce((acc, d) => acc + d.pageviews, 0);
-    const totalVisitors = last7Days.reduce((acc, d) => acc + d.visitors, 0);
+    // D. Comparison Metrics (Current 30 days vs Previous 30 days)
+    const totalPageviews = last30Days.reduce((acc, d) => acc + d.pageviews, 0);
+    const totalVisitors = last30Days.reduce((acc, d) => acc + d.visitors, 0);
 
-    // Fetch previous period for comparison (Days 8-14)
     let pageviewsChange = 0;
     let visitorsChange = 0;
 
     try {
-      const rangePrev = getDateRange(14);
+      const rangePrev = getDateRange(60);
       const prevDataParams = {
         startDate: rangePrev.startDate,
-        endDate: range7.startDate,
+        endDate: range30.startDate,
       };
 
       const prevRes = await fetchCloudflareAnalytics(querySummary, { zoneTag: zoneId, ...prevDataParams });
@@ -359,7 +358,22 @@ export async function GET() {
     });
 
   } catch (error) {
-    console.error("Analytics API Error:", error);
-    return NextResponse.json({ ...getEmptyData(), error: "Failed to load analytics" }, { status: 500 });
+    const errorMessage = error instanceof Error ? error.message : "Failed to load analytics";
+    console.error("Analytics API Error:", errorMessage);
+
+    // Extract a cleaner message if it contains JSON stringified errors
+    let cleanMessage = errorMessage;
+    if (errorMessage.includes("Cloudflare GraphQL errors")) {
+      try {
+        const errorJson = JSON.parse(errorMessage.split("Cloudflare GraphQL errors: ")[1]);
+        if (Array.isArray(errorJson) && errorJson[0]?.message) {
+          cleanMessage = `Cloudflare Error: ${errorJson[0].message}`;
+        }
+      } catch (e) {
+        // Fallback to original
+      }
+    }
+
+    return NextResponse.json({ ...getEmptyData(), error: cleanMessage }, { status: 500 });
   }
 }

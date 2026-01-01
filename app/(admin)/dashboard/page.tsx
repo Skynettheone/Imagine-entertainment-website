@@ -154,11 +154,11 @@ function TrafficChart({ data }: { data: AnalyticsData }) {
     <Card className="col-span-1 sm:col-span-4">
       <CardHeader className="pb-2 sm:pb-6">
         <CardTitle className="text-base sm:text-lg">Traffic Overview</CardTitle>
-        <CardDescription className="text-xs sm:text-sm">Last 7 days</CardDescription>
+        <CardDescription className="text-xs sm:text-sm">Last 30 days</CardDescription>
       </CardHeader>
       <CardContent className="pt-0 sm:pt-2">
         <ChartContainer config={chartConfig}>
-          <AreaChart data={data.traffic.last7Days}>
+          <AreaChart data={data.traffic.last30Days}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis
               dataKey="date"
@@ -215,7 +215,7 @@ function TopPages({ data }: { data: AnalyticsData }) {
     <Card className="col-span-1 sm:col-span-2">
       <CardHeader className="pb-2 sm:pb-6">
         <CardTitle className="text-base sm:text-lg">Top Pages</CardTitle>
-        <CardDescription className="text-xs sm:text-sm">Most viewed pages</CardDescription>
+        <CardDescription className="text-xs sm:text-sm">Most viewed (Last 24h)</CardDescription>
       </CardHeader>
       <CardContent className="pt-0">
         <Table>
