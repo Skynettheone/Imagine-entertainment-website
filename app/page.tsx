@@ -17,8 +17,8 @@ const Testimonials = dynamic(() => import("@/components/testimonials"))
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "IMAGINE ENTERTAINMENT | Sri Lanka's Premier Event Production Company",
-  description: "Experience world-class event production with Imagine Entertainment. 37+ years of delivering turnkey solutions for corporate events, concerts, weddings, and TV production in Sri Lanka.",
+  title: "Imagine Entertainment (Pvt) Ltd | Sri Lanka's Premier Event Production Company",
+  description: "With over 37 years of excellence, Imagine Entertainment delivers world-class event production across Sri Lanka. From corporate galas, musical concerts, and awards ceremonies to television production, weddings, and stadium-scale events — we bring extraordinary visions to life.",
   alternates: {
     canonical: '/',
   },

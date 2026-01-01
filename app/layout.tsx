@@ -18,9 +18,9 @@ const outfit = Outfit({
 })
 
 export const metadata: Metadata = {
-  title: "IMAGINE ENTERTAINMENT | Sri Lanka's Premier Event Production Company",
+  title: "Imagine Entertainment (Pvt) Ltd | Sri Lanka's Premier Event Production Company",
   description:
-    "With over 35 years of excellence, Imagine Entertainment delivers world-class event production across Sri Lanka. From corporate galas, musical concerts, and awards ceremonies to television production, weddings, and stadium-scale events — we bring extraordinary visions to life.",
+    "With over 37 years of excellence, Imagine Entertainment delivers world-class event production across Sri Lanka. From corporate galas, musical concerts, and awards ceremonies to television production, weddings, and stadium-scale events — we bring extraordinary visions to life.",
   keywords: [
     // Core Brand
     "Imagine Entertainment",
@@ -88,9 +88,9 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "https://www.imaginesl.com/",
-    title: "IMAGINE ENTERTAINMENT | Sri Lanka's Premier Event Production",
-    description: "35+ years of creating extraordinary experiences. Corporate events, concerts, TV production, weddings & major events across Sri Lanka.",
-    siteName: "Imagine Entertainment",
+    title: "Imagine Entertainment (Pvt) Ltd | Sri Lanka's Premier Event Production",
+    description: "As Sri Lanka's top entertainment provider, we offer advanced show lighting, audio-video solutions, staging, LED walls, and flawless execution for concerts, corporate events, and large-scale productions.",
+    siteName: "Imagine Entertainment (Pvt) Ltd",
     images: [{
       url: '/og-image.jpg', // Ensure this exists or use a default
       width: 1200,
@@ -100,8 +100,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "IMAGINE ENTERTAINMENT | Event Production Specialists",
-    description: "Sri Lanka's premier event production company. 35+ years of excellence in corporate events, concerts, TV production & more.",
+    title: "Imagine Entertainment (Pvt) Ltd | Event Production Specialists",
+    description: "Sri Lanka's premier event production company. 37+ years of excellence in corporate events, concerts, TV production & more.",
     // creator: "@imagineentertainment", // Uncomment if valid handle exists
     images: ['/og-image.jpg']
   },
