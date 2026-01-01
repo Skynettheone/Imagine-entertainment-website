@@ -8,27 +8,8 @@ import { motion } from "framer-motion"
 export default function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [videoReady, setVideoReady] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
-  const [shouldLoadVideo, setShouldLoadVideo] = useState(false)
 
   useEffect(() => {
-    // Check if mobile
-    const checkMobile = window.innerWidth < 768
-    setIsMobile(checkMobile)
-    
-    // On desktop, load video immediately. On mobile, wait a bit for better LCP
-    if (!checkMobile) {
-      setShouldLoadVideo(true)
-    } else {
-      // Delay video load on mobile to prioritize LCP
-      const timer = setTimeout(() => setShouldLoadVideo(true), 1000)
-      return () => clearTimeout(timer)
-    }
-  }, [])
-
-  useEffect(() => {
-    if (!shouldLoadVideo) return
-    
     const video = videoRef.current
     if (!video) return
 
@@ -45,38 +26,27 @@ export default function Hero() {
     return () => {
       video.removeEventListener('canplaythrough', handleCanPlay)
     }
-  }, [shouldLoadVideo])
+  }, [])
 
-  // Cloudinary URLs with mobile optimization
+  // Cloudinary video URL
   const videoUrl = "https://res.cloudinary.com/dqhklh9nd/video/upload/q_auto:eco,f_auto/v1767202328/Final_Web_vyhf3y.mp4"
-  const posterUrl = "https://res.cloudinary.com/dqhklh9nd/image/upload/q_auto,f_auto,w_1280/v1767202328/Final_Web_vyhf3y.jpg"
 
   return (
     <section className="relative min-h-dvh h-dvh bg-black overflow-hidden">
       
-      {/* Poster Image - Shows immediately for fast LCP */}
-      <div 
-        className={`absolute inset-0 bg-cover bg-center transition-opacity duration-700 ${videoReady ? 'opacity-0' : 'opacity-100'}`}
-        style={{ backgroundImage: `url(${posterUrl})` }}
-        aria-hidden="true"
-      />
-      
       {/* Video - Fades in when ready */}
-      {shouldLoadVideo && (
-        <video
-          ref={videoRef}
-          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${videoReady ? 'opacity-100' : 'opacity-0'}`}
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload={isMobile ? "metadata" : "auto"}
-          poster={posterUrl}
-          aria-label="Imagine Entertainment showreel"
-        >
-          <source src={videoUrl} type="video/mp4" />
-        </video>
-      )}
+      <video
+        ref={videoRef}
+        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${videoReady ? 'opacity-100' : 'opacity-0'}`}
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="auto"
+        aria-label="Imagine Entertainment showreel"
+      >
+        <source src={videoUrl} type="video/mp4" />
+      </video>
       
       {/* Gradient Overlay */}
       <div className="absolute inset-0 bg-linear-to-b from-black/40 via-transparent to-black/60" />
@@ -126,4 +96,3 @@ export default function Hero() {
     </section>
   )
 }
-
