@@ -14,46 +14,27 @@ export default function Hero() {
     const video = videoRef.current
     if (!video) return
 
-    // Delay video loading slightly to prioritize LCP (poster)
-    const loadTimer = setTimeout(() => {
-      const handleCanPlay = () => {
+    const handleCanPlay = () => {
+      setVideoReady(true)
+      video.play().catch(() => {
         setVideoReady(true)
-        video.play().catch(() => {
-          setVideoReady(true)
-        })
-      }
+      })
+    }
 
-      video.addEventListener('canplaythrough', handleCanPlay)
-      video.load()
-
-      return () => {
-        video.removeEventListener('canplaythrough', handleCanPlay)
-      }
-    }, 100) // Small delay to let poster render first
+    video.addEventListener('canplaythrough', handleCanPlay)
+    video.load()
 
     return () => {
-      clearTimeout(loadTimer)
+      video.removeEventListener('canplaythrough', handleCanPlay)
     }
   }, [])
 
   // Cloudinary URLs
   const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
-  // Generate poster from the video itself (ensure 1st frame, 1080p quality)
-  const posterUrl = `https://res.cloudinary.com/${cloudName}/video/upload/so_0,q_auto,f_auto,w_1920/IMAGINE/Final_Web_vyhf3y.jpg`
   const videoUrl = `https://res.cloudinary.com/${cloudName}/video/upload/q_auto:eco,f_auto/IMAGINE/Final_Web_vyhf3y`
 
   return (
     <section className="relative min-h-dvh h-dvh bg-black overflow-hidden">
-      {/* Priority Poster Image - Shows immediately for LCP */}
-      <Image
-        src={posterUrl}
-        alt="Imagine Entertainment"
-        fill
-        priority
-        quality={85}
-        className={`object-cover transition-opacity duration-500 ${videoReady ? 'opacity-0' : 'opacity-100'}`}
-        sizes="100vw"
-      />
       
       {/* Video - Fades in when ready */}
       <video
@@ -63,12 +44,10 @@ export default function Hero() {
         loop
         muted
         playsInline
-        preload="none"
+        preload="auto"
         aria-label="Imagine Entertainment showreel"
       >
         <source src={videoUrl} type="video/mp4" />
-        <source src="/Final_Web.webm" type="video/webm" />
-        <source src="/Final_Web.mp4" type="video/mp4" />
       </video>
       
       {/* Gradient Overlay */}

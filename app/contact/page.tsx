@@ -64,9 +64,17 @@ export default function ContactPage() {
         <div className="max-w-[1400px] mx-auto">
           <div className="grid lg:grid-cols-[1fr_2fr] gap-12 lg:gap-16">
             {/* Contact Info - Left Side */}
-            <div className="flex flex-col justify-between h-full">
+            {/* Contact Info - Left Side */}
+            <div className="flex flex-col justify-between h-full relative">
+              {/* Watermark */}
+              <div className="absolute top-[70%] -translate-y-1/2 left-0 text-[3.5rem] sm:text-[4.5rem] md:text-[5rem] lg:text-[6rem] font-bold text-foreground/5 dark:text-white/5 leading-[0.8] select-none pointer-events-none whitespace-nowrap">
+                WE GIVE<br />
+                YOU THE<br />
+                BEST.
+              </div>
+
               {/* Contact Details */}
-              <div className="space-y-12">
+              <div className="space-y-12 relative z-10">
                 <div
                   className={`transition-all duration-700 ${
                     isLoaded ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
@@ -115,7 +123,7 @@ export default function ContactPage() {
 
               {/* Social Icons - Pushed to Bottom */}
               <div 
-                className={`mt-12 lg:mt-0 transition-all duration-700 ${
+                className={`mt-12 lg:mt-0 relative z-10 transition-all duration-700 ${
                   isLoaded ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
                 }`}
                 style={{ transitionDelay: "0.6s" }}
