@@ -86,7 +86,7 @@ export default function ClientsMarquee() {
           className={`text-muted-foreground text-xs tracking-[0.2em] text-center mb-4 transition-all duration-700 ${isVisible ? "opacity-100" : "opacity-0"
             }`}
         >
-          //TRUSTED BY
+          <span style={{ color: "var(--brand-orange)" }}>//</span>TRUSTED BY
         </p>
         <h2
           className={`text-3xl md:text-4xl lg:text-5xl font-medium text-center transition-all duration-700 ${isVisible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"

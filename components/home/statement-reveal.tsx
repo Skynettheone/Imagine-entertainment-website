@@ -20,9 +20,15 @@ export function StatementReveal() {
   return (
     <div ref={ref} className="text-center max-w-3xl mx-auto">
       <div className="flex items-center justify-center gap-4 mb-6">
-        <div className="h-px w-10 bg-border" />
+        <div 
+          className="h-px w-10" 
+          style={{ background: "linear-gradient(90deg, transparent, var(--brand-blue))" }}
+        />
         <span className="text-muted-foreground text-xs tracking-[0.2em]">PHILOSOPHY</span>
-        <div className="h-px w-10 bg-border" />
+        <div 
+          className="h-px w-10" 
+          style={{ background: "linear-gradient(90deg, var(--brand-blue), transparent)" }}
+        />
       </div>
 
       <p

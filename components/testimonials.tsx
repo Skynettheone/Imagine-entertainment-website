@@ -11,6 +11,7 @@ const testimonials = [
     author: "Mr. Janaka Pathirathna",
     role: "Director Sales & Marketing/ Corporate Affairs",
     company: "Litro Gas Lanka Ltd.",
+    highlights: ["outstanding professionalism", "remarkable success", "nothing short of the best"],
   },
   {
     quote:
@@ -18,6 +19,7 @@ const testimonials = [
     author: "Mr. Akash Rathnasingham",
     role: "Director",
     company: "serendisco Team",
+    highlights: ["incredibly professional", "above and beyond", "elevated entertainment standards"],
   },
   {
     quote:
@@ -25,8 +27,61 @@ const testimonials = [
     author: "Mr. Prasad Udugampola",
     role: "Chief Human Resources Officer",
     company: "Siyapatha Finance PLC",
+    highlights: ["excellent job", "truly memorable", "outstanding contribution"],
   },
 ]
+
+// Function to render quote with highlights
+function renderQuoteWithHighlights(quote: string, highlights: string[]) {
+  if (!highlights || highlights.length === 0) return `"${quote}"`
+  
+  let result = quote
+  const parts: (string | { text: string; isHighlight: boolean })[] = []
+  
+  // Sort highlights by their position in the quote (to process in order)
+  const sortedHighlights = highlights
+    .map(h => ({ text: h, index: quote.toLowerCase().indexOf(h.toLowerCase()) }))
+    .filter(h => h.index !== -1)
+    .sort((a, b) => a.index - b.index)
+  
+  let lastIndex = 0
+  sortedHighlights.forEach(({ text, index }) => {
+    // Find the actual case-sensitive text in the quote
+    const actualIndex = quote.toLowerCase().indexOf(text.toLowerCase(), lastIndex)
+    if (actualIndex !== -1) {
+      // Add text before highlight
+      if (actualIndex > lastIndex) {
+        parts.push(quote.slice(lastIndex, actualIndex))
+      }
+      // Add highlighted text (preserve original case)
+      parts.push({ text: quote.slice(actualIndex, actualIndex + text.length), isHighlight: true })
+      lastIndex = actualIndex + text.length
+    }
+  })
+  // Add remaining text
+  if (lastIndex < quote.length) {
+    parts.push(quote.slice(lastIndex))
+  }
+  
+  return (
+    <>
+      "
+      {parts.map((part, i) => 
+        typeof part === 'string' ? (
+          <span key={i}>{part}</span>
+        ) : (
+          <span 
+            key={i} 
+            style={{ color: 'var(--brand-orange)' }}
+          >
+            {part.text}
+          </span>
+        )
+      )}
+      "
+    </>
+  )
+}
 
 // Same as original CSS: transition-all duration-500, translate-y-4 -> translate-y-0
 const quoteVariants = {
@@ -116,7 +171,7 @@ export default function Testimonials() {
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
               transition={{ duration: 0.7 }}
             >
-              <p className="text-muted-foreground text-xs tracking-[0.2em] mb-4">//TESTIMONIALS</p>
+              <p className="text-muted-foreground text-xs tracking-[0.2em] mb-4"><span style={{ color: "var(--brand-orange)" }}>//</span>TESTIMONIALS</p>
               <h2 className="text-2xl md:text-3xl lg:text-4xl font-medium mb-8">
                 What Our
                 <br />
@@ -173,7 +228,7 @@ export default function Testimonials() {
                   exit="exit"
                 >
                   <blockquote className={`${getQuoteTextSize(currentTestimonial.quote.length)} font-medium leading-relaxed mb-6 text-foreground`}>
-                    "{currentTestimonial.quote}"
+                    {renderQuoteWithHighlights(currentTestimonial.quote, currentTestimonial.highlights)}
                   </blockquote>
 
                   <div className="flex items-center gap-4 pt-6 border-t border-border">

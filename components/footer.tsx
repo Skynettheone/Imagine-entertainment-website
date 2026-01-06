@@ -60,7 +60,21 @@ export default function Footer() {
     : "/Imagine Logo Black Alpha.png"
 
   return (
-    <footer ref={footerRef} className="bg-background text-foreground border-t border-border mt-6">
+    <footer ref={footerRef} className="bg-background text-foreground border-t border-border mt-6 relative">
+      {/* Full width brand gradient line with reveal animation */}
+      <div 
+        className="absolute top-0 left-0 right-0 h-px overflow-hidden"
+      >
+        <div 
+          className="h-full"
+          style={{ 
+            background: "linear-gradient(90deg, transparent, var(--brand-orange) 10%, var(--brand-blue) 90%, transparent)",
+            transform: isInView ? "scaleX(1)" : "scaleX(0)",
+            transformOrigin: "center",
+            transition: "transform 1.5s cubic-bezier(0.22, 1, 0.36, 1)"
+          }}
+        />
+      </div>
       <div className="max-w-[1400px] mx-auto px-6 md:px-10">
         <div className="py-16 md:py-20 grid grid-cols-2 md:grid-cols-4 gap-10">
           {/* Logo section - fade in */}

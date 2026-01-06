@@ -82,6 +82,7 @@ interface MasonryProps {
   hoverScale?: number;
   blurToFocus?: boolean;
   colorShiftOnHover?: boolean;
+  onItemClick?: (item: Item, index: number) => void;
 }
 
 const Masonry: React.FC<MasonryProps> = ({
@@ -93,7 +94,8 @@ const Masonry: React.FC<MasonryProps> = ({
   scaleOnHover = true,
   hoverScale = 0.95,
   blurToFocus = true,
-  colorShiftOnHover = false
+  colorShiftOnHover = false,
+  onItemClick
 }) => {
   const columns = useMedia(
     ['(min-width:1500px)', '(min-width:1000px)', '(min-width:600px)', '(min-width:400px)'],
@@ -317,11 +319,18 @@ const Masonry: React.FC<MasonryProps> = ({
             }}
             className="item-wrapper"
             style={{ 
-              cursor: item.url ? 'pointer' : 'default',
+              cursor: onItemClick || item.url ? 'pointer' : 'default',
               width: `${item.w}px`,
               height: `${item.h}px`
             }}
-            onClick={() => item.url && window.open(item.url, '_blank', 'noopener')}
+            onClick={() => {
+              const index = items.findIndex(i => i.id === item.id);
+              if (onItemClick) {
+                onItemClick(item, index);
+              } else if (item.url) {
+                window.open(item.url, '_blank', 'noopener');
+              }
+            }}
             onMouseEnter={e => handleMouseEnter(e, item)}
             onMouseLeave={e => handleMouseLeave(e, item)}
           >

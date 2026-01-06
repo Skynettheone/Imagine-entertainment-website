@@ -40,7 +40,7 @@ export default function AboutPage() {
                     isLoaded ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"
                   }`}
                 >
-                  IMAGINE ENTERTAINMENT
+                  <span style={{ color: "var(--brand-orange)" }}>//</span>IMAGINE ENTERTAINMENT
                 </p>
               </div>
 
@@ -368,11 +368,11 @@ function TeamSection() {
         }`}
         style={{ transitionDelay: "0.15s" }}
       >
-        <div className="relative h-[70vh] md:h-[80vh]">
+        <div className="relative aspect-video md:aspect-auto md:h-[80vh]">
           <img
             src={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/q_auto,f_auto/About-01_rsdanf.jpg`}
             alt="Our House"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover md:object-cover"
           />
         </div>
       </div>

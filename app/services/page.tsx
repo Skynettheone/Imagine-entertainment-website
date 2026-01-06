@@ -122,7 +122,7 @@ export default function ServicesPage() {
                     isLoaded ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"
                   }`}
                 >
-                  WHAT WE DO
+                  <span style={{ color: "var(--brand-orange)" }}>//</span>WHAT WE DO
                 </p>
               </div>
               <h1>
@@ -166,7 +166,7 @@ export default function ServicesPage() {
         <div className="max-w-[1400px] mx-auto px-6 md:px-10">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 mb-12">
             <div>
-              <p className="text-muted-foreground text-xs tracking-[0.15em] mb-3">//Technical Services</p>
+              <p className="text-muted-foreground text-xs tracking-[0.15em] mb-3"><span style={{ color: "var(--brand-orange)" }}>//</span>Technical Services</p>
               <h2 className="text-2xl md:text-3xl font-medium">Full Production Support</h2>
             </div>
             <div className="lg:self-end">
@@ -282,11 +282,16 @@ function TechCard({ item, index }: { item: { title: string; desc: string }; inde
   return (
     <div
       ref={ref}
-      className={`p-5 bg-background rounded-xl transition-all duration-500 ${
+      className={`p-5 bg-background rounded-xl transition-all duration-500 relative overflow-hidden ${
         isVisible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
       }`}
       style={{ transitionDelay: `${index * 0.08}s` }}
     >
+      {/* Brand accent line */}
+      <div 
+        className="absolute top-0 left-0 right-0 h-px"
+        style={{ background: "linear-gradient(90deg, var(--brand-orange), transparent)" }}
+      />
       <h4 className="text-base font-medium mb-1">{item.title}</h4>
       <p className="text-sm text-muted-foreground">{item.desc}</p>
     </div>

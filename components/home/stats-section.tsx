@@ -34,15 +34,15 @@ export function StatsSection() {
                 isVisible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
               }`}
             >
-              //BY THE NUMBERS
+              <span style={{ color: "var(--brand-orange)" }}>//</span>BY THE NUMBERS
             </p>
           </div>
           <div className="lg:col-span-9">
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+            <div className="grid grid-cols-2 gap-10 lg:flex lg:justify-between lg:gap-8">
               {stats.map((stat, index) => (
                 <div
                   key={stat.label}
-                  className={`relative transition-all duration-700 ${
+                  className={`relative transition-all duration-700 lg:flex-shrink-0 ${
                     isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
                   }`}
                   style={{ transitionDelay: `${index * 0.1}s` }}
@@ -59,10 +59,14 @@ export function StatsSection() {
                   </div>
                   <p className="text-sm text-muted-foreground mt-2 italic">{stat.label}</p>
                   <div
-                    className={`absolute -top-4 left-0 w-8 h-px bg-border transition-all duration-700 ${
+                    className={`absolute -top-4 left-0 w-8 h-px transition-all duration-700 ${
                       isVisible ? "scale-x-100" : "scale-x-0"
                     }`}
-                    style={{ transitionDelay: `${index * 0.1 + 0.2}s`, transformOrigin: "left" }}
+                    style={{ 
+                      transitionDelay: `${index * 0.1 + 0.2}s`, 
+                      transformOrigin: "left",
+                      background: "linear-gradient(90deg, var(--brand-blue), transparent)"
+                    }}
                   />
                 </div>
               ))}

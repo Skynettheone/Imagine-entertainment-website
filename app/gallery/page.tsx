@@ -200,7 +200,7 @@ export default function GalleryPage() {
             <div>
               <div className="overflow-hidden mb-3">
                 <p className="text-muted-foreground text-xs tracking-[0.15em] transition-all duration-700 translate-y-0 opacity-100">
-                  OUR GALLERY
+                  <span style={{ color: "var(--brand-orange)" }}>//</span>OUR GALLERY
                 </p>
               </div>
               <h1 className="overflow-hidden pb-2">

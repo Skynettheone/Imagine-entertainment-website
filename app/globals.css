@@ -37,6 +37,9 @@
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
+  /* Brand Colors */
+  --brand-orange: #f4921f;
+  --brand-blue: #0b109f;
 }
 
 .dark {
@@ -122,6 +125,15 @@
 
   body {
     @apply bg-background text-foreground antialiased;
+  }
+
+  /* Brand color text selection - subtle orange highlight */
+  ::selection {
+    background: rgba(244, 146, 31, 0.25);
+  }
+
+  ::-moz-selection {
+    background: rgba(244, 146, 31, 0.25);
   }
 
   /* View Transition API - Smooth Cross-fade */
@@ -257,16 +269,20 @@ nav {
 
 /* Marquee mask */
 .marquee-mask {
-  mask-image: linear-gradient(to right,
-      transparent,
-      black 10%,
-      black 90%,
-      transparent);
-  -webkit-mask-image: linear-gradient(to right,
-      transparent,
-      black 10%,
-      black 90%,
-      transparent);
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 10%,
+    black 90%,
+    transparent
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 10%,
+    black 90%,
+    transparent
+  );
 }
 
 /* Smooth transitions */

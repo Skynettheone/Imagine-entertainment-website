@@ -46,7 +46,7 @@ export default function ContactPage() {
           <div className="max-w-3xl">
             <div className="mb-3">
               <p className="text-white/50 dark:text-white/70 text-xs tracking-[0.15em]">
-                GET IN TOUCH
+                <span style={{ color: "var(--brand-orange)" }}>//</span>GET IN TOUCH
               </p>
             </div>
             <h1>
@@ -81,7 +81,7 @@ export default function ContactPage() {
                   }`}
                   style={{ transitionDelay: "0.3s" }}
                 >
-                  <p className="text-xs tracking-[0.15em] text-muted-foreground mb-4">//Email</p>
+                  <p className="text-xs tracking-[0.15em] text-muted-foreground mb-4"><span style={{ color: "var(--brand-orange)" }}>//</span>Email</p>
                   <a
                     href="mailto:sales@imaginesl.com"
                     className="text-2xl md:text-3xl font-medium hover:text-muted-foreground transition-colors"
@@ -96,7 +96,7 @@ export default function ContactPage() {
                   }`}
                   style={{ transitionDelay: "0.4s" }}
                 >
-                  <p className="text-xs tracking-[0.15em] text-muted-foreground mb-4">//Phone</p>
+                  <p className="text-xs tracking-[0.15em] text-muted-foreground mb-4"><span style={{ color: "var(--brand-orange)" }}>//</span>Phone</p>
                   <a
                     href="tel:+94718933514"
                     className="text-2xl md:text-3xl font-medium hover:text-muted-foreground transition-colors"
@@ -111,7 +111,7 @@ export default function ContactPage() {
                   }`}
                   style={{ transitionDelay: "0.5s" }}
                 >
-                  <p className="text-xs tracking-[0.15em] text-muted-foreground mb-4">//Location</p>
+                  <p className="text-xs tracking-[0.15em] text-muted-foreground mb-4"><span style={{ color: "var(--brand-orange)" }}>//</span>Location</p>
                   <address className="text-lg font-medium not-italic leading-relaxed">
                     <p>No : 97 Delkanda,</p>
                     <p>Old Kesbewa Road,</p>
@@ -128,7 +128,7 @@ export default function ContactPage() {
                 }`}
                 style={{ transitionDelay: "0.6s" }}
               >
-                <p className="text-xs tracking-[0.15em] text-muted-foreground mb-4">//Follow Us</p>
+                <p className="text-xs tracking-[0.15em] text-muted-foreground mb-4"><span style={{ color: "var(--brand-orange)" }}>//</span>Follow Us</p>
                 <div className="flex gap-3">
                   {/* Facebook */}
                   <a
