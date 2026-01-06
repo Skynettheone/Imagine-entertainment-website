@@ -8,7 +8,7 @@ export function JsonLd() {
         "name": "Imagine Entertainment (Pvt) Ltd",
         "legalName": "Imagine Entertainment (Private) Limited",
         "url": "https://www.imaginesl.com",
-        "logo": "https://www.imaginesl.com/favicon/android-chrome-512x512.png",
+        "logo": "https://www.imaginesl.com/imagine-logo.png",
         "foundingDate": "1989",
         "foundingLocation": "Colombo, Sri Lanka",
         "slogan": "Sri Lanka's Premier Event Production Company",

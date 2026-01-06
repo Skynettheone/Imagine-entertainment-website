@@ -23,13 +23,68 @@ export const metadata: Metadata = {
   description:
     "With over 37 years of excellence, Imagine Entertainment delivers world-class event production across Sri Lanka. From corporate galas, musical concerts, and awards ceremonies to television production, weddings, and stadium-scale events — we bring extraordinary visions to life.",
   keywords: [
-    // Core Brand Keywords
+    // Core Brand Keywords & Variations
     "Imagine Entertainment",
+    "Imagine Sri Lanka",
+    "Best Light Sounds Sri Lanka",
+    "Imagine",
+    "IMAGINE",
+    "imagine",
     "Imagine Entertainment Sri Lanka",
     "Imagine Entertainment Pvt Ltd",
     "Imagine Events",
     "Imagine Event Production",
     "imaginesl",
+    "Imagine SL",
+    "Imagine Lanka",
+    "The Imagine Team",
+    
+    // Broad Industry Terms
+    "Events",
+    "Entertainment",
+    "Production",
+    "Lights",
+    "Sounds",
+    "Stage",
+    "Show",
+    "Concert",
+    "Live Events",
+    "Show Business",
+    
+    // Specific Services - Lighting
+    "Event Lighting",
+    "Stage Lighting",
+    "Concert Lighting",
+    "Lighting Rental Sri Lanka",
+    "Intelligent Lighting",
+    "Light Show",
+    "Lighting Design",
+    
+    // Specific Services - Sound
+    "Professional Sound",
+    "Sound System Rental",
+    "Audio Rental Sri Lanka",
+    "PA System Hire",
+    "Concert Sound",
+    "Line Array Systems",
+    "Live Sound Engineering",
+    
+    // Specific Services - Visuals
+    "LED Walls",
+    "LED Screen Rental",
+    "Video Mapping",
+    "Projection Mapping",
+    "Visual Effects",
+    "Live Visuals",
+    
+    // Specific Services - Staging & Rigging
+    "Stage Design",
+    "Stage Construction",
+    "Trussing",
+    "Rigging Services",
+    "Event Structures",
+    "Platform Rental",
+    
     // Event Production Services
     "Event Production Company",
     "Event Production Company Sri Lanka",
@@ -42,36 +97,7 @@ export const metadata: Metadata = {
     "Full Service Event Production",
     "Event Planning Sri Lanka",
     "Event Organizers Colombo",
-    // Technical & AV Services
-    "Professional Sound & Lighting",
-    "Stage Design & Setup",
-    "LED Wall Solutions",
-    "LED Screen Rental Sri Lanka",
-    "Audiovisual Production",
-    "AV Equipment Rental",
-    "Event Technical Partner",
-    "Show Production Services",
-    "Concert Production",
-    "Festival Production",
-    "Sound System Rental",
-    "Stage Lighting Design",
-    "Truss & Rigging Services",
-    "Video Wall Rental",
-    "PA System Rental Sri Lanka",
-    // Concert & Music Events
-    "Concert Production Sri Lanka",
-    "Music Festival Production",
-    "Live Concert Management",
-    "Artist Tour Production",
-    "Outdoor Concert Setup",
-    "Indoor Concert Production",
-    // Creative & Experience
-    "Immersive Event Experiences",
-    "Experiential Marketing",
-    "Creative Event Design",
-    "Bespoke Event Experiences",
-    "Premium Event Styling",
-    "Event Decor & Design",
+    
     // Corporate Events
     "Corporate Galas",
     "Award Ceremonies",
@@ -84,6 +110,15 @@ export const metadata: Metadata = {
     "AGM Event Production",
     "Trade Show Production",
     "Exhibition Stand Design",
+    
+    // Concert & Music Events
+    "Concert Production Sri Lanka",
+    "Music Festival Production",
+    "Live Concert Management",
+    "Artist Tour Production",
+    "Outdoor Concert Setup",
+    "Indoor Concert Production",
+    
     // Weddings & Private Celebrations
     "Weddings Sri Lanka",
     "Wedding Planning Sri Lanka",
@@ -91,6 +126,7 @@ export const metadata: Metadata = {
     "Luxury Wedding Production",
     "Wedding Stage Design",
     "Private Party Production",
+    
     // Broadcast & Virtual
     "Broadcast Production",
     "Live Streaming Services",
@@ -100,6 +136,7 @@ export const metadata: Metadata = {
     "Film Production Sri Lanka",
     "TV Show Production",
     "Reality TV Production",
+    
     // Location Keywords
     "Event Production Sri Lanka",
     "Colombo Event Production",
@@ -107,6 +144,9 @@ export const metadata: Metadata = {
     "Event Company Nugegoda",
     "Events Colombo",
     "Event Planners Western Province",
+    "Events in Sri Lanka",
+    "Colombo Events",
+    
     // Authority Keywords
     "Award-Winning Event Production",
     "Industry-Leading Event Experts",
@@ -116,12 +156,8 @@ export const metadata: Metadata = {
     "High-End Event Production",
     "Best Event Company Sri Lanka",
     "Top Event Planners Sri Lanka",
-    // Service Specific
-    "Stage Rental Sri Lanka",
-    "Event Equipment Hire",
-    "Backdrop Design",
-    "Event Furniture Rental",
-    "Pyrotechnics & Special Effects"
+    "Premier Event Company",
+    "No 1 Event Company Sri Lanka"
   ],
   authors: [{ name: "Imagine Entertainment (Pvt) Ltd" }],
   creator: "Imagine Entertainment",
@@ -158,6 +194,7 @@ export const metadata: Metadata = {
     icon: [
       { url: "/favicon/favicon-32x32.png", sizes: "32x32", type: "image/png" },
       { url: "/favicon/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/imagine-logo.png", sizes: "192x192", type: "image/png" },
     ],
     apple: [
       { url: "/favicon/apple-touch-icon.png", sizes: "180x180", type: "image/png" },

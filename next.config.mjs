@@ -31,6 +31,36 @@ const nextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: '/contact-us',
+        destination: '/contact',
+        permanent: true,
+      },
+      {
+        source: '/projects',
+        destination: '/work',
+        permanent: true,
+      },
+      {
+        // Redirect old portfolio items to the main work page
+        source: '/portfolio/:path*',
+        destination: '/work',
+        permanent: true,
+      },
+      {
+        source: '/services.html',
+        destination: '/services',
+        permanent: true,
+      },
+      {
+        source: '/about-us',
+        destination: '/about',
+        permanent: true,
+      },
+    ]
+  },
 }
 
 export default nextConfig

@@ -349,7 +349,7 @@ export default function Navigation() {
                                 >
                                   <Link
                                     href={service.href}
-                                    className="w-full flex items-center px-3 py-2 rounded-lg text-sm text-foreground hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
+                                    className="w-full flex items-center px-3 py-2 rounded-lg text-sm text-foreground hover:bg-black/5 focus:bg-black/5 dark:hover:bg-white/10 dark:focus:bg-white/10 transition-colors"
                                     onClick={() => setServicesOpen(false)}
                                   >
                                     <span>{service.label}</span>
@@ -367,7 +367,7 @@ export default function Navigation() {
                                 >
                                   <Link
                                     href={service.href}
-                                    className="w-full flex items-center px-3 py-2 rounded-lg text-sm text-foreground hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
+                                    className="w-full flex items-center px-3 py-2 rounded-lg text-sm text-foreground hover:bg-black/5 focus:bg-black/5 dark:hover:bg-white/10 dark:focus:bg-white/10 transition-colors"
                                     onClick={() => setServicesOpen(false)}
                                   >
                                     <span>{service.label}</span>
@@ -378,7 +378,7 @@ export default function Navigation() {
                               <DropdownMenuItem asChild className="focus:bg-transparent p-0 m-0">
                                 <Link
                                   href="/services"
-                                  className="w-full flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-foreground hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
+                                  className="w-full flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-foreground hover:bg-black/5 focus:bg-black/5 dark:hover:bg-white/10 dark:focus:bg-white/10 transition-colors"
                                   onClick={() => setServicesOpen(false)}
                                 >
                                   <span>View All Services</span>
