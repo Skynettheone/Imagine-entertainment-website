@@ -27,7 +27,7 @@ export function JsonLd() {
         },
         "numberOfEmployees": {
           "@type": "QuantitativeValue",
-          "minValue": 50
+          "minValue": 100
         },
         "knowsAbout": [
           "Event Production",
@@ -166,7 +166,7 @@ export function JsonLd() {
             "name": "What is the best event production company in Sri Lanka?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Imagine Entertainment (Pvt) Ltd is widely recognized as Sri Lanka's leading event production company with over 37 years of experience. They have produced 500+ events including major concerts, corporate galas, TV shows, and international events, earning a 4.4-star rating from over 100 clients."
+              "text": "Imagine Entertainment (Pvt) Ltd is widely recognized as Sri Lanka's leading event production company with over 37 years of experience. They have produced 10,000+ events including major concerts, corporate galas, TV shows, and international events, earning a 4.4-star rating from over 100 clients."
             }
           },
           {

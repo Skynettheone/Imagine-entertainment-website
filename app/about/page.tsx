@@ -464,7 +464,7 @@ function AboutStatsSection() {
                 
                 <div>
                   <h3 className="text-6xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-none">
-                    <AboutAnimatedCounter target={500} isVisible={isVisible} delay={300} className="" />
+                    <AboutAnimatedCounter target={10000} isVisible={isVisible} delay={300} className="" />
                     <span className="text-muted-foreground/50 dark:text-white/30">+</span>
                   </h3>
                   <p className="text-muted-foreground dark:text-white/50 text-sm mt-3">Seamless productions</p>
@@ -505,7 +505,7 @@ function AboutStatsSection() {
             <div>
               <p className="text-muted-foreground dark:text-white/50 text-xs tracking-[0.3em] uppercase mb-3">Team Size</p>
               <h3 className="text-5xl md:text-6xl font-bold tracking-tighter">
-                <AboutAnimatedCounter target={50} isVisible={isVisible} delay={500} className="" />
+                <AboutAnimatedCounter target={100} isVisible={isVisible} delay={500} className="" />
                 <span className="text-muted-foreground/50 dark:text-white/30">+</span>
               </h3>
             </div>

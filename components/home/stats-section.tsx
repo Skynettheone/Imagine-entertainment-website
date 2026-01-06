@@ -19,8 +19,8 @@ export function StatsSection() {
 
   const stats = [
     { number: 37, suffix: "+", label: "Years of Excellence" },
-    { number: 1000, suffix: "+", label: "Projects Delivered" },
-    { number: 100, suffix: "+", label: "Creative Experts" },
+    { number: 10000, suffix: "+", label: "Events Delivered" },
+    { number: 100, suffix: "+", label: "Employees" },
     { number: 98, suffix: "%", label: "Client Satisfaction" },
   ]
 
