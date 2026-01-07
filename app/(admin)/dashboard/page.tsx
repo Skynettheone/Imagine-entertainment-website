@@ -218,7 +218,7 @@ function TopPages({ data }: { data: AnalyticsData }) {
     <Card className="col-span-1 sm:col-span-2">
       <CardHeader className="pb-2 sm:pb-6">
         <CardTitle className="text-base sm:text-lg">Top Pages</CardTitle>
-        <CardDescription className="text-xs sm:text-sm">Most viewed (Last 30 days)</CardDescription>
+        <CardDescription className="text-xs sm:text-sm">Most viewed (Last 30 Days)</CardDescription>
       </CardHeader>
       <CardContent className="pt-0">
         <Table>
@@ -230,17 +230,25 @@ function TopPages({ data }: { data: AnalyticsData }) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data.topPages.map((page) => (
-              <TableRow key={page.path}>
-                <TableCell className="font-medium">{page.path}</TableCell>
-                <TableCell className="text-right">
-                  {page.views.toLocaleString()}
-                </TableCell>
-                <TableCell className="text-right">
-                  {page.visitors.toLocaleString()}
+            {data.topPages.length > 0 ? (
+              data.topPages.map((page) => (
+                <TableRow key={page.path}>
+                  <TableCell className="font-medium">{page.path}</TableCell>
+                  <TableCell className="text-right">
+                    {page.views.toLocaleString()}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    {page.visitors.toLocaleString()}
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={3} className="text-center text-muted-foreground py-4">
+                  No page data available for the last 30 days
                 </TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
       </CardContent>
@@ -280,15 +288,21 @@ function TopReferrers({ data }: { data: AnalyticsData }) {
         <CardDescription className="text-xs sm:text-sm">Traffic sources</CardDescription>
       </CardHeader>
       <CardContent className="pt-0">
-        <ChartContainer config={chartConfig}>
-          <BarChart data={data.topReferrers}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="source" />
-            <YAxis />
-            <ChartTooltip content={<ChartTooltipContent />} />
-            <Bar dataKey="views" fill={chartConfig.views.color} />
-          </BarChart>
-        </ChartContainer>
+        {data.topReferrers.length > 0 ? (
+          <ChartContainer config={chartConfig}>
+            <BarChart data={data.topReferrers}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="source" />
+              <YAxis />
+              <ChartTooltip content={<ChartTooltipContent />} />
+              <Bar dataKey="views" fill={chartConfig.views.color} />
+            </BarChart>
+          </ChartContainer>
+        ) : (
+          <div className="text-center text-muted-foreground py-8">
+            No referrer data available for the last 30 days
+          </div>
+        )}
       </CardContent>
     </Card>
   );
@@ -321,7 +335,7 @@ function DevicesChart({ data }: { data: AnalyticsData }) {
     <Card className="col-span-1 sm:col-span-2">
       <CardHeader className="pb-2 sm:pb-6">
         <CardTitle className="text-base sm:text-lg">Devices</CardTitle>
-        <CardDescription className="text-xs sm:text-sm">Traffic by device type</CardDescription>
+        <CardDescription className="text-xs sm:text-sm">Traffic by device type (Last 30 Days)</CardDescription>
       </CardHeader>
       <CardContent className="pt-0">
         <div className="flex flex-col sm:flex-row sm:items-center gap-4">
@@ -400,7 +414,7 @@ function TopCountries({ data }: { data: AnalyticsData }) {
     <Card className="col-span-1 sm:col-span-2">
       <CardHeader>
         <CardTitle>Top Countries</CardTitle>
-        <CardDescription>Traffic by country</CardDescription>
+        <CardDescription>Traffic by country (Last 30 Days)</CardDescription>
       </CardHeader>
       <CardContent>
         <Table>
@@ -412,31 +426,39 @@ function TopCountries({ data }: { data: AnalyticsData }) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data.topCountries.map((country) => (
-              <TableRow key={country.country}>
-                <TableCell className="font-medium">
-                  <div className="flex items-center gap-3">
-                    <div className="relative w-6 h-4 overflow-hidden rounded-sm border bg-muted group">
-                      <img
-                        src={`https://flagcdn.com/w40/${country.code.toLowerCase()}.png`}
-                        alt={country.country}
-                        className="object-cover w-full h-full"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src = 'https://flagcdn.com/w40/un.png';
-                        }}
-                      />
+            {data.topCountries.length > 0 ? (
+              data.topCountries.map((country) => (
+                <TableRow key={country.country}>
+                  <TableCell className="font-medium">
+                    <div className="flex items-center gap-3">
+                      <div className="relative w-6 h-4 overflow-hidden rounded-sm border bg-muted group">
+                        <img
+                          src={`https://flagcdn.com/w40/${country.code.toLowerCase()}.png`}
+                          alt={country.country}
+                          className="object-cover w-full h-full"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src = 'https://flagcdn.com/w40/un.png';
+                          }}
+                        />
+                      </div>
+                      <span>{country.country}</span>
                     </div>
-                    <span>{country.country}</span>
-                  </div>
-                </TableCell>
-                <TableCell className="text-right">
-                  {country.views.toLocaleString()}
-                </TableCell>
-                <TableCell className="text-right">
-                  {country.visitors.toLocaleString()}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    {country.views.toLocaleString()}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    {country.visitors.toLocaleString()}
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={3} className="text-center text-muted-foreground py-4">
+                  No country data available for the last 30 days
                 </TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
       </CardContent>
@@ -469,18 +491,24 @@ function BrowsersChart({ data }: { data: AnalyticsData }) {
     <Card className="col-span-1 sm:col-span-2">
       <CardHeader>
         <CardTitle>Browsers</CardTitle>
-        <CardDescription>Traffic by browser</CardDescription>
+        <CardDescription>Traffic by browser (Last 30 Days)</CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig}>
-          <BarChart data={data.browsers}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <ChartTooltip content={<ChartTooltipContent />} />
-            <Bar dataKey="percentage" fill={chartConfig.percentage.color} />
-          </BarChart>
-        </ChartContainer>
+        {data.browsers.length > 0 ? (
+          <ChartContainer config={chartConfig}>
+            <BarChart data={data.browsers}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <ChartTooltip content={<ChartTooltipContent />} />
+              <Bar dataKey="percentage" fill={chartConfig.percentage.color} />
+            </BarChart>
+          </ChartContainer>
+        ) : (
+          <div className="text-center text-muted-foreground py-8">
+            No browser data available for the last 30 days
+          </div>
+        )}
       </CardContent>
     </Card>
   );

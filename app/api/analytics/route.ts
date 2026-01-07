@@ -91,10 +91,15 @@ const COUNTRY_NAME_TO_CODE: Record<string, string> = {
   "Unknown": "un"
 };
 
+// Reverse lookup: country code to name
+const CODE_TO_COUNTRY_NAME: Record<string, string> = Object.fromEntries(
+  Object.entries(COUNTRY_NAME_TO_CODE).map(([name, code]) => [code.toLowerCase(), name])
+);
+
 function getCountryCode(name: string): string {
   // If it's already a 2-letter code, return it lowercased
   if (name.length === 2) return name.toLowerCase();
-  
+
   if (COUNTRY_NAME_TO_CODE[name]) return COUNTRY_NAME_TO_CODE[name];
   // Basic search for common variations
   const lowerName = name.toLowerCase();
@@ -102,6 +107,16 @@ function getCountryCode(name: string): string {
     if (key.toLowerCase() === lowerName) return code;
   }
   return "un";
+}
+
+function getCountryName(nameOrCode: string): string {
+  // If it's a 2-letter code, look up the name
+  if (nameOrCode.length === 2) {
+    const code = nameOrCode.toLowerCase();
+    return CODE_TO_COUNTRY_NAME[code] || nameOrCode;
+  }
+  // Otherwise return as-is (it's already a name)
+  return nameOrCode;
 }
 
 function getDateRange(days: number): DateRange {
@@ -282,15 +297,60 @@ export async function GET(request: NextRequest) {
       visitors: d.uniq.uniques || 0,
     })) || [];
 
-    // Use adaptive data for last 30 days for better accuracy
-    const rangeAdaptive = getDateRange(days);
-    const resAdaptive = await fetchCloudflareAnalytics(queryAdaptive, {
-      zoneTag: zoneId,
-      startDateTime: rangeAdaptive.startDateTime,
-      endDateTime: rangeAdaptive.endDateTime,
-    });
-    const zoneAdaptive = resAdaptive.data?.viewer?.zones?.[0];
-    const rawData = zoneAdaptive?.httpRequestsAdaptiveGroups || [];
+    // Use adaptive data for full period (30 days) by fetching in 1-day chunks
+    // This bypasses the Cloudflare Free/Pro plan limit of 24h for adaptive queries
+    const chunkedAdaptiveData: any[] = [];
+    const chunks: { start: string; end: string }[] = [];
+
+    const endDateObj = new Date();
+    const startDateObj = new Date();
+    startDateObj.setDate(startDateObj.getDate() - days);
+
+    // Generate daily chunks
+    let current = new Date(startDateObj);
+    while (current < endDateObj) {
+      const next = new Date(current);
+      next.setDate(next.getDate() + 1);
+
+      // Ensure we don't go past the final end date
+      const chunkEnd = next > endDateObj ? endDateObj : next;
+
+      chunks.push({
+        start: current.toISOString(),
+        end: chunkEnd.toISOString()
+      });
+      current = next;
+    }
+
+    // Fetch chunks with rate limiting (Cloudflare limits complexity/rate)
+    const BATCH_SIZE = 3;
+    for (let i = 0; i < chunks.length; i += BATCH_SIZE) {
+      const batch = chunks.slice(i, i + BATCH_SIZE);
+
+      // Add a small delay between batches to respect rate limits
+      if (i > 0) await new Promise(resolve => setTimeout(resolve, 250));
+
+      const results = await Promise.all(
+        batch.map(chunk =>
+          fetchCloudflareAnalytics(queryAdaptive, {
+            zoneTag: zoneId,
+            startDateTime: chunk.start,
+            endDateTime: chunk.end,
+          }).catch(err => {
+            const msg = err instanceof Error ? err.message : String(err);
+            console.warn(`Analytics chunk failed (${chunk.start}): ${msg}`);
+            return { data: { viewer: { zones: [{ httpRequestsAdaptiveGroups: [] }] } } };
+          })
+        )
+      );
+
+      results.forEach(res => {
+        const groups = res.data?.viewer?.zones?.[0]?.httpRequestsAdaptiveGroups || [];
+        chunkedAdaptiveData.push(...groups);
+      });
+    }
+
+    const rawData = chunkedAdaptiveData;
 
     const deviceCounts: Record<string, number> = { desktop: 0, mobile: 0, tablet: 0 };
     const browserCounts: Record<string, number> = {};
@@ -312,27 +372,47 @@ export async function GET(request: NextRequest) {
       const browser = getBrowserFromUA(item.dimensions.userAgent);
       browserCounts[browser] = (browserCounts[browser] || 0) + views;
 
-      const country = item.dimensions.clientCountryName || 'Unknown';
-      const code = getCountryCode(country);
-      if (!countryCounts[country]) countryCounts[country] = { views: 0, visitors: 0, code };
-      countryCounts[country].views += views;
-      countryCounts[country].visitors += visitors;
+      const countryNameFull = item.dimensions.clientCountryName || 'Unknown';
+      const code = getCountryCode(countryNameFull); // Fallback-based, but reliable enough for now
 
-      const path = item.dimensions.clientRequestPath || '/';
-      if (!pageCounts[path]) pageCounts[path] = { views: 0, visitors: 0 };
-      pageCounts[path].views += views;
-      pageCounts[path].visitors += visitors;
+      const countryName = getCountryName(countryNameFull);
+      if (!countryCounts[countryName]) countryCounts[countryName] = { views: 0, visitors: 0, code };
+      countryCounts[countryName].views += views;
+      countryCounts[countryName].visitors += visitors;
 
-      // Note: Referrer data is not available in httpRequestsAdaptiveGroups
-      // All traffic will be counted as "Direct" since we can't determine referrers
-      // from this API endpoint. Referrer data may require a different Cloudflare API.
+      let path = item.dimensions.clientRequestPath || '/';
+
+      // Filter out system paths, assets, and internal routes
+      const isSystemPath =
+        path.startsWith('/_next') ||
+        path.startsWith('/_vercel') ||
+        path.startsWith('/.well-known') ||
+        path.startsWith('/cdn-cgi');
+
+      // Prettify paths
+      if (path === '/') path = 'Home';
+      else if (path === '/work') path = 'Our Portfolio';
+      else if (path === '/about') path = 'About Us';
+      else if (path === '/contact') path = 'Contact';
+
+      if (!isSystemPath) {
+        if (!pageCounts[path]) pageCounts[path] = { views: 0, visitors: 0 };
+        pageCounts[path].views += views;
+        pageCounts[path].visitors += visitors;
+      }
+
+      // Note: Referrer data is not available for this zone plan in httpRequestsAdaptiveGroups
+      // Fallback to counting all as Direct or Unknown to prevent crashing
       referrerCounts['Direct'] = (referrerCounts['Direct'] || 0) + views;
     });
 
     const topReferrers = Object.entries(referrerCounts)
-      .map(([source, views]) => ({ source, views }))
-      .sort((a, b) => (b.views as number) - (a.views as number))
+      .map(([source, views]) => ({ source, views: views as number }))
+      .sort((a, b) => b.views - a.views)
       .slice(0, 5);
+
+    // If no referrers, return empty array instead of showing "Direct" with 0
+    const topReferrersFiltered = topReferrers.filter(r => r.views > 0);
 
     const totalDevices = deviceCounts.desktop + deviceCounts.mobile + deviceCounts.tablet;
     const devices = totalDevices > 0 ? {
@@ -379,11 +459,11 @@ export async function GET(request: NextRequest) {
         avgSessionDuration: { value: 0, change: 0 },
       },
       traffic: { history },
-      topPages,
-      topCountries,
-      topReferrers,
+      topPages: topPages.length > 0 ? topPages : [],
+      topCountries: topCountries.length > 0 ? topCountries : [],
+      topReferrers: topReferrersFiltered.length > 0 ? topReferrersFiltered : [],
       devices,
-      browsers,
+      browsers: browsers.length > 0 ? browsers : [],
     });
 
   } catch (error) {
