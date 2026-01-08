@@ -14,7 +14,7 @@
  * 
  * The public_id is: {folder}/{filename} (without extension)
  */
-export function extractPublicIdFromUrl(cloudinaryUrl: string): string | null {
+function extractPublicIdFromUrl(cloudinaryUrl: string): string | null {
     try {
         const url = new URL(cloudinaryUrl)
         
