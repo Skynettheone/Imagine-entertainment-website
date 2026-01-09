@@ -16,15 +16,22 @@ export default function Hero() {
     const handleCanPlay = () => {
       setVideoReady(true)
       video.play().catch(() => {
+        // Autoplay failed (user interaction required), show video anyway
         setVideoReady(true)
       })
     }
 
-    video.addEventListener('canplaythrough', handleCanPlay)
-    video.load()
+    // Use 'canplay' instead of 'canplaythrough' - starts playing with just ~2 seconds buffered
+    // instead of waiting for the browser to estimate it can play the entire video
+    video.addEventListener('canplay', handleCanPlay)
+    
+    // Also try to play on loadedmetadata for even faster start
+    video.addEventListener('loadedmetadata', () => {
+      video.play().catch(() => {})
+    })
 
     return () => {
-      video.removeEventListener('canplaythrough', handleCanPlay)
+      video.removeEventListener('canplay', handleCanPlay)
     }
   }, [])
 
