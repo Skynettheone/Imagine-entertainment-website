@@ -28,8 +28,8 @@ export default function Hero() {
     }
   }, [])
 
-  // Cloudinary video URL with best quality
-  const videoUrl = "https://res.cloudinary.com/dqhklh9nd/video/upload/q_auto:best,f_auto/v1767202328/Final_Web_vyhf3y.mp4"
+  // Self-hosted video for better caching and no CDN costs
+  const videoUrl = "/Final_Web.mp4"
 
   return (
     <section className="relative min-h-dvh h-dvh bg-black overflow-hidden">

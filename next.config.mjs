@@ -65,6 +65,14 @@ const nextConfig = {
   async headers() {
     return [
       {
+        // Video files - 1 year cache for hero video and other media
+        source: '/:path*.(mp4|webm|ogg|mov)',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+          { key: 'Accept-Ranges', value: 'bytes' }
+        ],
+      },
+      {
         // Static assets (images, fonts, etc.) - 1 year cache
         source: '/:path*.(ico|png|jpg|jpeg|gif|webp|avif|svg|woff|woff2|ttf|eot)',
         headers: [
