@@ -238,7 +238,7 @@ export default function RootLayout({
         ═══════════════════════════════════════════════════════════════════════
         ║  Property of IMAGINE ENTERTAINMENT (PVT) LTD.                       ║
         ║  Website: https://www.imaginesl.com                                 ║
-        ║  Developed by Skynet Labs                                           ║
+        ║  Developed by Sequence Labs                                           ║
         ║  https://www.linkedin.com/in/tharukakarunanayaka/                   ║
         ║  https://www.linkedin.com/in/hasal/                                 ║
         ║  © 2026 All Rights Reserved                                         ║

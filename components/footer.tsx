@@ -246,7 +246,7 @@ export default function Footer() {
               rel="noopener noreferrer"
               className="font-medium hover:text-foreground transition-colors"
             >
-              Developed by Skynet Labs
+              Developed by Sequence Labs
             </a>
           </div>
         </div>

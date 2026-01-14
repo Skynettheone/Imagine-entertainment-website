@@ -8,7 +8,7 @@ import { useEffect } from "react"
  * ║        Property of IMAGINE ENTERTAINMENT (PVT) LTD.                    ║
  * ║        Website: https://www.imaginesl.com                              ║
  * ║                                                                         ║
- * ║        Developed by Skynet Labs                                        ║
+ * ║        Developed by Sequence Labs                                        ║
  * ║        https://www.linkedin.com/in/tharukakarunanayaka/                ║
  * ║        https://www.linkedin.com/in/hasal/                              ║
  * ║                                                                         ║
@@ -26,7 +26,7 @@ export function ConsoleWatermark() {
  * ║        Property of IMAGINE ENTERTAINMENT (PVT) LTD.                     ║
  * ║        Website: https://www.imaginesl.com                               ║
  * ║                                                                         ║
- * ║        Developed by Skynet Labs                                         ║
+ * ║        Developed by Sequence Labs                                         ║
  * ║        https://www.linkedin.com/in/tharukakarunanayaka/                 ║
  * ║        https://www.linkedin.com/in/hasal/                               ║
  * ║                                                                         ║
