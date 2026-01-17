@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useFileUpload, type FileMetadata, type FileWithPreview } from '@/hooks/use-file-upload';
+import { useFileUpload, type FileWithPreview } from '@/hooks/use-file-upload';
 import { Alert, AlertContent, AlertDescription, AlertIcon, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { CloudUpload, ImageIcon, TriangleAlert, Upload, XIcon } from 'lucide-react';
@@ -20,20 +20,7 @@ export default function CoverUpload({
   className,
   onImageChange,
 }: CoverUploadProps) {
-  // Default cover image
-  const defaultCoverImage: FileMetadata = {
-    id: 'default-cover',
-    name: 'cover-image.jpg',
-    size: 2048000,
-    type: 'image/jpeg',
-    url: 'https://picsum.photos/1000/800?grayscale&random=3',
-  };
-
-  const [coverImage, setCoverImage] = useState<FileWithPreview | null>({
-    id: defaultCoverImage.id,
-    file: defaultCoverImage,
-    preview: defaultCoverImage.url,
-  });
+  const [coverImage, setCoverImage] = useState<FileWithPreview | null>(null);
 
   const [imageLoading, setImageLoading] = useState(true);
   const [uploadProgress, setUploadProgress] = useState(0);

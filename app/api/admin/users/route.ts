@@ -78,8 +78,17 @@ export async function POST(request: Request) {
 
     if (sendInvite) {
       // Send invitation email
+      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL
+      if (!siteUrl) {
+        console.error('NEXT_PUBLIC_SITE_URL environment variable is not set')
+        return NextResponse.json(
+          { error: 'Server configuration error' },
+          { status: 500 }
+        )
+      }
+
       const { data, error } = await supabaseAdmin.auth.admin.inviteUserByEmail(email, {
-        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/auth/callback?next=${encodeURIComponent('/setup-account?type=invite')}`,
+        redirectTo: `${siteUrl}/auth/callback?next=${encodeURIComponent('/setup-account?type=invite')}`,
       })
 
       if (error) {
